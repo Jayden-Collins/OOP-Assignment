@@ -5,5 +5,8 @@ public class Doctordetails {
     private int doctorContactNumber;
     private String doctorAddress;
 
-    
+    //Setters
+    public void setDoctorID(String doctorID) {
+        this.doctorID = doctorID;
+    }
 }
