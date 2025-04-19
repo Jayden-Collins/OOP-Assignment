@@ -17,7 +17,6 @@ public class Login{
             
 
             if(username == STAFF_USERNAME){
-                //give staff access
             }
         }
     }
