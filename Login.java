@@ -15,9 +15,6 @@ public class Login{
             System.out.print("Password: ");
             String password = scanner.nextLine();
             
-
-            if(username == STAFF_USERNAME){
-            }
         }
     }
 }
