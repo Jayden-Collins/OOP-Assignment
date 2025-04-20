@@ -1,4 +1,4 @@
-public class Staff {
+public class Staff extends Person{
     private String staffID;
     private String staffName;
     private String staffGender;
@@ -7,7 +7,7 @@ public class Staff {
 
     // empty constructor 
     public Staff(){
-
+        super();
     }
 
     // parameter constructor 

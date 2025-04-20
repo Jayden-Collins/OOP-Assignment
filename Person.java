@@ -6,7 +6,11 @@ public abstract class Person {
     private String personAddress;
 
     public Person(){
-
+        this.personID = "";
+        this.personName = "";
+        this.personGender = "";
+        this.personContactNumber = "";
+        this.personAddress = "";
     }
 
     public Person(String personID, String personName, String personGender, String personContactNumber, String personAddress){
@@ -39,6 +43,24 @@ public abstract class Person {
     }
 
     // get method 
+    public String getPersonID(){
+        return personID;
+    }
 
+    public String getPersonName(){
+        return personName;
+    }
+
+    public String getPersonGender(){
+        return personGender;
+    }
+
+    public String getPersonAddress(){
+        return personGender;
+    }
+
+    public String getPersonContactNumber(){
+        return personContactNumber;
+    }
 
 }

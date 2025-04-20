@@ -15,22 +15,16 @@ public class Doctordetails extends Staff{
 
     //non-paramterized constructor
     public Doctordetails(){
-        this.doctorID = "";
-        this.doctorName = "";
-        this.doctorGender = "";
+        super();
         this.doctorDepartment = "";
-        this.doctorContactNumber = "";
-        this.doctorAddress = "";
+        this.yearOfExp = "";
     }
 
     //parameterized constructor 
-    public Doctordetails(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String doctorContactNumber, String doctorAddress){
-        this.doctorID = doctorID;
-        this.doctorName = doctorName;
-        this.doctorGender = doctorGender;
+    public Doctordetails(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
+        super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress);
         this.doctorDepartment = doctorDepartment;
-        this.doctorContactNumber = doctorContactNumber;
-        this.doctorAddress = doctorAddress;
+        this.yearOfExp = yearOfExp;
     }
 
     //abstract method link to staff class 
@@ -61,12 +55,21 @@ public class Doctordetails extends Staff{
         return false;
     }
 
+    // set method for year of exp
+    public void setYearOfExp(String yearOfExp){
+        this.yearOfExp = yearOfExp;
+    }
+
+    public String getYear(){
+        return yearOfExp;
+    }
+
     public String getDoctorDepartment(){
         return doctorDepartment;
     }
     
     public String toString(){
-        return super.toString() + String.format("\n Department: %s\n ", doctorDepartment);
+        return super.toString() + String.format("\n Department: %s\nyearofExperience: %s", doctorDepartment, yearOfExp);
     }
 }
 

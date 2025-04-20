@@ -7,11 +7,7 @@ public class NurseDetails extends Staff{
 
     //constructor 
     public NurseDetails(String nurseID, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress){
-        this.nurseID = nurseID;
-        this.nurseName = nurseName;
-        this.nurseGender = nurseGender;
-        this.nurseContactNumber = nurseContactNumber;
-        this.nurseAddress = nurseAddress;
+        super(nurseID, nurseName, nurseGender, nurseContactNumber, nurseAddress);
     }
 
     //abstract method link with staff super class
@@ -21,7 +17,7 @@ public class NurseDetails extends Staff{
 
     //convert to string 
     public String toString(){
-        return String.format("Nurse ID: %s\nName: %s\nGender: %s\nContactNumber: %s\nAddress: %s", nurseID, nurseName, nurseGender, nurseContactNumber, nurseAddress);
+        return super.toString();
     }
         
 }
