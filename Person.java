@@ -1,5 +1,5 @@
 public abstract class Person {
-    private String id;
+    private final String id;
     private String name;
     private String gender;
     private String contactNumber;
@@ -14,17 +14,37 @@ public abstract class Person {
     }
 
     // setter methods
-
-    public void setName(String name){
-        this.name = name;
+    public boolean setName(String name){
+        if(ValidationCheck.validateName(name)){
+            this.name = name;
+            return true;
+        }
+        return false;
     }
 
-    public void setContactNumber(String contactNumber){
-        this.contactNumber = contactNumber;
+    //set and boolean method for staff gender
+    public boolean setGender(String gender){
+        if(ValidationCheck.validateGender(gender)){
+            this.gender = gender;
+            return true;
+        }
+        return false;
     }
 
-    public void setAddress(String address){
-        this.address = address;
+    public boolean setContactNumber(String contactNumber){
+        if(ValidationCheck.validateNumber(contactNumber)){
+            this.contactNumber = contactNumber;
+        }
+        return false;
+    }
+
+    // set and boolean method for staff address 
+    public boolean setAddress(String address){
+        if(ValidationCheck.validateAddress(address)){
+            this.address = address;
+            return true;
+        }
+        return false;
     }
 
     // get method 
@@ -51,13 +71,11 @@ public abstract class Person {
     public abstract String getDetails();
 
     // toString method to return a string representation of the person
-    @Override
     public String toString() {
         return "ID: " + id + ", Name: " + name + ", Gender:" + gender + ", Contact Number: " + contactNumber + ", Address: " + address;
     }
 
     // equals method to compare two Person objects based on their ID
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // Check if the same object
         if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is null or not of the same class
@@ -66,7 +84,6 @@ public abstract class Person {
     }
 
     // hashCode method to generate a hash code based on the ID
-    @Override
     public int hashCode() {
         return id.hashCode(); // Generate hash code based on ID
     }

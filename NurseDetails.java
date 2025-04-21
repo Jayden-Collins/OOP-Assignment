@@ -1,13 +1,12 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class NurseDetails extends Staff{
-    private String nurseID;
-    private String nurseName;
-    private String nurseGender;
-    private String nurseContactNumber;
-    private String nurseAddress;
+    List<Patient> patients = new ArrayList<>(); // list of patients assigned to the nurse
 
     //constructor 
-    public NurseDetails(String nurseID, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress){
-        super(nurseID, nurseName, nurseGender, nurseContactNumber, nurseAddress);
+    public NurseDetails(String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department){
+        super(IdGenerator.generateNurseId(), nurseName, nurseGender, nurseContactNumber, nurseAddress, department);
     }
 
     //abstract method link with staff super class

@@ -137,7 +137,6 @@ public class Hospital {
         } catch (IOException e){
             System.out.println("Error saving doctor information" + e.getMessage());
         }
-
     }
 
     // create an array list for the reading file 
@@ -207,32 +206,4 @@ public class Hospital {
             System.out.println("Information is not found.");
         }
     }
-
-    //nurse management system
-    public void nurseManagement(){
-        System.out.println("Nurse Management");
-        System.out.println("1. Add Nurse Information");
-        System.out.println("2. List all nurse");
-        System.out.println("3. Search Nurse");
-        System.out.print("Enter choice: : ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-
-        switch(selection){
-            case 1:
-                addNurseInformation();
-                break;
-            case 2:
-                listNurse();
-                break;
-            case 3:
-                searchNurse();
-                break;
-            default:
-                System.out.println("Invalid selection. Re-enter");
-        }
-    }
-
-    //
 }

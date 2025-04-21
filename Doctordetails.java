@@ -2,28 +2,13 @@
 import java.util.Arrays;
 
 public class Doctordetails extends Staff{
-    private String doctorID;
-    private String doctorName;
-    private String doctorGender;
-    private String doctorDepartment;
     private String yearOfExp;
-    private String doctorContactNumber;
-    private String doctorAddress;
     private Appointment[] appointments = new Appointment[1000];
     private int appointmentCount = 0;
 
-
-    //non-paramterized constructor
-    public Doctordetails(){
-        super();
-        this.doctorDepartment = "";
-        this.yearOfExp = "";
-    }
-
     //parameterized constructor 
     public Doctordetails(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
-        super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress);
-        this.doctorDepartment = doctorDepartment;
+        super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
         this.yearOfExp = yearOfExp;
     }
 
@@ -47,13 +32,6 @@ public class Doctordetails extends Staff{
     }
 
     // set method for doctor department 
-    public boolean setDoctorDepartment(String doctorDepartment){
-        if(ValidationCheck.validateDoctorDepartment(doctorDepartment)){
-            this.doctorDepartment = doctorDepartment;
-            return true;
-        }
-        return false;
-    }
 
     // set method for year of exp
     public void setYearOfExp(String yearOfExp){
@@ -64,12 +42,8 @@ public class Doctordetails extends Staff{
         return yearOfExp;
     }
 
-    public String getDoctorDepartment(){
-        return doctorDepartment;
-    }
-    
     public String toString(){
-        return super.toString() + String.format("\n Department: %s\nyearofExperience: %s", doctorDepartment, yearOfExp);
+        return super.toString() + String.format("yearofExperience: %s", yearOfExp);
     }
 }
 

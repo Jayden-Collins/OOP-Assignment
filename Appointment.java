@@ -10,8 +10,8 @@ public class Appointment {
     private static int appointmentCount = 0;
 
     //parameter constructor 
-    public Appointment(String appointmentID, Doctordetails doctor, Patientdetails patient, Date appointmentDate, String consultationRoom, String appoinmentStatus){
-        this.appointmentID = appointmentID;
+    public Appointment(Doctordetails doctor, Patientdetails patient, Date appointmentDate, String consultationRoom, String appoinmentStatus){
+        this.appointmentID = IdGenerator.generateAppointmentId();
         this.doctor = doctor;
         this.patient = patient;
         this.appointmentDate = appointmentDate;
