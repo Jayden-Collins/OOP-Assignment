@@ -40,11 +40,8 @@ public class Patient extends Person{
         return emergencyContact;
     }
 
-    public String getDetails(){
-        return "Patient";
-    }
-
     public String toString(){
-        return String.format("Patient ID: %s\nPatient Name: %s\nPatient Gender: %s\nPatient ContactNumber: %s\nEmergency contact number: %s\nAddress: %s", patientID, patientName, patientGender, patientPhoneNumber, emergencyContact, patientAddress);
+        return super.toString() + "\n" +
+                "Emergency Contact: " + emergencyContact + "\n" +
     }
 }

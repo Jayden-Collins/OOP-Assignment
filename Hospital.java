@@ -21,6 +21,11 @@ public class Hospital {
         hospital.combination();
     }
 
+    public void makeAppointment()
+    {
+        System.out.println("Appointment created successfully.");
+    }
+
     //combine access, management 
     public void combination(){
         checkUserAccess();

@@ -13,7 +13,7 @@ public abstract class Person {
         this.address = address;
     }
 
-    // setter methods
+    // validate and set name
     public boolean setName(String name){
         if(name != null && name.matches("^[a-zA-Z ]+$")){
             this.name = name;
@@ -22,7 +22,7 @@ public abstract class Person {
         return false;
     }
 
-    //set and boolean method for staff gender
+    // set and boolean method for staff gender
     public boolean setGender(String gender){
         if(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Others")){
             this.gender = gender;
@@ -67,15 +67,16 @@ public abstract class Person {
         return address;
     }
 
-    // abstract method to be implemented in subclasses to return specific details about the person
-    public abstract String getDetails();
-
     // toString method to return a string representation of the person
     public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Gender:" + gender + ", Contact Number: " + contactNumber + ", Address: " + address;
+        return "ID: " + id + "\n" +
+                "Name: " + name + "\n" +
+                "Gender: " + gender + "\n" +
+                "Contact Number: " + contactNumber + "\n" +
+                "Address: " + address + "\n";
     }
 
-    // equals method to compare two Person objects based on their ID
+/*     // equals method to compare two Person objects based on their ID
     public boolean equals(Object obj) {
         if (this == obj) return true; // Check if the same object
         if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is null or not of the same class
@@ -86,5 +87,5 @@ public abstract class Person {
     // hashCode method to generate a hash code based on the ID
     public int hashCode() {
         return id.hashCode(); // Generate hash code based on ID
-    }
+    } */
 }

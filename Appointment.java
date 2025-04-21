@@ -10,12 +10,12 @@ public class Appointment {
     private String appointmentStatus;
 
     //parameter constructor 
-    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, String consultationRoom, String appoinmentStatus){
+    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, String consultationRoom){
         this.doctor = doctor;
         this.patient = patient;
         this.appointmentDate = appointmentDate;
         this.consulationRoom = consultationRoom;
-        this.appointmentStatus = appoinmentStatus;
+        this.appointmentStatus = "Scheduled";
 
         //link appointment with doctor and patient 
         doctor.addAppointment(this);
@@ -24,7 +24,7 @@ public class Appointment {
 
     // setter and boolean for appointmentStatus
     public boolean setAppointmentStatus(String appointmentStatus){
-        if(appointmentStatus != null && appointmentStatus.matches("^[a-zA-z ]+$")){
+        if(appointmentStatus.equals("Scheduled") || appointmentStatus.equals("Completed") || appointmentStatus.equals("Cancelled")){
             this.appointmentStatus = appointmentStatus;
             return true;
         }
@@ -49,16 +49,6 @@ public class Appointment {
     // get mthod for appointment id 
     public String getAppointmentID(){
         return appointmentID;
-    }
-
-    // get method for doctor details 
-    public Doctor getDoctorDetails(){
-        return doctor;
-    }
-
-    // get method for patient details 
-    public Patient getPatientDetails(){
-        return patient;
     }
 
     // get method for appointment date 
