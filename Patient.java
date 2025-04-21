@@ -1,31 +1,29 @@
-
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class Patient extends Person{
     private String emergencyContact;
-    private String medicalHistory;
-    private Appointment[] appointments = new Appointment[1000];
+    private final MedicalRecords medicalRecord;
+    private List<Appointment> appointments;
     private int appointmentCount = 0;
 
     //parameterized constructor
-    public Patient(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact, String medicalHistory){
+    public Patient(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(IdGenerator.generatePatientId(), patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
-        this.medicalHistory = medicalHistory;
+        this.medicalRecord = new MedicalRecords(this, null);
     }
 
     // add appoinment of patients to the appointment class 
     public void addAppointment(Appointment appointment){
-        if (appointmentCount < appointments.length){
-            appointments[appointmentCount++] = appointment;
-        } else {
-            System.out.println("Appointment for patients is full. ");
-        }
+        appointments.add(appointment);
+        appointmentCount++;
     }
 
     // return for the calling of number of appoints and the count 
-    public Appointment[] getAppointment(){
-        return Arrays.copyOf(appointments, appointmentCount);
+    public List<Appointment> getAppointment(){
+        return Collections.unmodifiableList(appointments);
     }
 
     //set emergency contact number and boolean method
@@ -37,23 +35,9 @@ public class Patient extends Person{
         return false;
     }
 
-    //set medical history and boolean method 
-    public boolean setMedicalHistory(String medicalHistory){
-        if(medicalHistory != null && medicalHistory.matches("^[a-zA-Z0-9 ]+$")){
-            this.medicalHistory = medicalHistory;
-            return true;
-        }
-        return false;
-    }
-
     //get emergency contact 
     public String getEmergencyContact(){
         return emergencyContact;
-    }
-
-    //get medical history
-    public String getMedicalHistory(){
-        return medicalHistory;
     }
 
     public String getDetails(){

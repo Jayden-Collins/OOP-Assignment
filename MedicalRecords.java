@@ -5,10 +5,8 @@ import java.util.List;
 
 public class MedicalRecords {
     private final LocalDate creationDate = LocalDate.now();
-    private final String id = IdGenerator.generateMedicalRecordId();
     private final Patient patient;
     private Doctor doctor;
-
     private List<String> diagnoses;
     private List<String> prescribedMedications;
     private List<String> treatmentHistory;
@@ -18,7 +16,7 @@ public class MedicalRecords {
         this.patient = patient;
     }
 
-    public void addDiagnoses(String diagnoses){
+    public void addDiagnosis(String diagnoses){
         this.diagnoses.add(diagnoses);
     }
 
@@ -32,10 +30,6 @@ public class MedicalRecords {
 
     public void addFollowUp(LocalDateTime nextFollowUp){
         this.nextFollowUp = nextFollowUp;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public LocalDate getCreationDate() {
