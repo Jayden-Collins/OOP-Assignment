@@ -1,11 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class NurseDetails extends Staff{
+public class Nurse extends Staff{
     List<Patient> patients = new ArrayList<>(); // list of patients assigned to the nurse
 
     //constructor 
-    public NurseDetails(String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department){
+    public Nurse(String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department){
         super(IdGenerator.generateNurseId(), nurseName, nurseGender, nurseContactNumber, nurseAddress, department);
     }
 

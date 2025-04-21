@@ -5,6 +5,7 @@ public class IdGenerator {
     private static int nurseCount = 0;
     private static int patientCount = 0;
     private static int appointmentCount = 0;
+    private static int medicalRecordCount = 0;
     private static int roomCount = 0;
     private static int departmentCount = 0;
 
@@ -29,16 +30,22 @@ public class IdGenerator {
         return String.format("NC-%02d-%03d", getYear(), seq);
     }
 
-    //Patient: PC-24-04-001
+    //Patient: PC-24-04-0001
     public static String generatePatientId() {
         int seq = ++patientCount;
-        return String.format("PC-%02d-%02d-%03d", getYear(), LocalDate.now().getMonthValue(), seq);
+        return String.format("PC-%02d-%02d-%04d", getYear(), LocalDate.now().getMonthValue(), seq);
     }
 
     //Appointment: AP-24-04-001
     public static String generateAppointmentId() {
         int seq = ++appointmentCount;
         return String.format("AP-%02d-%02d-%03d", getYear(), LocalDate.now().getMonthValue(), seq);
+    }
+
+    //Medical Record: MR-24-04-001
+    public static String generateMedicalRecordId() {
+        int seq = ++medicalRecordCount;
+        return String.format("MR-%02d-%02d-%03d", getYear(), LocalDate.now().getMonthValue(), seq);
     }
 
     //Room: RM-1001

@@ -1,13 +1,13 @@
 
 import java.util.Arrays;
 
-public class Doctordetails extends Staff{
+public class Doctor extends Staff{
     private String yearOfExp;
     private Appointment[] appointments = new Appointment[1000];
     private int appointmentCount = 0;
 
     //parameterized constructor 
-    public Doctordetails(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
+    public Doctor(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
         super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
         this.yearOfExp = yearOfExp;
     }

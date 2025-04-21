@@ -8,7 +8,7 @@ public abstract class Staff extends Person{
     }
 
     public boolean setDoctorDepartment(String department){
-        if(validateDoctorDepartment(department)){
+        if(department != null && department.matches("^[a-zA-Z0-9 ]+$")){
             this.department = department;
             return true;
         }
@@ -27,10 +27,5 @@ public abstract class Staff extends Person{
     //toString method 
     public String toString(){
         return super.toString() + String.format("\nDepartment: %s", department);
-    }
-
-    //validation for doctor department 
-    public static boolean validateDoctorDepartment(String doctorDepartment){
-        return doctorDepartment != null && doctorDepartment.matches("^[a-zA-Z0-9 ]+$");
     }
 }

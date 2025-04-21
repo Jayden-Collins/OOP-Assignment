@@ -1,14 +1,14 @@
 
 import java.util.Arrays;
 
-public class Patientdetails extends Person{
+public class Patient extends Person{
     private String emergencyContact;
     private String medicalHistory;
     private Appointment[] appointments = new Appointment[1000];
     private int appointmentCount = 0;
 
     //parameterized constructor
-    public Patientdetails(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact, String medicalHistory){
+    public Patient(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact, String medicalHistory){
         super(IdGenerator.generatePatientId(), patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
         this.medicalHistory = medicalHistory;
@@ -30,7 +30,7 @@ public class Patientdetails extends Person{
 
     //set emergency contact number and boolean method
     public boolean setPatientEmergencyNumber(String emergencyContact){
-        if(validateNumber(emergencyContact)){
+        if(emergencyContact.matches("^\\d{3}-\\d{7}$") || emergencyContact.matches("^\\d{3}-\\d{8}$") || emergencyContact.matches("^\\d{10}$") || emergencyContact.matches("^\\d{11}$")){
             this.emergencyContact = emergencyContact;
             return true;
         }
@@ -39,7 +39,7 @@ public class Patientdetails extends Person{
 
     //set medical history and boolean method 
     public boolean setMedicalHistory(String medicalHistory){
-        if(validatePatientMedicalHistory(medicalHistory)){
+        if(medicalHistory != null && medicalHistory.matches("^[a-zA-Z0-9 ]+$")){
             this.medicalHistory = medicalHistory;
             return true;
         }
@@ -58,11 +58,6 @@ public class Patientdetails extends Person{
 
     public String getDetails(){
         return "Patient";
-    }
-
-    //validation for patient medical history
-    public static boolean validatePatientMedicalHistory(String medicalHistory){
-        return medicalHistory != null && medicalHistory.matches("^[a-zA-Z0-9 ]+$");
     }
 
     public String toString(){
