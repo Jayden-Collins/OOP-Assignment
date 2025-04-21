@@ -30,7 +30,7 @@ public class Patientdetails extends Person{
 
     //set emergency contact number and boolean method
     public boolean setPatientEmergencyNumber(String emergencyContact){
-        if(ValidationCheck.validateNumber(emergencyContact)){
+        if(validateNumber(emergencyContact)){
             this.emergencyContact = emergencyContact;
             return true;
         }
@@ -39,7 +39,7 @@ public class Patientdetails extends Person{
 
     //set medical history and boolean method 
     public boolean setMedicalHistory(String medicalHistory){
-        if(ValidationCheck.validatePatientMedicalHistory(medicalHistory)){
+        if(validatePatientMedicalHistory(medicalHistory)){
             this.medicalHistory = medicalHistory;
             return true;
         }
@@ -58,6 +58,11 @@ public class Patientdetails extends Person{
 
     public String getDetails(){
         return "Patient";
+    }
+
+    //validation for patient medical history
+    public static boolean validatePatientMedicalHistory(String medicalHistory){
+        return medicalHistory != null && medicalHistory.matches("^[a-zA-Z0-9 ]+$");
     }
 
     public String toString(){

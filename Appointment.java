@@ -80,4 +80,8 @@ public class Appointment {
         return appointmentStatus;
     }
 
+    //validation for appointment status 
+    public static boolean validateAppointmentStatus(String status){
+        return status != null && status.matches("^[a-zA-z ]+$");
+    }
 }

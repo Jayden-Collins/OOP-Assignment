@@ -15,7 +15,7 @@ public abstract class Person {
 
     // setter methods
     public boolean setName(String name){
-        if(ValidationCheck.validateName(name)){
+        if(name != null && name.matches("^[a-zA-Z ]+$")){
             this.name = name;
             return true;
         }
@@ -24,7 +24,7 @@ public abstract class Person {
 
     //set and boolean method for staff gender
     public boolean setGender(String gender){
-        if(ValidationCheck.validateGender(gender)){
+        if(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Others")){
             this.gender = gender;
             return true;
         }
@@ -32,7 +32,7 @@ public abstract class Person {
     }
 
     public boolean setContactNumber(String contactNumber){
-        if(ValidationCheck.validateNumber(contactNumber)){
+        if(contactNumber.matches("^\\d{3}-\\d{7}$") || contactNumber.matches("^\\d{3}-\\d{8}$") || contactNumber.matches("^\\d{10}$") || contactNumber.matches("^\\d{11}$")){
             this.contactNumber = contactNumber;
         }
         return false;
@@ -40,7 +40,7 @@ public abstract class Person {
 
     // set and boolean method for staff address 
     public boolean setAddress(String address){
-        if(ValidationCheck.validateAddress(address)){
+        if(address != null && address.matches("^[a-zA-z0-9 ]+$")){
             this.address = address;
             return true;
         }
