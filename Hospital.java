@@ -12,7 +12,7 @@ public class Hospital {
     private static final String DOCTOR_FILE = "doctor.txt";
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
-
+    
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
 
@@ -234,5 +234,105 @@ public class Hospital {
         }
     }
 
-    //
+    //add nurse information
+    public void addNurseInformation(){
+        System.out.println("Add Nurse Information");
+
+        System.out.print("Enter Nurse ID: ");
+        String nurseID = scanner.nextLine();
+
+        System.out.print("Enter Nurse Name: ");
+        String nurseName = scanner.nextLine();
+
+        System.out.print("Enter Nurse Gender: ");
+        String nurseGender = scanner.nextLine();
+
+        System.out.print("Enter Nurse Contact Number: ");
+        String nurseContactNumber = scanner.nextLine();
+
+        System.out.print("Enter Nurse Address: ");
+        String nurseAddress = scanner.nextLine();
+
+        //join the string together
+        String nurseRecord = String.join("|", nurseID, nurseName, nurseGender, nurseContactNumber, nurseAddress);
+
+        // store record in doctor file 
+        try(FileWriter fw = new FileWriter(NURSE_FILE, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)){
+            out.println(nurseRecord);
+            System.out.println("\n Nurse Information added successful.");
+        } catch (IOException e){
+            System.out.println("Error saving nurse information" + e.getMessage());
+        }
+
+    }
+
+    // read all nurse information and store it at the array list 
+    public ArrayList<String[]> getNurse(){
+        ArrayList<String[]> nurses = new ArrayList<>();
+
+        // read from the file 
+        try(BufferedReader br = new BufferedReader(new FileReader(NURSE_FILE))){
+            
+            String line;
+            while((line = br.readLine()) != null){
+                String[] nurseRecord = line.split("\\|");
+                nurses.add(nurseRecord);
+            }
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e){
+            System.out.println("Error reading nurse data: " + e.getMessage());
+        }
+
+        return nurses;
+    }
+
+    // list nurse information 
+    public void listNurse(){
+        ArrayList<String[]> nurses = getNurse();
+        if(nurses.isEmpty()){
+            System.out.println("No nurse information is registered yet.");
+            return;
+        }
+
+        for (String[] nurse: nurses){
+            System.out.println("ID: " + nurse[0]);
+            System.out.println("Name: " + nurse[1]);
+            System.out.println("Gender: " + nurse[2]);
+            System.out.println("Contact Number: " + nurse[3]);
+            System.out.println("Address: " + nurse[4]);
+            System.out.println("Year of Experience: " + nurse[5]);
+            System.out.println("Department: " + nurse[6]);
+        }
+    }
+
+    // search nurse information
+    public void searchNurse(){
+        System.out.print("Enter nurse id or nurse name to search information: ");
+        String searchID_Name = scanner.nextLine();
+
+        ArrayList<String[]> nurses = getNurse();
+        boolean exist = false;
+
+        for(String[] nurse : nurses){
+            if(nurse[0].equals(searchID_Name) || nurse[1].equals(searchID_Name)){
+                System.out.println("Found the information");
+                System.out.println("ID: " + nurse[0]);
+                System.out.println("Name: " + nurse[1]);
+                System.out.println("Gender: " + nurse[2]);
+                System.out.println("Contact Number: " + nurse[3]);
+                System.out.println("Address: " + nurse[4]);
+                System.out.println("Year of Experience: " + nurse[5]);
+                System.out.println("Department: " + nurse[6]);
+                exist = true;
+                break;
+            }
+        }
+
+        if(!exist){
+            System.out.println("Information is not found");
+        }
+    }
 }

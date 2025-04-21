@@ -47,7 +47,7 @@ public class Menu {
     }
 
     // staff choice method called 
-    public void staffChoice(int choice){
+    public void staffChoice(int choice){    
         switch (choice){
             case 1:
                 hospital.doctorManagement();
