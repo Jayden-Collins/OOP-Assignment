@@ -1,7 +1,7 @@
 public class ValidationCheck {
     //validation check for id is it null and match the criteria
     public static boolean validateID(String id){
-        return id != null && id.matches("^\\d{2}[a-zA-Z]{3}\\d{4}$");
+        return id != null && id.matches("^DC-\\d{2}-\\d{2}-\\d{3}$");
     }
 
     //validation check for name is it alphabet 
@@ -27,6 +27,11 @@ public class ValidationCheck {
     //validation for address 
     public static boolean validateAddress(String address){
         return address != null && address.matches("^[a-zA-z0-9 ]+$");
+    }
+
+    // validation for year of experience
+    public static boolean validateYearOfExp(String yearOfExp){
+        return yearOfExp != null && yearOfExp.matches("^[0-9 ]+$");
     }
 
     //validation for patient medical history
