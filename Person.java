@@ -1,9 +1,10 @@
 public abstract class Person {
-    private final String id;
+    private String id;
     private String name;
-    private final String gender;
+    private String gender;
     private String contactNumber;
     private String address;
+
 
     protected Person(String id, String name, String gender, String contactNumber, String address){
         this.id = id; // Generate a unique ID for the person
