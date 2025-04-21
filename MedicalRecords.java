@@ -4,9 +4,7 @@ public class MedicalRecords {
     private String treatmentHistory;
     private String Schedule;
 
-    public MedicalRecords(){
-
-    }
-
-    public MedicalRecords(String )
+   public MedicalRecords(){
+    
+   }
 }

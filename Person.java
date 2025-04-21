@@ -5,7 +5,6 @@ public abstract class Person {
     private String contactNumber;
     private String address;
 
-
     protected Person(String id, String name, String gender, String contactNumber, String address){
         this.id = id; // Generate a unique ID for the person
         this.name = name;
@@ -71,6 +70,4 @@ public abstract class Person {
     public int hashCode() {
         return id.hashCode(); // Generate hash code based on ID
     }
-
-    testing
 }
