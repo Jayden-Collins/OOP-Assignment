@@ -1,44 +1,91 @@
 public abstract class Person {
-    private String personID;
-    private String personName;
-    private String personGender;
-    private String personContactNumber;
-    private String personAddress;
+    private final String id;
+    private String name;
+    private String gender;
+    private String contactNumber;
+    private String address;
 
-    public Person(){
-
+    protected Person(String id, String name, String gender, String contactNumber, String address){
+        this.id = id; // Generate a unique ID for the person
+        this.name = name;
+        this.gender = gender;
+        this.contactNumber = contactNumber;
+        this.address = address;
     }
 
-    public Person(String personID, String personName, String personGender, String personContactNumber, String personAddress){
-        this.personID = personID;
-        this.personName = personName;
-        this.personGender = personGender;
-        this.personContactNumber = personContactNumber;
-        this.personAddress = personAddress;
+    // validate and set name
+    public boolean setName(String name){
+        if(name != null && name.matches("^[a-zA-Z ]+$")){
+            this.name = name;
+            return true;
+        }
+        return false;
     }
 
-    //set method 
-    public void setPersonID(String personID){
-        this.personID = personID;
+    // set and boolean method for staff gender
+    public boolean setGender(String gender){
+        if(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Others")){
+            this.gender = gender;
+            return true;
+        }
+        return false;
     }
 
-    public void setPersonName(String personName){
-        this.personName = personName;
+    public boolean setContactNumber(String contactNumber){
+        if(contactNumber.matches("^\\d{3}-\\d{7}$") || contactNumber.matches("^\\d{3}-\\d{8}$") || contactNumber.matches("^\\d{10}$") || contactNumber.matches("^\\d{11}$")){
+            this.contactNumber = contactNumber;
+        }
+        return false;
     }
 
-    public void setPersonGender(String personGender){
-        this.personGender = personGender;
-    }
-
-    public void setPersonContactNumber(String personContactNumber){
-        this.personContactNumber = personContactNumber;
-    }
-
-    public void setPersonAddress(String personAddress){
-        this.personAddress = personAddress;
+    // set and boolean method for staff address 
+    public boolean setAddress(String address){
+        if(address != null && address.matches("^[a-zA-z0-9 ]+$")){
+            this.address = address;
+            return true;
+        }
+        return false;
     }
 
     // get method 
+    public String getId(){
+        return id;
+    }
+    public String getName(){
+        return name;
+    }
 
+    public String getGender(){
+        return gender;
+    }
 
+    public String getContactNumber(){
+        return contactNumber;
+    }
+
+    public String getAddress(){
+        return address;
+    }
+
+    // toString method to return a string representation of the person
+    public String toString() {
+        return "ID: " + id + "\n" +
+                "Name: " + name + "\n" +
+                "Gender: " + gender + "\n" +
+                "Contact Number: " + contactNumber + "\n" +
+                "Address: " + address + "\n";
+    }
+
+/*     // equals method to compare two Person objects based on their ID
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Check if the same object
+        if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is null or not of the same class
+        Person person = (Person) obj; // Cast to Person
+        return id.equals(person.id); // Compare IDs for equality
+    }
+
+    // hashCode method to generate a hash code based on the ID
+    public int hashCode() {
+        return id.hashCode(); // Generate hash code based on ID
+    } */
 }
