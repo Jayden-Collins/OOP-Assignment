@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -205,7 +206,7 @@ public class Hospital {
         }
 
         // create new doctor object
-        Doctor doctor = new Doctor(doctorIc, doctorName, doctorGender, doctorDepartment, doctorYearOfExp, doctorContactNumber, doctorAddress);
+        Doctor doctor = new Doctor(doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, Integer.parseInt(doctorYearOfExp));
         doctors.add(doctor);
 
         // store record in doctor file 
@@ -220,23 +221,24 @@ public class Hospital {
     }
 
     // create an array list for the reading file 
-    public ArrayList<String[]> getDoctors(){
-        ArrayList<String[]> doctors = new ArrayList<>();
-
+    public void readDoctors(){
         // read from the text file 
         try(BufferedReader br = new BufferedReader(new FileReader(DOCTOR_FILE))){
     
             String line;
             while ((line = br.readLine()) != null){
-                String[] doctorRecord1 = line.split("\\|");
-                doctors.add(doctorRecord1);
+                String[] doctorRecord = line.split("\\|");
+                doctors.add(new Doctor(doctorRecord[0], doctorRecord[1], doctorRecord[2], doctorRecord[3], doctorRecord[4], doctorRecord[5], doctorRecord[6], Integer.parseInt(doctorRecord[7])));
             }
         } catch (FileNotFoundException e){
             
         } catch (IOException e){
             System.out.println("Error reading doctor data: " + e.getMessage());
         }
+    }
 
+    // returns a list of doctors
+    public List<Doctor> getDoctors(){
         return doctors;
     }
 
@@ -264,19 +266,19 @@ public class Hospital {
         System.out.print("Enter doctor id or name to search: ");
         String searchID_Name = scanner.nextLine();
 
-        ArrayList<String[]> doctors = getDoctors();
         boolean exist = false;
 
-        for (String[] doctor: doctors){
-            if(doctor[0].equals(searchID_Name) || doctor[1].equals(searchID_Name)){
+        for (Doctor doctor: doctors){
+            if(doctor.getId().equals(searchID_Name) || doctor.getName().equalsIgnoreCase(searchID_Name)){
                 System.out.println("Found the information");
-                System.out.println("ID: " + doctor[0]);
-                System.out.println("Name: " + doctor[1]);
-                System.out.println("Gender: " + doctor[2]);
-                System.out.println("Contact Number: " + doctor[3]);
-                System.out.println("Address: " + doctor[4]);
-                System.out.println("Year of Experience: " + doctor[5]);
-                System.out.println("Department: " + doctor[6]);
+                System.out.println("ID: " + doctor.getId());
+                System.out.println("IC: " + doctor.getIc());
+                System.out.println("Name: " + doctor.getName());
+                System.out.println("Gender: " + doctor.getGender());
+                System.out.println("Contact Number: " + doctor.getContactNumber());
+                System.out.println("Address: " + doctor.getAddress());
+                System.out.println("Department: " + doctor.getDepartment());
+                System.out.println("Year of Experience: " + doctor.getYearOfExp());
                 exist = true;
                 break;
             }

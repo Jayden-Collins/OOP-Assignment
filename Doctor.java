@@ -8,13 +8,19 @@ public class Doctor extends Staff{
     private int appointmentCount = 0;
 
     // constructor for new doctors
-    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorDepartment, int yearOfExp, String doctorContactNumber, String doctorAddress){
+    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
         super(IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
     // constructor for file loading
-    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorDepartment, int yearOfExp, String doctorContactNumber, String doctorAddress){
+    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
         super(doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
+    }
+
+    // method to add appointment to the list of appointments
+    public void addAppointment(Appointment appointment){
+        appointments.add(appointment);
+        appointmentCount++;
     }
 
     // getter method for appointments array 
