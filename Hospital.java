@@ -21,16 +21,15 @@ public class Hospital {
         hospital.combination();
     }
 
-<<<<<<< HEAD
     //clear screen method 
     public static void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
-=======
+    }
+
     public void makeAppointment()
     {
         System.out.println("Appointment created successfully.");
->>>>>>> jayden-branch
     }
 
     //combine access, management 
@@ -279,7 +278,6 @@ public class Hospital {
             System.out.println("Information is not found.");
         }
     }
-<<<<<<< HEAD
 
     //delete doctor information 
 
@@ -541,6 +539,3 @@ public class Hospital {
 
     
 }
-=======
-}
->>>>>>> jayden-branch
