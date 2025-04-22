@@ -2,8 +2,8 @@ public abstract class Staff extends Person{
     private String department;
 
     // parameter constructor 
-    public Staff(String staffID, String staffName, String staffGender, String staffContactNumber, String staffAddress, String department){
-        super(staffID, staffName, staffGender, staffContactNumber, staffAddress);
+    public Staff(String staffId, String staffIc, String staffName, String staffGender, String staffContactNumber, String staffAddress, String department){
+        super(staffId, staffIc, staffName, staffGender, staffContactNumber, staffAddress);
         this.department = department;
     }
 

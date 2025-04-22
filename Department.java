@@ -1,12 +1,10 @@
 public class Department {
-    private String departmentID;
+    private final String departmentID;
     private String departmentName;
-    private String departmentStatus;
 
-    public Department(String departmentID, String departmentName, String departmentStatus){
-        this.departmentID = departmentID;
+    public Department(String departmentName, String departmentStatus){
+        this.departmentID = IdGenerator.generateDepartmentId();
         this.departmentName = departmentName;
-        this.departmentStatus = departmentStatus;
     }
 
     // validation for department name 
@@ -18,26 +16,11 @@ public class Department {
         return false;
     }
 
-    // validation for department status 
-    public boolean setDepartmentStatus(String departmentStatus){
-        if(ValidationCheck.validateAppointmentStatus(departmentStatus)){
-            this.departmentStatus = departmentStatus;
-            return true;
-        }
-        return false;
+    public String getDepartmentID(){
+        return departmentID;
     }
 
     public String getDepartmentName(){
         return departmentName;
     }
-
-    public String getDepartmentID(){
-        return departmentID;
-    }
-
-    public String getDepartmentStatus(){
-        return departmentStatus;
-    }
-
-
 }

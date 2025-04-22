@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,9 +8,16 @@ public class Patient extends Person{
     private int appointmentCount = 0;
 
     //parameterized constructor
-    public Patient(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(IdGenerator.generatePatientId(), patientName, patientGender, patientPhoneNumber, patientAddress);
-        this.emergencyContact = emergencyContact;
+    public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+        super(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+
+        if (ValidationCheck.validateNumber(emergencyContact)){
+            this.emergencyContact = emergencyContact;
+        }
+        else{
+            throw new IllegalArgumentException("Invalid phone number format. Please use the correct format.");
+        }
+        
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
@@ -42,6 +48,6 @@ public class Patient extends Person{
 
     public String toString(){
         return super.toString() + "\n" +
-                "Emergency Contact: " + emergencyContact + "\n" +
+                "Emergency Contact: " + emergencyContact + "\n" ;
     }
 }

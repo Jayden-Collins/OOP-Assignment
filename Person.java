@@ -1,12 +1,14 @@
 public abstract class Person {
     private final String id;
+    private final String ic;
     private String name;
     private String gender;
     private String contactNumber;
     private String address;
 
-    protected Person(String id, String name, String gender, String contactNumber, String address){
+    protected Person(String id, String ic, String name, String gender, String contactNumber, String address){
         this.id = id; // Generate a unique ID for the person
+        this.ic = ic;
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
@@ -24,7 +26,7 @@ public abstract class Person {
 
     // set and boolean method for staff gender
     public boolean setGender(String gender){
-        if(gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Others")){
+        if(ValidationCheck.validateGender(gender)){
             this.gender = gender;
             return true;
         }
@@ -32,15 +34,16 @@ public abstract class Person {
     }
 
     public boolean setContactNumber(String contactNumber){
-        if(contactNumber.matches("^\\d{3}-\\d{7}$") || contactNumber.matches("^\\d{3}-\\d{8}$") || contactNumber.matches("^\\d{10}$") || contactNumber.matches("^\\d{11}$")){
+        if(ValidationCheck.validateNumber(contactNumber)){
             this.contactNumber = contactNumber;
+            return true;
         }
         return false;
     }
 
     // set and boolean method for staff address 
     public boolean setAddress(String address){
-        if(address != null && address.matches("^[a-zA-z0-9 ]+$")){
+        if(ValidationCheck.validateAddress(address)){
             this.address = address;
             return true;
         }
@@ -51,6 +54,11 @@ public abstract class Person {
     public String getId(){
         return id;
     }
+
+    public String getIc(){
+        return ic;
+    }
+    
     public String getName(){
         return name;
     }
