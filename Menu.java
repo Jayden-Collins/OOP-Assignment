@@ -17,6 +17,7 @@ public class Menu {
 
     //display staff menu
     public void displayStaffMenu(){
+        hospital.clearScreen();
         System.out.println("Staff Page");
         System.out.println("1. Doctor Management ");
         System.out.println("2. Nurse Management ");
@@ -28,6 +29,7 @@ public class Menu {
 
     //display patient menu 
     public void displayPatientMenu(){
+        hospital.clearScreen();
         System.out.println("Patient Page");
         System.out.println("1. View Doctor");
         System.out.println("2. Check own Information.");
@@ -47,12 +49,23 @@ public class Menu {
     }
 
     // staff choice method called 
-    public void staffChoice(int choice){
+    public void staffChoice(int choice){    
         switch (choice){
             case 1:
                 hospital.doctorManagement();
+                System.out.println("Press enter to continue");
+                hospital.scanner.nextLine();
+                hospital.clearScreen();
                 break;
             case 2:
+                hospital.nurseManagement();
+                hospital.clearScreen();
+                break;
+            case 3:
+                hospital.patientManagment();
+                hospital.clearScreen();
+                break;
+            case 4:
                 System.out.println("Closed Program.");
                 System.exit(0);
                 break;

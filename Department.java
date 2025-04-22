@@ -9,15 +9,6 @@ public class Department {
         this.departmentStatus = departmentStatus;
     }
 
-    //validation for department id 
-    public boolean setDepartmentID(String departmentID){
-        if(ValidationCheck.validateID(departmentID)){
-            this.departmentID = departmentID;
-            return true;
-        }
-        return false;
-    }
-
     // validation for department name 
     public boolean setDepartmentName(String departmentName){
         if(ValidationCheck.validateName(departmentName)){
