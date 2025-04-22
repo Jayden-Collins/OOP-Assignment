@@ -4,6 +4,11 @@ public class ValidationCheck {
         return id != null && id.matches("^DC-\\d{2}-\\d{2}-\\d{3}$");
     }
 
+    // validation check for ic matches the format 012345-67-8901 and is not null
+    public static boolean validateIc(String ic){
+        return ic != null && ic.matches("^[0-9]{6}-[0-9]{2}-[0-9]{4}$");
+    }
+
     //validation check for name is it alphabet 
     public static boolean validateName(String name){
         return name != null && name.matches("^[a-zA-Z ]+$");
@@ -37,10 +42,5 @@ public class ValidationCheck {
     //validation for patient medical history
     public static boolean validatePatientMedicalHistory(String medicalHistory){
         return medicalHistory != null && medicalHistory.matches("^[a-zA-Z0-9 ]+$");
-    }
-
-    //validation for appointment status 
-    public static boolean validateAppointmentStatus(String status){
-        return status != null && status.matches("^[a-zA-z ]+$");
     }
 }

@@ -6,15 +6,16 @@ public class Doctor extends Staff{
     private Appointment[] appointments = new Appointment[1000];
     private int appointmentCount = 0;
 
-    //parameterized constructor 
-    public Doctor(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
-        super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
+    // constructor for new doctors
+    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
+        super(IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
         this.yearOfExp = yearOfExp;
     }
 
-    //abstract method link to staff class 
-    public String getDetails(){
-        return "Doctor";
+    // constructor for file loading
+    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
+        super(doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
+        this.yearOfExp = yearOfExp;
     }
 
     // add appointment method 
@@ -38,8 +39,12 @@ public class Doctor extends Staff{
         this.yearOfExp = yearOfExp;
     }
 
-    public String getYear(){
+    public String getYearOfExp(){
         return yearOfExp;
+    }
+
+    public String toFileFormat(){
+        return String.join("|", this.getId(), this.getIc(), this.getName(), this.getGender(), this.getContactNumber(), this.getAddress(), this.getDepartment(), this.getYearOfExp());
     }
 
     public String toString(){

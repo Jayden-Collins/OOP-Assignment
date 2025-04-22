@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hospital {
+    // username and password for staff and patient
     private static final String STAFF_USERNAME = "Staff";
     private static final String STAFF_PASSWORD = "12345";
     private static final String PATIENT_USERNAME = "Patient";
@@ -12,7 +13,13 @@ public class Hospital {
     private static final String DOCTOR_FILE = "doctor.txt";
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
-    
+
+    private ArrayList<Department> departments = new ArrayList<>(); // list of departments
+    private ArrayList<Doctor> doctors = new ArrayList<>(); // list of doctors
+    private ArrayList<Nurse> nurses = new ArrayList<>(); // list of nurses
+    private ArrayList<Patient> patients = new ArrayList<>(); // list of patients
+
+    // scanner for user input
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
 
@@ -113,27 +120,27 @@ public class Hospital {
     public void addDoctorInformation(){
         System.out.println("Add Doctor Information");
 
-        // doctor id 
-        String doctorID;
-        while(true){
-            System.out.print("Enter Doctor ID: (DC-24-04-001) ");
-            doctorID = scanner.nextLine();
-            if(ValidationCheck.validateID(doctorID)){
-                break;
-            } else{
-                System.out.println("\nInvalid ID format. Please re-enter: ");
-            }
-        }
-
         // doctor name 
         String doctorName;
         while(true){
-            System.out.print("Enter Doctor Name: (Desterriman) ");
+            System.out.print("Enter Doctor Name: (Desmond Tan) ");
             doctorName = scanner.nextLine();
             if(ValidationCheck.validateName(doctorName)){
                 break;
             } else{
                 System.out.println("\nInvalid Name format. Please re-enter: ");
+            }
+        }
+
+        // doctor IC
+        String doctorIc;
+        while(true){
+            System.out.print("Enter Doctor IC: (012345-67-1234) ");
+            doctorIc = scanner.nextLine();
+            if(ValidationCheck.validateIc(doctorIc)){
+                break;
+            } else{
+                System.out.println("\nInvalid IC format. Please re-enter: ");
             }
         }
 
@@ -197,15 +204,16 @@ public class Hospital {
             }
         }
 
-        //store in string 
-        String doctorRecord = String.join("|", doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorYearOfExp, doctorDepartment);
+        // create new doctor object
+        Doctor doctor = new Doctor(doctorIc, doctorName, doctorGender, doctorDepartment, doctorYearOfExp, doctorContactNumber, doctorAddress);
+        doctors.add(doctor);
 
         // store record in doctor file 
         try(FileWriter fw = new FileWriter(DOCTOR_FILE, true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)){
-            out.println(doctorRecord);
-            System.out.println("\n Doctor Information added successful.");
+            out.println(doctor.toFileFormat());
+            System.out.println("\n New doctor information added successful.");
         } catch (IOException e){
             System.out.println("Error saving doctor information" + e.getMessage());
         }
@@ -442,8 +450,8 @@ public class Hospital {
     public void addPatientInformation(){
         System.out.println("Add Patient Information");
 
-        System.out.println("Enter Patient ID: ");
-        String patientID = scanner.nextLine();
+        System.out.println("Enter Patient IC: ");
+        String patientIC = scanner.nextLine();
 
         System.out.println("Enter Patient Name: ");
         String patientName = scanner.nextLine();
@@ -457,7 +465,7 @@ public class Hospital {
         System.out.println("Enter Patient Address: ");
         String patientAddress = scanner.nextLine();
 
-        String patientRecord = String.join("|", patientID, patientName, patientGender, patientContactNumber, patientAddress);
+        String patientRecord = String.join("|", patientIC, patientName, patientGender, patientContactNumber, patientAddress);
 
         // write to file 
         try(FileWriter fw = new FileWriter(PATIENT_FILE, true);
@@ -518,7 +526,7 @@ public class Hospital {
         boolean exist = false;
 
         for (String[] patient : patients){
-            if(patient[0].equals(searchID_Name) || patient[1].equals(searchID_Name)){
+            if(patient[0].equals(searchID_Name) || patient[1].equalsIgnoreCase(searchID_Name)){
                 System.out.println("Found the information");
                 System.out.println("ID: " + patient[0]);
                 System.out.println("Name: " + patient[1]);
