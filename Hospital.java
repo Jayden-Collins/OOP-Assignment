@@ -12,6 +12,9 @@ public class Hospital {
     private static final String DOCTOR_FILE = "doctor.txt";
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
+
+    //consultation room 
+    ArrayList<String[]> consultRooms = new ArrayList<>();
     
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
@@ -276,7 +279,9 @@ public class Hospital {
     }
 
     //delete doctor information 
+    public void deleteDoctor(){
 
+    }
 
     //nurse management system
     public void nurseManagement(){
@@ -531,6 +536,25 @@ public class Hospital {
         if(!exist){
             System.out.println("Information is not found.");
         }
+    }
+
+
+    // read information from doctor file 
+    public ArrayList<String[]> getDoctorInformation(){
+        ArrayList<String[]> doctorLists = new ArrayList<>();
+
+        // read from file 
+        try (BufferedReader br = new BufferedReader(new FileReader(DOCTOR_FILE))){
+            
+        }
+    }
+
+
+    //View doctor 
+    public void viewDoctorList(){
+        ArrayList<String[]> doctorLists = new ArrayList<>();
+
+
     }
 
     
