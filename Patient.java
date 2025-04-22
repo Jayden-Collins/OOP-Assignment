@@ -10,14 +10,7 @@ public class Patient extends Person{
     //parameterized constructor
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
-
-        if (ValidationCheck.validateNumber(emergencyContact)){
-            this.emergencyContact = emergencyContact;
-        }
-        else{
-            throw new IllegalArgumentException("Invalid phone number format. Please use the correct format.");
-        }
-        
+        this.emergencyContact = emergencyContact;
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
