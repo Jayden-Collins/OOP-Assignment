@@ -30,6 +30,11 @@ public class Hospital {
         System.out.flush();
     }
 
+    public void makeAppointment()
+    {
+        System.out.println("Appointment created successfully.");
+    }
+
     //combine access, management 
     public void combination(){
         checkUserAccess();
@@ -207,7 +212,6 @@ public class Hospital {
         } catch (IOException e){
             System.out.println("Error saving doctor information" + e.getMessage());
         }
-
     }
 
     // create an array list for the reading file 

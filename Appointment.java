@@ -1,72 +1,58 @@
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Appointment {
-    private String appointmentID;
-    private Doctordetails doctor;
-    private Patientdetails patient;
-    private Date appointmentDate;
+    private final LocalDate creationDate = LocalDate.now();
+    private final String appointmentID = IdGenerator.generateAppointmentId();
+    private final Doctor doctor;
+    private final Patient patient;
+    private LocalDate appointmentDate;
     private String consulationRoom;
     private String appointmentStatus;
-    private static int appointmentCount = 0;
 
     //parameter constructor 
-    public Appointment(String appointmentID, Doctordetails doctor, Patientdetails patient, Date appointmentDate, String consultationRoom, String appoinmentStatus){
-        this.appointmentID = appointmentID;
+    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, String consultationRoom){
         this.doctor = doctor;
         this.patient = patient;
         this.appointmentDate = appointmentDate;
         this.consulationRoom = consultationRoom;
-        this.appointmentStatus = appoinmentStatus;
+        this.appointmentStatus = "Scheduled";
 
         //link appointment with doctor and patient 
         doctor.addAppointment(this);
         patient.addAppointment(this);
     }
 
-    //setter and boolean method for appointmentID 
-    public boolean setAppointmentID(String appointmentID){
-        if(ValidationCheck.validateID(appointmentID)){
-            this.appointmentID =  appointmentID;
-            return true;
-        }
-        return false;
-    }
-
-    //setter and boolena method for consultation room
-    public boolean setConsultationRoom(String consultationRoom){
-        if(ValidationCheck.validateName(consultationRoom)){
-            this.consulationRoom = consultationRoom;
-            return true;
-        }
-        return false;
-    }
-
-    //setter and boolean for appointmentStatus
+    // setter and boolean for appointmentStatus
     public boolean setAppointmentStatus(String appointmentStatus){
-        if(ValidationCheck.validateAppointmentStatus(appointmentStatus)){
+        if(appointmentStatus.equals("Scheduled") || appointmentStatus.equals("Completed") || appointmentStatus.equals("Cancelled")){
             this.appointmentStatus = appointmentStatus;
             return true;
         }
         return false;
     }
 
+    // change venue
+    public void changeVenue(String newRoom){
+        this.consulationRoom = newRoom;
+    }
+
+    // reschedule appointment
+    public void rescheduleAppointment(LocalDate newDate){
+        this.appointmentDate = newDate;
+    }
+
+    // get creation date
+    public LocalDate getCreationDate(){
+        return creationDate;
+    }
+    
     // get mthod for appointment id 
     public String getAppointmentID(){
         return appointmentID;
     }
 
-    // get method for doctor details 
-    public Doctordetails getDoctorDetails(){
-        return doctor;
-    }
-
-    // get method for patient details 
-    public Patientdetails getPatientDetails(){
-        return patient;
-    }
-
     // get method for appointment date 
-    public Date getAppointmentDate(){
+    public LocalDate getAppointmentDate(){
         return appointmentDate;
     }
 
@@ -79,5 +65,4 @@ public class Appointment {
     public String getAppointmentStatus(){
         return appointmentStatus;
     }
-
 }
