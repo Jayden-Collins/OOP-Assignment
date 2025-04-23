@@ -6,20 +6,51 @@ public class Appointment {
     private final Doctor doctor;
     private final Patient patient;
     private LocalDate appointmentDate;
-    private String consulationRoom;
+    // get room string method 
+    private Room consulationRoom;
     private String appointmentStatus;
 
     //parameter constructor 
-    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, String consultationRoom){
+    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, Room consultationRoom){
+        //check the room is it available or not 
+        if(!consultationRoom.getAvailable()){
+            throw new IllegalStateException("Consultation Room is not available.");
+        }
         this.doctor = doctor;
         this.patient = patient;
         this.appointmentDate = appointmentDate;
         this.consulationRoom = consultationRoom;
         this.appointmentStatus = "Scheduled";
 
+        //book the room
+        consultationRoom.bookedRoom(this);
+
         //link appointment with doctor and patient 
         doctor.addAppointment(this);
         patient.addAppointment(this);
+    }
+
+    //changing room 
+    public boolean changeRoom(Room changeRoom){
+        if(changeRoom.getAvailable()){
+            this.consulationRoom.freeRoom();
+            this.consulationRoom = changeRoom;
+            changeRoom.bookedRoom(this);
+            return true;
+        }
+        return false;
+    }
+
+    // set appointment status 
+    public void completeAppointment(){
+        this.appointmentStatus = "Completed";
+        this.consulationRoom.freeRoom();
+    }
+
+    // cancel appointment 
+    public void cancelAppointment(){
+        this.appointmentStatus = "Cancelled";
+        this.consulationRoom.freeRoom();
     }
 
     // setter and boolean for appointmentStatus
@@ -29,11 +60,6 @@ public class Appointment {
             return true;
         }
         return false;
-    }
-
-    // change venue
-    public void changeVenue(String newRoom){
-        this.consulationRoom = newRoom;
     }
 
     // reschedule appointment
@@ -57,7 +83,7 @@ public class Appointment {
     }
 
     // get method for consultation room
-    public String getConsultationRoom(){
+    public Room getConsultationRoom(){
         return consulationRoom;
     }
 

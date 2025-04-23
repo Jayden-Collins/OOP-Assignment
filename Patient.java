@@ -1,11 +1,11 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Patient extends Person{
     private String emergencyContact;
     private final MedicalRecords medicalRecord;
-    private List<Appointment> appointments;
+    private List<Appointment> appointments = new ArrayList<>();
     private int appointmentCount = 0;
 
     //parameterized constructor
@@ -42,6 +42,6 @@ public class Patient extends Person{
 
     public String toString(){
         return super.toString() + "\n" +
-                "Emergency Contact: " + emergencyContact + "\n" +
+                "Emergency Contact: " + emergencyContact;
     }
 }
