@@ -18,6 +18,7 @@ public class Patient extends Person{
     public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
+
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
