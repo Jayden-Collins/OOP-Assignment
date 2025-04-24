@@ -36,7 +36,7 @@ public class ValidationCheck {
 
     // validation for year of experience
     public static boolean validateYearOfExp(String yearOfExp){
-        return yearOfExp != null && yearOfExp.matches("^[0-9 ]+$");
+        return yearOfExp != null && yearOfExp.matches("^[0-9]+$");
     }
 
     //validation for patient medical history

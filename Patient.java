@@ -7,17 +7,18 @@ public class Patient extends Person{
     private List<Appointment> appointments;
     private int appointmentCount = 0;
 
-    //parameterized constructor
+    // parameterized constructor
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        this.emergencyContact = emergencyContact;
+        this.medicalRecord = new MedicalRecords(this, null);
+    }
 
-        if (ValidationCheck.validateNumber(emergencyContact)){
-            this.emergencyContact = emergencyContact;
-        }
-        else{
-            throw new IllegalArgumentException("Invalid phone number format. Please use the correct format.");
-        }
-        
+    // constructor for file loading
+    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+        super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        this.emergencyContact = emergencyContact;
+
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
@@ -41,11 +42,18 @@ public class Patient extends Person{
         return false;
     }
 
-    //get emergency contact 
+    // get emergency contact 
     public String getEmergencyContact(){
         return emergencyContact;
     }
 
+    // to file format for the patient class
+    @Override
+    public String toFileFormat(){
+        return String.join("|", super.toFileFormat(), emergencyContact);
+    }
+
+    @Override
     public String toString(){
         return super.toString() + "\n" +
                 "Emergency Contact: " + emergencyContact + "\n" ;
