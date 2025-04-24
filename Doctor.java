@@ -3,18 +3,17 @@ import java.util.Collections;
 import java.util.List;
 
 public class Doctor extends Staff{
-
     private final List<Appointment> appointments = new ArrayList<>(); // list of appointments for the doctor
     private int appointmentCount = 0;
 
     // constructor for new doctors
     public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
-        super(IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
+        super(Role.DOCTOR, IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
     // constructor for file loading
     public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
-        super(doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
+        super(Role.DOCTOR, doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
     // method to add appointment to the list of appointments
@@ -26,11 +25,6 @@ public class Doctor extends Staff{
     // getter method for appointments array 
     public List<Appointment> getAppointments(){
         return Collections.unmodifiableList(appointments);
-    }
-
-    // convert to string for writing to file
-    public String toFileFormat(){
-        return String.join("|", this.getId(), this.getIc(), this.getName(), this.getGender(), this.getContactNumber(), this.getAddress(), this.getDepartment(), String.valueOf(this.getYearOfExp()));
     }
 
     @Override

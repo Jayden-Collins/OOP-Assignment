@@ -15,6 +15,7 @@ public class Hospital {
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
 
+    // lists for departments, doctors, nurses, and patients
     private final List<Department> departments = new ArrayList<>(); // list of departments
     private final List<Doctor> doctors = new ArrayList<>(); // list of doctors
     private final List<Nurse> nurses = new ArrayList<>(); // list of nurses
@@ -58,7 +59,7 @@ public class Hospital {
         return userAccess;
     }
 
-    //check either is patient or staff 
+    // check either is patient or staff 
     public void checkUserAccess(){
         clearScreen();
         System.out.println("Hospital Login System.");
@@ -90,7 +91,12 @@ public class Hospital {
         }
     }
 
-    //doctor management system 
+    // return a list of departments
+    public List<Department> getDepartments(){
+        return departments;
+    }
+
+    // doctor management system 
     public void doctorManagement(){
         clearScreen();
         System.out.println("Doctor Management");
@@ -107,6 +113,7 @@ public class Hospital {
                 addDoctorInformation();
                 break;
             case 2:
+                readDoctors();
                 listdoctor();
                 break;
             case 3:
@@ -117,95 +124,131 @@ public class Hospital {
         }
     }
 
-    // doctor management system sub selection add doctor information
-    public void addDoctorInformation(){
-        System.out.println("Add Doctor Information");
+    // get person information
+    public List<String> getPersonInformation(Role role){
+        List<String> personInfo = new ArrayList<>();
 
-        // doctor name 
-        String doctorName;
+        System.out.println("Enter " + role + " Information: ");
+
+        String name;
         while(true){
-            System.out.print("Enter Doctor Name: (Desmond Tan) ");
-            doctorName = scanner.nextLine();
-            if(ValidationCheck.validateName(doctorName)){
+            System.out.print("Enter " + role + " Name (e.g. John Smith): ");
+            name = scanner.nextLine();
+            if(ValidationCheck.validateName(name)){
+                personInfo.add(name);
                 break;
             } else{
                 System.out.println("\nInvalid Name format. Please re-enter: ");
             }
         }
 
-        // doctor IC
-        String doctorIc;
+        String ic;
         while(true){
-            System.out.print("Enter Doctor IC: (012345-67-1234) ");
-            doctorIc = scanner.nextLine();
-            if(ValidationCheck.validateIc(doctorIc)){
+            System.out.print("Enter " + role + " IC (e.g. 123456-01-0123): ");
+            ic = scanner.nextLine();
+            if(ValidationCheck.validateIc(ic)){
+                personInfo.add(ic);
                 break;
             } else{
                 System.out.println("\nInvalid IC format. Please re-enter: ");
             }
         }
 
-        //doctor gender 
-        String doctorGender;
+        String gender;
         while(true){
-            System.out.print("Enter Doctor Gender: (Male/Female) ");
-            doctorGender = scanner.nextLine();
-            if(ValidationCheck.validateGender(doctorGender)){
+            System.out.print("Enter " + role + " Gender (Male/Female): ");
+            gender = scanner.nextLine();
+            if(ValidationCheck.validateGender(gender)){
+                personInfo.add(gender);
                 break;
             } else{
                 System.out.println("\nInvalid Gender format. Please re-enter: ");
             }
         }
-
-        // doctor contact number 
-        String doctorContactNumber;
+        
+        String contactNumber;
         while(true){
-            System.out.println("Enter Doctor Contact Number: (012-3456789/0123456789) ");
-            doctorContactNumber = scanner.nextLine();
-            if(ValidationCheck.validateNumber(doctorContactNumber)){
+            System.out.print("Enter " + role + " Contact Number (012-3456789): ");
+            contactNumber = scanner.nextLine();
+            if(ValidationCheck.validateNumber(contactNumber)){
+                personInfo.add(contactNumber);
                 break;
             } else{
                 System.out.println("\nInvalid contact number format. Please re-enter: ");
             }
         }
 
-        // doctor address 
-        String doctorAddress;
+        String address;
         while(true){
-            System.out.println("Enter Doctor Address: (19-09 Taman Rambutan 11900 Bayan Lepas Pulau Pinang) ");
-            doctorAddress = scanner.nextLine();
-            if(ValidationCheck.validateAddress(doctorAddress)){
+            System.out.print("Enter " + role + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
+            address = scanner.nextLine();
+            if(ValidationCheck.validateAddress(address)){
+                personInfo.add(address);
                 break;
             } else {
-                System.out.println("\nInvalid address format. Please re-enter");
+                System.out.println("\nInvalid address format. Please re-enter: ");
             }
         }
 
-        // doctor department
-        String doctorDepartment;
-        while(true){
-            System.out.print("Enter Doctor Department: (Cardiology) ");
-            doctorDepartment = scanner.nextLine();
-            if(ValidationCheck.validateDoctorDepartment(doctorDepartment)){
-                break;
-            } else {
-                System.out.println("\nInvalid department format. Please re-enter: ");
+        if (Role.isStaff(role)){
+            String department;
+            while(true){
+                System.out.print("Enter/Select" + role + " Department: ");
+                department = scanner.nextLine();
+                if(ValidationCheck.validateDoctorDepartment(department)){
+                    personInfo.add(department);
+                    break;
+                } else {
+                    System.out.println("\nInvalid department format. Please re-enter: ");
+                }
+            }
+
+            String yearOfExp;
+            while(true){
+                System.out.print("Enter " + role + " Year of Experience: ");
+                yearOfExp = scanner.nextLine();
+                if(ValidationCheck.validateYearOfExp(yearOfExp)){
+                    personInfo.add(yearOfExp);
+                    break;
+                } else {
+                    System.out.println("\nInvalid year of experience format. Please re-enter: ");
+                }
+            }
+        }
+        else if (role == Role.PATIENT){
+            String emergencyContact;
+            while(true){
+                System.out.print("Enter " + role + " Emergency Contact Number (012-3456789): ");
+                emergencyContact = scanner.nextLine();
+                if(ValidationCheck.validateNumber(emergencyContact)){
+                    personInfo.add(emergencyContact);
+                    break;
+                } else {
+                    System.out.println("\nInvalid emergency contact number format. Please re-enter: ");
+                }
             }
         }
 
-        //doctor year of experience 
-        String doctorYearOfExp;
-        while(true){
-            System.out.println("Enter Doctor Year of Experience: (12) ");
-            doctorYearOfExp = scanner.nextLine();
-            if(ValidationCheck.validateYearOfExp(doctorYearOfExp)){
-                break;
-            } else {
-                System.out.println("\nInvalid year of experience format. Please re-enter: ");
-            }
-        }
+        // return the list of person information
+        return personInfo;
+    }
+    
+    // get staff information
 
-        // create new doctor object
+    // doctor management system sub selection add doctor information
+    public void addDoctorInformation(){
+
+        // get person information
+        List<String> personInfo = getPersonInformation(Role.DOCTOR);
+        String doctorName = personInfo.get(0);
+        String doctorIc = personInfo.get(1);
+        String doctorGender = personInfo.get(2);
+        String doctorContactNumber = personInfo.get(3);
+        String doctorAddress = personInfo.get(4);
+        String doctorDepartment = personInfo.get(5);
+        String doctorYearOfExp = personInfo.get(6);
+
+        // create a new doctor object
         Doctor doctor = new Doctor(doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, Integer.parseInt(doctorYearOfExp));
         doctors.add(doctor);
 
@@ -264,14 +307,7 @@ public class Hospital {
         for (Doctor doctor: doctors){
             if(doctor.getId().equals(searchID_Name) || doctor.getName().equalsIgnoreCase(searchID_Name)){
                 System.out.println("Found the information");
-                System.out.println("ID: " + doctor.getId());
-                System.out.println("IC: " + doctor.getIc());
-                System.out.println("Name: " + doctor.getName());
-                System.out.println("Gender: " + doctor.getGender());
-                Systemr.out.println("Contact Number: " + doctor.getContactNumber());
-                System.out.println("Address: " + doctor.getAddress());
-                System.out.println("Department: " + doctor.getDepartment());
-                System.out.println("Year of Experience: " + doctor.getYearOfExp());
+                System.out.println(doctor);
                 exist = true;
                 break;
             }
@@ -291,6 +327,7 @@ public class Hospital {
         System.out.println("1. Add Nurse Information");
         System.out.println("2. List all nurse");
         System.out.println("3. Search Nurse");
+        System.out.println("4. Back to Main Menu");
         System.out.print("Enter choice: : ");
 
         int selection = scanner.nextInt();
@@ -301,6 +338,7 @@ public class Hospital {
                 addNurseInformation();
                 break;
             case 2:
+                readNurse();
                 listNurse();
                 break;
             case 3:
@@ -313,46 +351,16 @@ public class Hospital {
 
     //add nurse information
     public void addNurseInformation(){
-        System.out.println("Add Nurse Information");
 
-        System.out.print("Enter Nurse Name: ");
-        String nurseName = scanner.nextLine();
-
-        System.out.print("Enter Nurse IC: ");
-        String nurseIC = scanner.nextLine();
-
-        System.out.print("Enter Nurse Gender: ");
-        String nurseGender = scanner.nextLine();
-
-        System.out.print("Enter Nurse Contact Number: ");
-        String nurseContactNumber = scanner.nextLine();
-
-        System.out.print("Enter Nurse Address: ");
-        String nurseAddress = scanner.nextLine();
-
-        // doctor department
-        String nurseDepartment;
-        while(true){
-            System.out.print("Enter Doctor Department: (Cardiology) ");
-            nurseDepartment = scanner.nextLine();
-            if(ValidationCheck.validateDoctorDepartment(nurseDepartment)){
-                break;
-            } else {
-                System.out.println("\nInvalid department format. Please re-enter: ");
-            }
-        }
-
-        //doctor year of experience 
-        String nurseYearOfExp;
-        while(true){
-            System.out.println("Enter Doctor Year of Experience: (12) ");
-            nurseYearOfExp = scanner.nextLine();
-            if(ValidationCheck.validateYearOfExp(nurseYearOfExp)){
-                break;
-            } else {
-                System.out.println("\nInvalid year of experience format. Please re-enter: ");
-            }
-        }
+        // get person information
+        List<String> personInfo = getPersonInformation(Role.NURSE);
+        String nurseName = personInfo.get(0);
+        String nurseIC = personInfo.get(1);
+        String nurseGender = personInfo.get(2);
+        String nurseContactNumber = personInfo.get(3);
+        String nurseAddress = personInfo.get(4);
+        String nurseDepartment = personInfo.get(5);
+        String nurseYearOfExp = personInfo.get(6);
 
         // createa a new nurse object
         Nurse nurse = new Nurse(nurseIC, nurseName, nurseGender, nurseContactNumber, nurseAddress, nurseDepartment, Integer.parseInt(nurseYearOfExp));
@@ -422,11 +430,12 @@ public class Hospital {
     }
 
     //patient managment system
-    public void patientManagment(){
+    public void patientManagement(){
         System.out.println("Patient Management");
         System.out.println("1. Add Patient Information.");
         System.out.println("2. List all patient information");
         System.out.println("3. Search Information");
+        System.out.println("4. Back to Main Menu");
         System.out.println("Enter choice: ");
 
         int selection = scanner.nextInt();
@@ -437,6 +446,7 @@ public class Hospital {
                 addPatientInformation();
                 break;
             case 2:
+                readPatient();
                 listPatient();
                 break;
             case 3:
@@ -451,30 +461,22 @@ public class Hospital {
 
     // add patient information 
     public void addPatientInformation(){
-        System.out.println("Add Patient Information");
+        // get person information
+        List<String> personInfo = getPersonInformation(Role.PATIENT);
+        String patientName = personInfo.get(0);
+        String patientIC = personInfo.get(1);
+        String patientGender = personInfo.get(2);
+        String patientContactNumber = personInfo.get(3);
+        String patientAddress = personInfo.get(4);
+        String patientEmergencyContact = personInfo.get(5);
 
-        System.out.println("Enter Patient IC: ");
-        String patientIC = scanner.nextLine();
-
-        System.out.println("Enter Patient Name: ");
-        String patientName = scanner.nextLine();
-
-        System.out.println("Enter Patient Gender: ");
-        String patientGender = scanner.nextLine();
-
-        System.out.println("Enter Patient Contact Number: ");
-        String patientContactNumber = scanner.nextLine();
-
-        System.out.println("Enter Patient Address: ");
-        String patientAddress = scanner.nextLine();
-
-        String patientRecord = String.join("|", patientIC, patientName, patientGender, patientContactNumber, patientAddress);
+        Patient patient = new Patient(patientIC, patientName, patientGender, patientContactNumber, patientAddress, patientEmergencyContact);
 
         // write to file 
         try(FileWriter fw = new FileWriter(PATIENT_FILE, true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)){
-            out.println(patientRecord);
+            out.println(patient);
             System.out.println("Nurse Information saved succesfully");
         } catch (IOException e){
             System.out.println("Error saving nurse information." + e.getMessage());

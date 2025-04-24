@@ -9,14 +9,14 @@ public class Patient extends Person{
 
     // parameterized constructor
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
     // constructor for file loading
     public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
         this.medicalRecord = new MedicalRecords(this, null);
     }
@@ -41,11 +41,18 @@ public class Patient extends Person{
         return false;
     }
 
-    //get emergency contact 
+    // get emergency contact 
     public String getEmergencyContact(){
         return emergencyContact;
     }
 
+    // to file format for the patient class
+    @Override
+    public String toFileFormat(){
+        return String.join("|", super.toFileFormat(), emergencyContact);
+    }
+
+    @Override
     public String toString(){
         return super.toString() + "\n" +
                 "Emergency Contact: " + emergencyContact + "\n" ;
