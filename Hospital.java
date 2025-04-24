@@ -1,7 +1,9 @@
 import java.io.*;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.time.LocalDate;
 
 public class Hospital {
     // username and password for staff and patient
@@ -15,7 +17,8 @@ public class Hospital {
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
 
-    // lists for departments, doctors, nurses, and patients
+    // lists for consultation rooms, departments, doctors, nurses, and patients
+    private final List<consultationRoom> consultationRooms;
     private final List<Department> departments = new ArrayList<>(); // list of departments
     private final List<Doctor> doctors = new ArrayList<>(); // list of doctors
     private final List<Nurse> nurses = new ArrayList<>(); // list of nurses
@@ -29,6 +32,14 @@ public class Hospital {
         Hospital hospital = new Hospital();
         hospital.combination();
     }
+
+    //set the rooms 
+    private void addRooms(){
+        
+    }
+
+    // check the available 
+    public void 
 
     //clear screen method 
     public void clearScreen(){
@@ -319,7 +330,9 @@ public class Hospital {
     }
 
     //delete doctor information 
+    public void deleteDoctor(){
 
+    }
 
     //nurse management system
     public void nurseManagement(){
@@ -534,6 +547,55 @@ public class Hospital {
 
         if(!exist){
             System.out.println("Information is not found.");
+        }
+    }
+
+    //patient management page 
+
+    //View doctor 
+    public void viewDoctorList(){
+        ArrayList<String[]> doctorLists = getDoctors();
+
+        if(doctorLists.isEmpty()){
+            System.out.println("No doctor information is added.");
+            return;
+        }
+
+        for (String[] doctorList : doctorLists){
+            System.out.println("ID: " + doctorList[0]);
+            System.out.println("Name: " + doctorList[1]);
+            System.out.println("Gender: " + doctorList[2]);
+            System.out.println("Contact Number: " + doctorList[3]);
+            System.out.println("Address: " + doctorList[4]);
+            System.out.println("Year of Experience: " + doctorList[5]);
+            System.out.println("Department: " + doctorList[6]);
+        }
+
+    }
+
+    //check own information 
+    public void checkPersonalInformation(){
+        System.out.print("Enter your own id or name to check own information");
+        String search = scanner.nextLine();
+
+        ArrayList<String[]> ownLists = getPatient();
+        boolean exist = false;
+        boolean update = false;
+
+        for(String[] ownList : ownLists){
+            if(ownList[0].equalsIgnoreCase(search) || ownList[0].equalsIgnoreCase(search)){
+                System.out.println("ID: " + ownList[0]);
+                System.out.println("Name: " + ownList[1]);
+                System.out.println("Gender: " + ownList[2]);
+                System.out.println("Contact Number: " + ownList[3]);
+                System.out.println("Address: " + ownList[4]);
+                System.out.println("Year of Experience: " + ownList[5]);
+                System.out.println("Department: " + ownList[6]);
+            }
+        }
+
+        if(!exist){
+            System.out.println("Information not been stored.");
         }
     }
 }
