@@ -75,6 +75,10 @@ public abstract class Person {
         return address;
     }
 
+    public String toFileFormat(){
+        return String.join("|", id, ic, name, gender, contactNumber, address);
+    }
+
     // toString method to return a string representation of the person
     public String toString() {
         return "ID: " + id + "\n" +

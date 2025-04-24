@@ -7,9 +7,16 @@ public class Patient extends Person{
     private List<Appointment> appointments;
     private int appointmentCount = 0;
 
-    //parameterized constructor
+    // parameterized constructor
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        this.emergencyContact = emergencyContact;
+        this.medicalRecord = new MedicalRecords(this, null);
+    }
+
+    // constructor for file loading
+    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+        super(patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
         this.medicalRecord = new MedicalRecords(this, null);
     }

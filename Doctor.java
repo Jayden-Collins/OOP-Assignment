@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Doctor extends Staff{
 
-    private List<Appointment> appointments = new ArrayList<>(); // list of appointments for the doctor
+    private final List<Appointment> appointments = new ArrayList<>(); // list of appointments for the doctor
     private int appointmentCount = 0;
 
     // constructor for new doctors
@@ -33,8 +33,8 @@ public class Doctor extends Staff{
         return String.join("|", this.getId(), this.getIc(), this.getName(), this.getGender(), this.getContactNumber(), this.getAddress(), this.getDepartment(), String.valueOf(this.getYearOfExp()));
     }
 
+    @Override
     public String toString(){
         return super.toString();
     }
 }
-
