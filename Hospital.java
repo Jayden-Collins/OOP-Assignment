@@ -25,18 +25,35 @@ public class Hospital {
     // scanner for user input
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
+    private Role userRole = null;
 
     public static void main(String[] args) {
         Hospital hospital = new Hospital();
-        hospital.combination();
-    }
-
-    //set the rooms 
-    private void addRooms(){
         
+        // log in page
+        hospital.checkUserAccess();
+
+        // creates a menu object for the hospital object
+        Menu menu = new Menu(hospital);
+        
+        while(true){
+            // display staff or patient menu based on user role
+            menu.displayMenu();
+
+            // read user input for page selection
+            int choice = hospital.scanner.nextInt();
+            hospital.scanner.nextLine(); // continue new line 
+
+            // display page based on choice selected
+            menu.choiceSelection(choice);
+        }
     }
 
-    //clear screen method 
+    // set the rooms 
+    private void addRooms(){ 
+    }
+
+    // clear screen method 
     public void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -46,26 +63,43 @@ public class Hospital {
     {
         System.out.println("Appointment created successfully.");
     }
-
-    //combine access, management 
-    public void combination(){
-        checkUserAccess();
-        Menu menu = new Menu(this);
-        
-        while(true){
-            menu.displayMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // continue new line 
-            menu.choiceSelection(choice);
-        }
-    }
     
     // user access
-    public String UserAccess(){
+    public String getUserAccess(){
         return userAccess;
     }
 
-    // check either is patient or staff 
+    // returns user role
+    public Role getUserRole(){
+        return userRole;
+    }
+
+    // returns a list of departments
+    public List<Department> getDepartments(){
+        return departments;
+    }
+
+    // returns a list of rooms
+    public List<Room> getRooms(){
+        return consultationRooms;
+    }
+
+    // returns a list of doctors
+    public List<Doctor> getDoctors(){
+        return doctors;
+    }
+
+    public List<Nurse> getNurses(){
+        return nurses;
+    }
+
+    // return a list of patients
+    public List<Patient> getPatient(){
+        return patients;
+    }
+
+
+    // log in page that checks whether the user is a patient or staff 
     public void checkUserAccess(){
         clearScreen();
         System.out.println("Hospital Login System.");
@@ -79,14 +113,16 @@ public class Hospital {
 
             if(username.equals(STAFF_USERNAME) && password.equals(STAFF_PASSWORD)){
                 userAccess = "Staff";
+                userRole = Role.STAFF;
                 clearScreen();
-                System.out.println("Login Successful as staff.");
+                System.out.println("Log In Successful!");
                 break;
             }
             else if(username.equals(PATIENT_USERNAME) && password.equals(PATIENT_PASSWORD)){
                 userAccess = "Patient";
+                userRole = Role.PATIENT;
                 clearScreen();
-                System.out.println("Login Successful as patient.");
+                System.out.println("Log In Successful!");
                 break;
             }
             else{
@@ -97,10 +133,6 @@ public class Hospital {
         }
     }
 
-    // return a list of departments
-    public List<Department> getDepartments(){
-        return departments;
-    }
 
     // doctor management system 
     public void doctorManagement(){
@@ -116,13 +148,16 @@ public class Hospital {
         
         switch (selection){
             case 1:
+                clearScreen();
                 addDoctorInformation();
                 break;
             case 2:
+                clearScreen();
                 readDoctors();
                 listdoctor();
                 break;
             case 3:
+                clearScreen();
                 searchDoctor();
                 break;
             default:
@@ -290,11 +325,6 @@ public class Hospital {
         }
     }
 
-    // returns a list of doctors
-    public List<Doctor> getDoctors(){
-        return doctors;
-    }
-
     // list doctor information 
     public void listdoctor(){
         if(doctors.isEmpty()){
@@ -347,13 +377,16 @@ public class Hospital {
 
         switch(selection){
             case 1:
+                clearScreen();
                 addNurseInformation();
                 break;
             case 2:
+                clearScreen();
                 readNurse();
                 listNurse();
                 break;
             case 3:
+                clearScreen();
                 searchNurse();
                 break;
             default:
@@ -408,10 +441,6 @@ public class Hospital {
         }
     }
 
-    public List<Nurse> getNurses(){
-        return nurses;
-    }
-
     // list nurse information 
     public void listNurse(){
         if(nurses.isEmpty()){
@@ -458,16 +487,20 @@ public class Hospital {
 
         switch(selection){
             case 1:
+                clearScreen();
                 addPatientInformation();
                 break;
             case 2:
+                clearScreen();
                 readPatient();
                 listPatient();
                 break;
             case 3:
+                clearScreen();
                 searchPatient();
                 break;
             case 4:
+                clearScreen();
                 System.exit(0);
             default:
                 System.out.println("Invalid choice. Please re-enter");
@@ -502,7 +535,7 @@ public class Hospital {
     public void readPatient(){
         // clear patient list
         patients.clear();
-        
+
         // read from the file 
         try(BufferedReader br = new BufferedReader(new FileReader(PATIENT_FILE))){
             String line;
@@ -515,11 +548,6 @@ public class Hospital {
         } catch (IOException e){
             System.out.println("Error reading patient information."+ e.getMessage());
         }
-    }
-
-    // return a list of patients
-    public List<Patient> getPatient(){
-        return patients;
     }
 
     // list for all patient

@@ -1,20 +1,20 @@
 public class Menu {
-    private Hospital hospital;
+    private final Hospital hospital;
 
     public Menu(Hospital hospital){
         this.hospital = hospital;
     }
 
-    //display selection of menu
+    // display staff or patient menu based on user role
     public void displayMenu(){
-        if(hospital.UserAccess().equals("Staff")){
+        if(Role.isStaff(hospital.getUserRole())){
             displayStaffMenu();
         } else {
             displayPatientMenu();
         }
     }
 
-    //display staff menu
+    // display staff menu
     public void displayStaffMenu(){
         hospital.clearScreen();
         System.out.println("Staff Page");
@@ -26,7 +26,7 @@ public class Menu {
         System.out.print("Enter choice: ");
     }
 
-    //display patient menu 
+    // display patient menu 
     public void displayPatientMenu(){
         hospital.clearScreen();
         System.out.println("Patient Page");
@@ -38,16 +38,16 @@ public class Menu {
         System.out.print("Enter choice: ");
     }
 
-    // choice for method operations called 
+    // calls the relevent choice handling methods based on user role
     public void choiceSelection(int choice){
-        if(hospital.UserAccess().equals("Staff")){
+        if(Role.isStaff(hospital.getUserRole())){
             staffChoice(choice);
         } else{
             patientChoice(choice);
         }
     }
 
-    // staff choice method called 
+    // handles choice selection for staff
     public void staffChoice(int choice){    
         switch (choice){
             case 1:
@@ -64,7 +64,7 @@ public class Menu {
                 hospital.patientManagement();
                 hospital.clearScreen();
                 break;
-            case 5:
+            case 4:
                 System.out.println("Closed Program.");
                 System.exit(0);
                 break;
@@ -73,7 +73,7 @@ public class Menu {
         }
     }
 
-    // patient choice method called 
+    // handles choice selection for patients
     public void patientChoice(int choice){
         switch(choice){
             case 1:

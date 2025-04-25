@@ -1,4 +1,5 @@
 public enum Role{
+    STAFF("Staff"),
     DOCTOR("Doctor"),
     NURSE("Nurse"),
     PATIENT("Patient");
@@ -10,7 +11,7 @@ public enum Role{
     }
 
     public static boolean isStaff(Role role){
-        return role == DOCTOR || role == NURSE;
+        return role == DOCTOR || role == NURSE || role == STAFF;
     }
 
     public String getRoleName(){
