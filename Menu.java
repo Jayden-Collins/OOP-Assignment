@@ -1,4 +1,3 @@
-
 public class Menu {
     private Hospital hospital;
 
@@ -62,10 +61,10 @@ public class Menu {
                 hospital.clearScreen();
                 break;
             case 3:
-                hospital.patientManagment();
+                hospital.patientManagement();
                 hospital.clearScreen();
                 break;
-            case 4:
+            case 5:
                 System.out.println("Closed Program.");
                 System.exit(0);
                 break;

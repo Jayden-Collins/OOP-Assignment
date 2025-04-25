@@ -1,9 +1,7 @@
 import java.io.*;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 public class Hospital {
     // username and password for staff and patient
@@ -18,11 +16,11 @@ public class Hospital {
     private static final String PATIENT_FILE = "patient.txt";
 
     // lists for consultation rooms, departments, doctors, nurses, and patients
-    private final List<consultationRoom> consultationRooms;
-    private final List<Department> departments = new ArrayList<>(); // list of departments
-    private final List<Doctor> doctors = new ArrayList<>(); // list of doctors
-    private final List<Nurse> nurses = new ArrayList<>(); // list of nurses
-    private final List<Patient> patients = new ArrayList<>(); // list of patients
+    private final List<Room> consultationRooms = new ArrayList<>();
+    private final List<Department> departments = new ArrayList<>();
+    private final List<Doctor> doctors = new ArrayList<>();
+    private final List<Nurse> nurses = new ArrayList<>();
+    private final List<Patient> patients = new ArrayList<>();
 
     // scanner for user input
     Scanner scanner = new Scanner(System.in);
@@ -37,9 +35,6 @@ public class Hospital {
     private void addRooms(){
         
     }
-
-    // check the available 
-    public void 
 
     //clear screen method 
     public void clearScreen(){
@@ -139,11 +134,12 @@ public class Hospital {
     public List<String> getPersonInformation(Role role){
         List<String> personInfo = new ArrayList<>();
 
-        System.out.println("Enter " + role + " Information: ");
+
+        System.out.println("Enter " + role.getRoleName() + " Information: ");
 
         String name;
         while(true){
-            System.out.print("Enter " + role + " Name (e.g. John Smith): ");
+            System.out.print("Enter " + role.getRoleName() + " Name (e.g. John Smith): ");
             name = scanner.nextLine();
             if(ValidationCheck.validateName(name)){
                 personInfo.add(name);
@@ -155,7 +151,7 @@ public class Hospital {
 
         String ic;
         while(true){
-            System.out.print("Enter " + role + " IC (e.g. 123456-01-0123): ");
+            System.out.print("Enter " + role.getRoleName() + " IC (e.g. 123456-01-0123): ");
             ic = scanner.nextLine();
             if(ValidationCheck.validateIc(ic)){
                 personInfo.add(ic);
@@ -167,7 +163,7 @@ public class Hospital {
 
         String gender;
         while(true){
-            System.out.print("Enter " + role + " Gender (Male/Female): ");
+            System.out.print("Enter " + role.getRoleName() + " Gender (Male/Female): ");
             gender = scanner.nextLine();
             if(ValidationCheck.validateGender(gender)){
                 personInfo.add(gender);
@@ -179,7 +175,7 @@ public class Hospital {
         
         String contactNumber;
         while(true){
-            System.out.print("Enter " + role + " Contact Number (012-3456789): ");
+            System.out.print("Enter " + role.getRoleName() + " Contact Number (012-3456789): ");
             contactNumber = scanner.nextLine();
             if(ValidationCheck.validateNumber(contactNumber)){
                 personInfo.add(contactNumber);
@@ -191,7 +187,7 @@ public class Hospital {
 
         String address;
         while(true){
-            System.out.print("Enter " + role + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
+            System.out.print("Enter " + role.getRoleName() + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
             address = scanner.nextLine();
             if(ValidationCheck.validateAddress(address)){
                 personInfo.add(address);
@@ -204,7 +200,7 @@ public class Hospital {
         if (Role.isStaff(role)){
             String department;
             while(true){
-                System.out.print("Enter/Select" + role + " Department: ");
+                System.out.print("Enter/Select" + role.getRoleName() + " Department (e.g. Cardiology): ");
                 department = scanner.nextLine();
                 if(ValidationCheck.validateDoctorDepartment(department)){
                     personInfo.add(department);
@@ -216,7 +212,7 @@ public class Hospital {
 
             String yearOfExp;
             while(true){
-                System.out.print("Enter " + role + " Year of Experience: ");
+                System.out.print("Enter " + role.getRoleName() + " Year of Experience (e.g. 12): ");
                 yearOfExp = scanner.nextLine();
                 if(ValidationCheck.validateYearOfExp(yearOfExp)){
                     personInfo.add(yearOfExp);
@@ -229,7 +225,7 @@ public class Hospital {
         else if (role == Role.PATIENT){
             String emergencyContact;
             while(true){
-                System.out.print("Enter " + role + " Emergency Contact Number (012-3456789): ");
+                System.out.print("Enter " + role.getRoleName() + " Emergency Contact Number (012-3456789): ");
                 emergencyContact = scanner.nextLine();
                 if(ValidationCheck.validateNumber(emergencyContact)){
                     personInfo.add(emergencyContact);
@@ -276,6 +272,9 @@ public class Hospital {
 
     // create an array list for the reading file 
     public void readDoctors(){
+        // clear doctors array
+        doctors.clear();
+
         // read from the text file 
         try(BufferedReader br = new BufferedReader(new FileReader(DOCTOR_FILE))){
     
@@ -392,6 +391,9 @@ public class Hospital {
 
     // read all nurse information and store it at the array list 
     public void readNurse(){
+        // clear nurse list
+        nurses.clear();
+
         try(BufferedReader br = new BufferedReader(new FileReader(NURSE_FILE))){
             
             String line;
@@ -498,6 +500,9 @@ public class Hospital {
 
     // get all patient information 
     public void readPatient(){
+        // clear patient list
+        patients.clear();
+        
         // read from the file 
         try(BufferedReader br = new BufferedReader(new FileReader(PATIENT_FILE))){
             String line;
@@ -531,13 +536,49 @@ public class Hospital {
 
     // search for patient 
     public void searchPatient(){
-        System.out.print("Enter patient id or name to search information: ");
-        String searchID_Name = scanner.nextLine();
+        String search;
 
+        while (true){
+            System.out.println("Search by:");
+            System.out.println("1. Patient ID");
+            System.out.println("2. Patient Name");
+            System.out.print("Enter choice: ");
+
+            String choice = scanner.nextLine();
+
+            if (choice.equals("1")){
+                while (true){
+                    System.out.print("Enter Patient ID: ");
+                    String searchID = scanner.nextLine();
+                    if (ValidationCheck.validateID(searchID)){
+                        search = searchID;
+                        break;
+                    } else {
+                        System.out.println("Invalid ID format. Please re-enter.");
+                    }
+                }
+                break;
+            } else if (choice.equals("2")){
+                while (true){
+                    System.out.print("Enter Patient Name: ");
+                    String searchName = scanner.nextLine();
+                    if(ValidationCheck.validateName(searchName)){
+                        search = searchName;
+                        break;
+                    } else {
+                        System.out.println("Invalid name format. Please re-enter.");
+                    }
+                }
+                break;
+            } else {
+                System.out.println("Invalid choice. Please re-enter.");
+            }
+        }
+        
         boolean exist = false;
 
         for (Patient patient : patients){
-            if(patient.getId().equals(searchID_Name) || patient.getName().equalsIgnoreCase(searchID_Name)){
+            if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
                 System.out.println("Found the information");
                 System.out.println(patient);
                 exist = true;
@@ -551,51 +592,4 @@ public class Hospital {
     }
 
     //patient management page 
-
-    //View doctor 
-    public void viewDoctorList(){
-        ArrayList<String[]> doctorLists = getDoctors();
-
-        if(doctorLists.isEmpty()){
-            System.out.println("No doctor information is added.");
-            return;
-        }
-
-        for (String[] doctorList : doctorLists){
-            System.out.println("ID: " + doctorList[0]);
-            System.out.println("Name: " + doctorList[1]);
-            System.out.println("Gender: " + doctorList[2]);
-            System.out.println("Contact Number: " + doctorList[3]);
-            System.out.println("Address: " + doctorList[4]);
-            System.out.println("Year of Experience: " + doctorList[5]);
-            System.out.println("Department: " + doctorList[6]);
-        }
-
-    }
-
-    //check own information 
-    public void checkPersonalInformation(){
-        System.out.print("Enter your own id or name to check own information");
-        String search = scanner.nextLine();
-
-        ArrayList<String[]> ownLists = getPatient();
-        boolean exist = false;
-        boolean update = false;
-
-        for(String[] ownList : ownLists){
-            if(ownList[0].equalsIgnoreCase(search) || ownList[0].equalsIgnoreCase(search)){
-                System.out.println("ID: " + ownList[0]);
-                System.out.println("Name: " + ownList[1]);
-                System.out.println("Gender: " + ownList[2]);
-                System.out.println("Contact Number: " + ownList[3]);
-                System.out.println("Address: " + ownList[4]);
-                System.out.println("Year of Experience: " + ownList[5]);
-                System.out.println("Department: " + ownList[6]);
-            }
-        }
-
-        if(!exist){
-            System.out.println("Information not been stored.");
-        }
-    }
 }

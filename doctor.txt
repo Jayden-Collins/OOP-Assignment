@@ -1,1 +1,15 @@
-DC-25-001|012345-67-1234|desmond tan|Male|0123456789|123 road|Cardiology|12
+890101-01-1234|John Smith|Male|012-3456789|3 Western Ave|Cardiology|12
+900202-02-2345|Sarah Tan|Female|013-4567890|15 Jalan Merdeka|Cardiology|8
+870303-03-3456|Michael Wong|Male|014-5678901|22 Parkview Heights|Cardiology|15
+910404-04-4567|Lisa Lim|Female|016-6789012|8 Sunway Residency|Neurology|10
+880505-05-5678|David Raj|Male|017-7890123|45 Bangsar Avenue|Neurology|17
+930606-06-6789|Priya Kaur|Female|018-8901234|12 KLCC Penthouse|Neurology|5
+940707-07-7890|Ahmad bin Ali|Male|019-9012345|7 Taman Tun Homes|Pediatrics|9
+850808-08-8901|Emily Chen|Female|011-0123456|33 Damansara Heights|Pediatrics|18
+950909-09-9012|Robert Teo|Male|010-1234567|1 Mont Kiara Villa|Pediatrics|6
+891010-10-0123|Nurul Hasanah|Female|012-2345678|9 Putrajaya Precinct|Emergency|11
+921111-11-1234|James Ho|Male|013-3456789|27 Subang Jaya|Emergency|7
+861212-12-2345|Anita Devi|Female|014-4567890|5 Petaling Heights|Emergency|16
+931313-13-3456|Christopher Lee|Male|015-5678901|14 Cyberjaya Homes|Oncology|13
+941414-14-4567|Siti Aminah|Female|016-6789012|19 Shah Alam Residency|Oncology|8
+871515-15-5678|Daniel Lim|Male|017-7890123|2 Puchong Terrace|Oncology|14
