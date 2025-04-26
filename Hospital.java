@@ -606,7 +606,30 @@ public class Hospital {
         }
     }
 
-    // Book Appointment page 
+    //check doctor is it available 
+    public boolean doctorAvailability(Doctor doctor, LocalDate date){
+        Appointment[] appointments = doctor.getAppointments();
+        for(Appointment appointment : appointments){
+            if(appointment != null && appointment.getAppointmentDate().equals(date)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // get available rooms 
+    public List<Room> getAvailableRoom(String roomType){
+        List<Room> available = new ArrayList<>();
+        for(Room room : consultationRooms){
+            if(room.getAvailable() && (roomType != null || room.getRoomType().equals(roomType))){
+                available.add(room);
+            }
+        }
+        return available;
+    }
+
+    // Book Appointment page
+    // (Check patient is it new or exist) (Check available department) (Check available doctor) (Get appointment date and check with available doctor) (check available room) 
     public void bookAppointment(){
         clearScreen();
         System.out.println("Booking Appointment Page");
@@ -653,9 +676,88 @@ public class Hospital {
             return;
         }
 
+        // read the doctor array list, get the doctor id , doctor year of exp 
+        for (int i = 0; i < doctors.size(); i++){
+            System.out.println((i+1) + doctors.get(i)[1] + doctors.get(i)[5] + " years of experience.");
+        }
+        System.out.println("Select doctor: ");
+        int doctorSelection = scanner.nextInt();
         
+        // check the doctor selection is it match the size of the doctors array 
+        if(doctorSelection < 1 || doctorSelection > doctors.size()){
+            System.out.println("Invalid doctor selection");
+            return;
+        }
+
+        // create array string for selected data to be present 
+        String[] selectedDoctor = doctors.get(doctorSelection -1);
+
+        // create a object for selected doctor present
+        Doctor doctor = new Doctor(selectedDoctor[0], selectedDoctor[1], selectedDoctor[2], selectedDoctor[3], selectedDoctor[4], selectedDoctor[5], selectedDoctor[6]);
+
+        // get appointment date 
+        System.out.print("Enter appointment date (yyyy-mm-dd): ");
+        // get date in string format;
+        String appointmentDate = scanner.nextLine(); 
+        LocalDate appointmentDate1; // default format yyyy-mm-dd 
+
+
+        //compare the date given is it follow the local date format
+        try {
+            appointmentDate1 = LocalDate.parse(appointmentDate);
+        } catch (Exception e) {
+            System.out.println("Invalid date format. Re-enter: ");
+            return;
+        }
+
+        // check doctor is it available
+        if(!doctorAvailability(doctor, appointmentDate1)){
+            System.out.println("This doctor is not available in this appointment date.");
+            return;
+        }
+
+        // find available room 
+        List<Room> availableRooms = getAvailableRoom(department);
+
+        // no available room check 
+        if(availableRooms.isEmpty()){
+            System.out.println("No available room in this " + department);
+            return;
+        }
+
+        // show available room 
+        System.out.println("Available Rooms: ");
+        for(int i =0;i < availableRooms.size();i++){
+            System.out.println((i+1) + ". " + availableRooms.get(i).getRoomID());
+        }
+
+        System.out.print("Select Room: ");
+        int roomSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        //check choice fulfill the size
+        if(roomSelection < 1 || roomSelection > availableRooms.size()){
+            System.out.println("Invalid room selection");
+            return;
+        }
+
+        Room selectedRoom = availableRooms.get(roomSelection -1);
+
+        // create appointment
+        try {
+            Appointment appointment = new Appointment(doctor, patient, appointmentDate1, selectedRoom);
+
+            System.out.println("Appointment Successful");
+            System.out.println("AppointmentID: " + appointment.getAppointmentID());
+            System.out.println("Doctor: " + doctor.getName());
+            System.out.println("Patient: " + patient.getName());
+            System.out.println("Appointment Room: " + selectedRoom.getRoomID());
+        } catch (Exception e){
+            System.out.println("Unable to create the appointment." + e.getMessage());
+        }
     }
 
+    // 
 
 
     // find patient 
