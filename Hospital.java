@@ -1,8 +1,8 @@
 import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Hospital {
     private static final String STAFF_USERNAME = "Staff";
@@ -24,12 +24,6 @@ public class Hospital {
     public static void main(String[] args) {
         Hospital hospital = new Hospital();
         hospital.combination();
-    }
-
-    // combine of consulation room and add new rooms 
-    public combinationAppointRoom(){
-        this.consultationRooms = new ArrayList<>();
-        addRoomInformation();
     }
 
     // add room information 
@@ -98,6 +92,12 @@ public class Hospital {
             }
 
         }
+    }
+
+    // patient access page 
+    public void patientPage(){
+        clearScreen();
+        System.out.println("Hi");
     }
 
     //doctor management system 
@@ -628,6 +628,17 @@ public class Hospital {
         return available;
     }
 
+    // find patient by id 
+    public Patient findPatientID(String patientID){
+        ArrayList<String[]> patients = new ArrayList<>();
+        for(String[] patient : patients){
+            if(patient[0].equals(patientID)){
+                return new Patient(patient[0], patient[1], patient[2], patient[3], patient[4]);
+            }
+        }
+        return null;
+    }
+
     // Book Appointment page
     // (Check patient is it new or exist) (Check available department) (Check available doctor) (Get appointment date and check with available doctor) (check available room) 
     public void bookAppointment(){
@@ -645,9 +656,9 @@ public class Hospital {
         Patient patient;
         //check the choice is it new or exist patient 
         if(patientChoice == 1){
-            patient = newPatient();
+            patient = registerNewPatient();
         } else if (patientChoice ==2 ){
-            patient = existPatient();
+            patient = findExistPatient();
         } else{
             return;
         }
@@ -757,10 +768,39 @@ public class Hospital {
         }
     }
 
-    // 
+    //register new patient information
+    public Patient registerNewPatient(){
+        System.out.println("New Patient Registration\n");
 
+        System.out.print("Enter Patient Name: ");
+        String patientName = scanner.nextLine();
 
-    // find patient 
+        System.out.println("Enter Patient Gender (Male/Female): ");
+        String patientGender = scanner.nextLine();
+
+        System.out.println("Enter Patient Contact Number: ");
+        String patientContactNumber = scanner.nextLine();
+
+        System.out.println("Enter Patient Address: ");
+        String patientAddress = scanner.nextLine();
+
+        return new Patient(patientName, patientGender, patientAddress, patientContactNumber, patientAddress);
+    }
+
+    // find exist patient 
+    public Patient findExistPatient(){
+        System.out.print("Enter your patient id: ");
+        String compareID = scanner.nextLine();
+
+        Patient patient = findPatientID(compareID);
+        if(patient == null){
+            System.out.println("Invalid patient if or patient not found");
+            return null;
+        }
+
+        System.out.println("Information found: " + patient.getName());
+        return patient;
+    }
 
     // convert department choice 
     public String getDepartmentChoice(int choice){
@@ -776,5 +816,17 @@ public class Hospital {
         }
     }
 
+    // department choice
+    public ArrayList<String[]> getDoctorDepartment(String department){
+        ArrayList<String[]> doctors = getDoctors();
+        ArrayList<String[]> departmentDoctors = new ArrayList<>();
+
+        for (String[] doctor : doctors){
+            if(doctor[6].equalsIgnoreCase(department)){
+                departmentDoctors.add(doctor);
+            }
+        }
+        return departmentDoctors;
+    }
 
 }

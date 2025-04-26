@@ -1,5 +1,4 @@
 
-import java.lang.ref.Cleaner;
 
 
 public class Menu {
@@ -82,9 +81,16 @@ public class Menu {
     public void patientChoice(int choice){
         switch(choice){
             case 1:
-                System.out.println("Closed Program");
-                System.exit(0);
+                hospital.viewDoctorList();
                 break;
+            case 2:
+                hospital.checkPersonalInformation();
+                break;
+            case 3:
+                hospital.bookAppointment();
+                break;
+            case 4:
+                System.exit(0);
             default:
                 System.out.println("Invalid Choice. Re-enter");
         }
