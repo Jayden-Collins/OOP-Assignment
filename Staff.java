@@ -39,7 +39,7 @@ public abstract class Staff extends Person{
     @Override
     //toString method 
     public String toString(){
-        return super.toString() + "department: " + department + "\n" +
+        return super.toString() + "Department: " + department + "\n" +
                 "Year of Experience: " + yearOfExp + "\n";
     }
 }
