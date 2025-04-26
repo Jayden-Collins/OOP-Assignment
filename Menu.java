@@ -1,4 +1,7 @@
 
+import java.lang.ref.Cleaner;
+
+
 public class Menu {
     private Hospital hospital;
 
@@ -23,6 +26,7 @@ public class Menu {
         System.out.println("2. Nurse Management ");
         System.out.println("3. Patient Management");
         System.out.println("4. Generate Medical Report");
+        System.out.println("5. View department ");
         System.out.println("5. Exit");
         System.out.print("Enter choice: ");
     }

@@ -16,7 +16,7 @@ public class Hospital {
     private static final String PATIENT_FILE = "patient.txt";
 
     //consultation room 
-    private List<consultationRoom> consultationRooms;
+    private List<Room> consultationRooms;
     
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
@@ -26,13 +26,18 @@ public class Hospital {
         hospital.combination();
     }
 
-    //set the rooms 
-    private void addRooms(){
-        
+    // combine of consulation room and add new rooms 
+    public combinationAppointRoom(){
+        this.consultationRooms = new ArrayList<>();
+        addRoomInformation();
     }
 
-    // check the available 
-    public void 
+    // add room information 
+    public void addRoomInformation(){
+        consultationRooms.add(new Room("CR-001", "General"));
+        consultationRooms.add(new Room("CR-002", "General"));
+        consultationRooms.add(new Room("CR-003", "General"));
+    }
 
     //clear screen method 
     public static void clearScreen(){
@@ -601,5 +606,73 @@ public class Hospital {
         }
     }
 
-    
+    // Book Appointment page 
+    public void bookAppointment(){
+        clearScreen();
+        System.out.println("Booking Appointment Page");
+        
+        System.out.println("Visit before our hospital");
+        System.out.println("1. New Patient");
+        System.out.println("2. Existing Patient");
+        System.out.println("3. Exit Appointment page");
+        System.out.print("Select your choice: ");
+        int patientChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        Patient patient;
+        //check the choice is it new or exist patient 
+        if(patientChoice == 1){
+            patient = newPatient();
+        } else if (patientChoice ==2 ){
+            patient = existPatient();
+        } else{
+            return;
+        }
+
+        // check departments, show and select 
+        System.out.println("\n Available Department");
+        System.out.println("1. Cardiology");
+        System.out.println("2. Oncology");
+        System.out.println("3. Radiology");
+        System.out.print("Select your choice: ");
+        int departmentChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        String department = getDepartmentChoice(departmentChoice);
+        if(department == null){
+            System.out.println("Invalid Department selection");
+            return;
+        }
+
+        // check available doctor 
+        System.out.println("Available doctor in " + department + " : ");
+
+        ArrayList<String[]> doctors = getDoctorDepartment(department);
+        if(doctors.isEmpty()){
+            System.out.println("No doctor is available on this department");
+            return;
+        }
+
+        
+    }
+
+
+
+    // find patient 
+
+    // convert department choice 
+    public String getDepartmentChoice(int choice){
+        switch (choice){
+            case 1:
+                return "Cardiology";
+            case 2:
+                return "Oncology";
+            case 3:
+                return "Radiology";
+            default:
+                return null;
+        }
+    }
+
+
 }
