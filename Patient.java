@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,10 +7,18 @@ public class Patient extends Person{
     private List<Appointment> appointments = new ArrayList<>();
     private int appointmentCount = 0;
 
-    //parameterized constructor
-    public Patient(String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(IdGenerator.generatePatientId(), patientName, patientGender, patientPhoneNumber, patientAddress);
+    // parameterized constructor
+    public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+        super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
+        this.medicalRecord = new MedicalRecords(this, null);
+    }
+
+    // constructor for file loading
+    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+        super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        this.emergencyContact = emergencyContact;
+
         this.medicalRecord = new MedicalRecords(this, null);
     }
 
@@ -35,13 +42,20 @@ public class Patient extends Person{
         return false;
     }
 
-    //get emergency contact 
+    // get emergency contact 
     public String getEmergencyContact(){
         return emergencyContact;
     }
 
+    // to file format for the patient class
+    @Override
+    public String toFileFormat(){
+        return String.join("|", super.toFileFormat(), emergencyContact);
+    }
+
+    @Override
     public String toString(){
         return super.toString() + "\n" +
-                "Emergency Contact: " + emergencyContact;
+                "Emergency Contact: " + emergencyContact + "\n" ;
     }
 }

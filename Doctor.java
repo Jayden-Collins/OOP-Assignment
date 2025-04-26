@@ -1,49 +1,34 @@
-
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Doctor extends Staff{
-    private String yearOfExp;
-    private Appointment[] appointments = new Appointment[1000];
+    private final List<Appointment> appointments = new ArrayList<>(); // list of appointments for the doctor
     private int appointmentCount = 0;
 
-    //parameterized constructor 
-    public Doctor(String doctorID, String doctorName, String doctorGender, String doctorDepartment, String yearOfExp, String doctorContactNumber, String doctorAddress){
-        super(doctorID, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment);
-        this.yearOfExp = yearOfExp;
+    // constructor for new doctors
+    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
+        super(Role.DOCTOR, IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
-    //abstract method link to staff class 
-    public String getDetails(){
-        return "Doctor";
+    // constructor for file loading
+    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
+        super(Role.DOCTOR, doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
-    // add appointment method 
+    // method to add appointment to the list of appointments
     public void addAppointment(Appointment appointment){
-        if(appointmentCount < appointments.length){
-            appointments[appointmentCount++] = appointment;
-        } else {
-            System.out.println("Doctor Appointments is full.");
-        }
+        appointments.add(appointment);
+        appointmentCount++;
     }
 
     // getter method for appointments array 
-    public Appointment[] getAppointments(){
-        return Arrays.copyOf(appointments, appointmentCount);
+    public List<Appointment> getAppointments(){
+        return Collections.unmodifiableList(appointments);
     }
 
-    // set method for doctor department 
-
-    // set method for year of exp
-    public void setYearOfExp(String yearOfExp){
-        this.yearOfExp = yearOfExp;
-    }
-
-    public String getYear(){
-        return yearOfExp;
-    }
-
+    @Override
     public String toString(){
-        return super.toString() + String.format("yearofExperience: %s", yearOfExp);
+        return super.toString();
     }
 }
-
