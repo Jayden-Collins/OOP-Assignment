@@ -4,63 +4,189 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Hospital {
-    // username and password for staff and patient
-    private static final String STAFF_USERNAME = "Staff";
-    private static final String STAFF_PASSWORD = "12345";
-    private static final String PATIENT_USERNAME = "Patient";
-    private static final String PATIENT_PASSWORD = "123456";
-
-    // file paths 
-    private static final String DOCTOR_FILE = "doctor.txt";
-    private static final String NURSE_FILE = "nurse.txt";
-    private static final String PATIENT_FILE = "patient.txt";
-
-    // lists for departments, doctors, nurses, and patients
-    private final List<Department> departments = new ArrayList<>(); // list of departments
-    private final List<Doctor> doctors = new ArrayList<>(); // list of doctors
-    private final List<Nurse> nurses = new ArrayList<>(); // list of nurses
-    private final List<Patient> patients = new ArrayList<>(); // list of patients
-
     // scanner for user input
-    Scanner scanner = new Scanner(System.in);
-    private String userAccess;
+    public static final Scanner scanner = new Scanner(System.in);
+    private static Role userRole = null;
 
     public static void main(String[] args) {
-        Hospital hospital = new Hospital();
-        hospital.combination();
+
+        // constants file paths 
+        final String DEPARTMENT_FILE = "department.txt";
+        final String DOCTOR_FILE = "doctor.txt";
+        final String NURSE_FILE = "nurse.txt";
+        final String PATIENT_FILE = "patient.txt";
+
+        // lists constants for consultation rooms, departments, doctors, nurses, and patients
+        final List<Department> departments = new ArrayList<>();
+        final List<Doctor> doctors = new ArrayList<>();
+        final List<Nurse> nurses = new ArrayList<>();
+        final List<Patient> patients = new ArrayList<>();
+        final List<Room> consultationRooms = new ArrayList<>();
+
+        // log in page
+        checkUserAccess();
+
+        while(true){
+            // display staff or patient menu based on user role
+            if(Role.isStaff(userRole)){
+                displayStaffMenu();
+            } else {
+                displayPatientMenu();
+            }
+
+            // read user input for page selection
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // continue new line 
+
+            // display page based on choice selected
+            if(Role.isStaff(userRole)){
+                switch (choice){
+                    case 1:
+                        doctorManagement();
+
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        switch (choice){
+                            // add doctor
+                            case 1:
+                                clearScreen();
+                                Doctor newDoctor = getNewDoctorDetails();
+                                doctors.add(newDoctor);
+                                storeRecord(DOCTOR_FILE, newDoctor.toFileFormat());
+                                break;
+                            // list all doctors
+                            case 2:
+                                clearScreen();
+                                // clear doctors array
+                                doctors.clear();
+                                doctors.addAll(readDoctors(DOCTOR_FILE));
+                                listdoctor(doctors);
+                                break;
+                            // search for doctor
+                            case 3:
+                                clearScreen();
+                                searchDoctor(doctors);
+                                break;
+                            default:
+                                System.out.println("Invalid selection.");
+                        }
+
+                        System.out.println("Press <Enter> to continue.");
+                        scanner.nextLine();
+                        clearScreen();
+                        break;
+                    case 2:
+                        nurseManagement();
+
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch(choice){
+                            // add nurse
+                            case 1:
+                                clearScreen();
+                                Nurse newNurse = getNewNurseDetails();
+                                nurses.add(newNurse);
+                                storeRecord(NURSE_FILE, newNurse.toFileFormat());
+                                break;
+                            // list all nurses
+                            case 2:
+                                clearScreen();
+                                // clear nurse array
+                                nurses.clear();
+                                nurses.addAll(readNurse(NURSE_FILE));
+                                listNurse(nurses);
+                                break;
+                            // search for nurse
+                            case 3:
+                                clearScreen();
+                                searchNurse(nurses);
+                                break;
+                            default:
+                                System.out.println("Invalid selection. Re-enter");
+                        }
+
+                        clearScreen();
+                        break;
+                    case 3:
+                        patientManagement();
+
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch(choice){
+                            case 1:
+                                clearScreen();
+                                Patient newPatient = getNewPatientDetails();
+                                patients.add(newPatient);
+                                storeRecord(PATIENT_FILE, newPatient.toFileFormat());
+                                break;
+                            case 2:
+                                clearScreen();
+                                // clear patient array
+                                patients.clear();
+                                patients.addAll(readPatient(PATIENT_FILE));
+                                listPatient(patients);
+                                break;
+                            case 3:
+                                clearScreen();
+                                searchPatient(patients);
+                                break;
+                            case 4:
+                                clearScreen();
+                                System.exit(0);
+                            default:
+                                System.out.println("Invalid selection. Please re-enter");
+                        }
+
+                        clearScreen();
+                        break;
+                    case 5:
+                        System.out.println("Closed Program.");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid selection. Re-enter");
+                }
+            } else {
+                switch(choice){
+                    case 1:
+                        clearScreen();
+                        System.out.println("Closed Program");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid selection. Re-enter");
+                }
+            }
+        }
     }
 
-    //clear screen method 
-    public void clearScreen(){
+    // set the rooms 
+    private static void addRooms(){ 
+    }
+
+    // clear screen method 
+    public static void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
-    public void makeAppointment()
+    public static void makeAppointment()
     {
         System.out.println("Appointment created successfully.");
     }
 
-    //combine access, management 
-    public void combination(){
-        checkUserAccess();
-        Menu menu = new Menu(this);
-        
-        while(true){
-            menu.displayMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // continue new line 
-            menu.choiceSelection(choice);
-        }
-    }
-    
-    // user access
-    public String UserAccess(){
-        return userAccess;
-    }
+    // log in page that checks whether the user is a patient or staff 
+    public static void checkUserAccess(){
 
-    // check either is patient or staff 
-    public void checkUserAccess(){
+        // constans for username and password for staff and patient
+        final String STAFF_USERNAME = "Staff";
+        final String STAFF_PASSWORD = "12345";
+        final String PATIENT_USERNAME = "Patient";
+        final String PATIENT_PASSWORD = "123456";
+        
         clearScreen();
         System.out.println("Hospital Login System.");
 
@@ -72,15 +198,15 @@ public class Hospital {
             String password = scanner.nextLine();
 
             if(username.equals(STAFF_USERNAME) && password.equals(STAFF_PASSWORD)){
-                userAccess = "Staff";
+                userRole = Role.STAFF;
                 clearScreen();
-                System.out.println("Login Successful as staff.");
+                System.out.println("Log In Successful!");
                 break;
             }
             else if(username.equals(PATIENT_USERNAME) && password.equals(PATIENT_PASSWORD)){
-                userAccess = "Patient";
+                userRole = Role.PATIENT;
                 clearScreen();
-                System.out.println("Login Successful as patient.");
+                System.out.println("Log In Successful!");
                 break;
             }
             else{
@@ -91,60 +217,41 @@ public class Hospital {
         }
     }
 
-    // return a list of departments
-    public List<Department> getDepartments(){
-        return departments;
+    // display staff menu
+    public static void displayStaffMenu(){
+        Hospital.clearScreen();
+        System.out.println("Staff Page");
+        System.out.println("1. Doctor Management ");
+        System.out.println("2. Nurse Management ");
+        System.out.println("3. Patient Management");
+        System.out.println("4. Generate Medical Report");
+        System.out.println("5. Exit");
+        System.out.print("Enter choice: ");
     }
 
-    // doctor management system 
-    public void doctorManagement(){
-        clearScreen();
-        System.out.println("Doctor Management");
-        System.out.println("1. Add Doctor Information.");
-        System.out.println("2. List all doctor");
-        System.out.println("3. Search Doctor");
-        System.out.print("Choose option: ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-        
-        switch (selection){
-            case 1:
-                addDoctorInformation();
-                break;
-            case 2:
-                readDoctors();
-                listdoctor();
-                break;
-            case 3:
-                searchDoctor();
-                break;
-            default:
-                System.out.println("Invalid selection");
-        }
+    // display patient menu
+    public static void displayPatientMenu(){
+        Hospital.clearScreen();
+        System.out.println("Patient Page");
+        System.out.println("1. View Doctor");
+        System.out.println("2. Check own Information.");
+        System.out.println("3. Book Appoinments");
+        System.out.println("4. View Medical Report");
+        System.out.println("5. Exit");
+        System.out.print("Enter choice: ");
     }
 
-    // get person information
-    public List<String> getPersonInformation(Role role){
+    // get new person information and return as string list
+    public static List<String> getPersonInformation(Role role){
         List<String> personInfo = new ArrayList<>();
 
-        System.out.println("Enter " + role + " Information: ");
+        System.out.println("Enter " + role.getRoleName() + " Information: ");
 
-        String name;
-        while(true){
-            System.out.print("Enter " + role + " Name (e.g. John Smith): ");
-            name = scanner.nextLine();
-            if(ValidationCheck.validateName(name)){
-                personInfo.add(name);
-                break;
-            } else{
-                System.out.println("\nInvalid Name format. Please re-enter: ");
-            }
-        }
+        personInfo.add(getPersonName(role));
 
         String ic;
         while(true){
-            System.out.print("Enter " + role + " IC (e.g. 123456-01-0123): ");
+            System.out.print("Enter " + role.getRoleName() + " IC (e.g. 123456-01-0123): ");
             ic = scanner.nextLine();
             if(ValidationCheck.validateIc(ic)){
                 personInfo.add(ic);
@@ -156,7 +263,7 @@ public class Hospital {
 
         String gender;
         while(true){
-            System.out.print("Enter " + role + " Gender (Male/Female): ");
+            System.out.print("Enter " + role.getRoleName() + " Gender (Male/Female): ");
             gender = scanner.nextLine();
             if(ValidationCheck.validateGender(gender)){
                 personInfo.add(gender);
@@ -168,7 +275,7 @@ public class Hospital {
         
         String contactNumber;
         while(true){
-            System.out.print("Enter " + role + " Contact Number (012-3456789): ");
+            System.out.print("Enter " + role.getRoleName() + " Contact Number (012-3456789): ");
             contactNumber = scanner.nextLine();
             if(ValidationCheck.validateNumber(contactNumber)){
                 personInfo.add(contactNumber);
@@ -180,7 +287,7 @@ public class Hospital {
 
         String address;
         while(true){
-            System.out.print("Enter " + role + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
+            System.out.print("Enter " + role.getRoleName() + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
             address = scanner.nextLine();
             if(ValidationCheck.validateAddress(address)){
                 personInfo.add(address);
@@ -193,7 +300,7 @@ public class Hospital {
         if (Role.isStaff(role)){
             String department;
             while(true){
-                System.out.print("Enter/Select" + role + " Department: ");
+                System.out.print("Enter/Select" + role.getRoleName() + " Department (e.g. Cardiology): ");
                 department = scanner.nextLine();
                 if(ValidationCheck.validateDoctorDepartment(department)){
                     personInfo.add(department);
@@ -205,7 +312,7 @@ public class Hospital {
 
             String yearOfExp;
             while(true){
-                System.out.print("Enter " + role + " Year of Experience: ");
+                System.out.print("Enter " + role.getRoleName() + " Year of Experience (e.g. 12): ");
                 yearOfExp = scanner.nextLine();
                 if(ValidationCheck.validateYearOfExp(yearOfExp)){
                     personInfo.add(yearOfExp);
@@ -218,7 +325,7 @@ public class Hospital {
         else if (role == Role.PATIENT){
             String emergencyContact;
             while(true){
-                System.out.print("Enter " + role + " Emergency Contact Number (012-3456789): ");
+                System.out.print("Enter " + role.getRoleName() + " Emergency Contact Number (012-3456789): ");
                 emergencyContact = scanner.nextLine();
                 if(ValidationCheck.validateNumber(emergencyContact)){
                     personInfo.add(emergencyContact);
@@ -233,10 +340,69 @@ public class Hospital {
         return personInfo;
     }
     
+    // get person name
+    public static String getPersonName(Role role){
+        String name;
+
+        while(true){
+            System.out.print("Enter " + role.getRoleName() + " Name (e.g. John Smith): ");
+            name = scanner.nextLine();
+            if(ValidationCheck.validateName(name)){
+                return name;
+            } else{
+                System.out.println("\nInvalid Name format. Please re-enter: ");
+            }
+        }
+    }
+
     // get staff information
+    public static String getPersonId(Role role){
+        String id;
+
+        while(true){
+            System.out.print("Enter " + role.getRoleName() + " ID (e.g. 123456): ");
+            id = scanner.nextLine();
+            if(ValidationCheck.validateID(id)){
+                return id;
+            } else {
+                System.out.println("\nInvalid ID format. Please re-enter: ");
+            }
+        }
+    }
+
+    // store record in file
+    public static void storeRecord(String file, String record){
+        try(FileWriter fw = new FileWriter(file, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)){
+            out.println(record);
+            System.out.println("\nNew doctor information added successfully.");
+        } catch (IOException e){
+            System.out.println("Error saving doctor information." + e.getMessage());
+        }
+    }
+
+    // add department
+    public static void addDepartment(){
+        // read department name
+
+        // create department object
+
+        // write department to file
+    }
+    
+    // doctor management system 
+    public static void doctorManagement(){
+        clearScreen();
+        System.out.println("Doctor Management");
+        System.out.println("1. Add Doctor Information.");
+        System.out.println("2. List all doctor");
+        System.out.println("3. Search Doctor");
+        System.out.print("Choose option: ");
+    }
 
     // doctor management system sub selection add doctor information
-    public void addDoctorInformation(){
+    public static Doctor getNewDoctorDetails(){
 
         // get person information
         List<String> personInfo = getPersonInformation(Role.DOCTOR);
@@ -249,44 +415,30 @@ public class Hospital {
         String doctorYearOfExp = personInfo.get(6);
 
         // create a new doctor object
-        Doctor doctor = new Doctor(doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, Integer.parseInt(doctorYearOfExp));
-        doctors.add(doctor);
-
-        // store record in doctor file 
-        try(FileWriter fw = new FileWriter(DOCTOR_FILE, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw)){
-            out.println(doctor.toFileFormat());
-            System.out.println("\nNew doctor information added successfully.");
-        } catch (IOException e){
-            System.out.println("Error saving doctor information" + e.getMessage());
-        }
+        return new Doctor(doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, Integer.parseInt(doctorYearOfExp));
     }
 
     // create an array list for the reading file 
-    public void readDoctors(){
-        // read from the text file 
-        try(BufferedReader br = new BufferedReader(new FileReader(DOCTOR_FILE))){
-    
+    public static List<Doctor> readDoctors(String file){
+        List<Doctor> doctorRecords = new ArrayList<>();
+
+        // read from the text file
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
             String line;
             while ((line = br.readLine()) != null){
                 String[] doctorRecord = line.split("\\|");
-                doctors.add(new Doctor(doctorRecord[0], doctorRecord[1], doctorRecord[2], doctorRecord[3], doctorRecord[4], doctorRecord[5], doctorRecord[6], Integer.parseInt(doctorRecord[7])));
+                doctorRecords.add(new Doctor(doctorRecord[0], doctorRecord[1], doctorRecord[2], doctorRecord[3], doctorRecord[4], doctorRecord[5], doctorRecord[6], Integer.parseInt(doctorRecord[7])));
             }
         } catch (FileNotFoundException e){
-            
+            System.out.println("Error reading doctor data: " + e.getMessage());
         } catch (IOException e){
             System.out.println("Error reading doctor data: " + e.getMessage());
         }
-    }
-
-    // returns a list of doctors
-    public List<Doctor> getDoctors(){
-        return doctors;
+        return doctorRecords;
     }
 
     // list doctor information 
-    public void listdoctor(){
+    public static void listdoctor(List<Doctor> doctors){
         if(doctors.isEmpty()){
             System.out.println("No doctors is registered yet.");
             return;
@@ -298,15 +450,33 @@ public class Hospital {
     }
 
     // search doctor 
-    public void searchDoctor(){
-        System.out.print("Enter doctor id or name to search: ");
-        String searchID_Name = scanner.nextLine();
+    public static void searchDoctor(List<Doctor> doctors){
+        String search;
+
+        while (true){
+            System.out.println("Search by:");
+            System.out.println("1. Doctor ID");
+            System.out.println("2. Doctor Name");
+            System.out.print("Enter choice: ");
+
+            String choice = scanner.nextLine();
+
+            if (choice.equals("1")){
+                search = getPersonId(Role.DOCTOR);
+                break;
+            } else if (choice.equals("2")){
+                search = getPersonName(Role.DOCTOR);
+                break;
+            } else {
+                System.out.println("Invalid choice. Please re-enter.");
+            }
+        }
 
         boolean exist = false;
 
         for (Doctor doctor: doctors){
-            if(doctor.getId().equals(searchID_Name) || doctor.getName().equalsIgnoreCase(searchID_Name)){
-                System.out.println("Found the information");
+            if(doctor.getId().equals(search) || doctor.getName().equalsIgnoreCase(search)){
+                System.out.println("Found the information.");
                 System.out.println(doctor);
                 exist = true;
                 break;
@@ -319,38 +489,22 @@ public class Hospital {
     }
 
     //delete doctor information 
+    public static void deleteDoctor(){
 
+    }
 
     //nurse management system
-    public void nurseManagement(){
+    public static void nurseManagement(){
         System.out.println("Nurse Management");
         System.out.println("1. Add Nurse Information");
         System.out.println("2. List all nurse");
         System.out.println("3. Search Nurse");
         System.out.println("4. Back to Main Menu");
         System.out.print("Enter choice: : ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-
-        switch(selection){
-            case 1:
-                addNurseInformation();
-                break;
-            case 2:
-                readNurse();
-                listNurse();
-                break;
-            case 3:
-                searchNurse();
-                break;
-            default:
-                System.out.println("Invalid selection. Re-enter");
-        }
     }
 
     //add nurse information
-    public void addNurseInformation(){
+    public static Nurse getNewNurseDetails(){
 
         // get person information
         List<String> personInfo = getPersonInformation(Role.NURSE);
@@ -363,42 +517,30 @@ public class Hospital {
         String nurseYearOfExp = personInfo.get(6);
 
         // createa a new nurse object
-        Nurse nurse = new Nurse(nurseIC, nurseName, nurseGender, nurseContactNumber, nurseAddress, nurseDepartment, Integer.parseInt(nurseYearOfExp));
-        nurses.add(nurse);
-
-        // store record in doctor file 
-        try(FileWriter fw = new FileWriter(NURSE_FILE, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw)){
-            out.println(nurse.toFileFormat());
-            System.out.println("\n Nurse Information added successful.");
-        } catch (IOException e){
-            System.out.println("Error saving nurse information" + e.getMessage());
-        }
+        return new Nurse(nurseIC, nurseName, nurseGender, nurseContactNumber, nurseAddress, nurseDepartment, Integer.parseInt(nurseYearOfExp));
     }
 
     // read all nurse information and store it at the array list 
-    public void readNurse(){
-        try(BufferedReader br = new BufferedReader(new FileReader(NURSE_FILE))){
+    public static List<Nurse> readNurse(String file){
+        List<Nurse> nurseRecords = new ArrayList<>();
+
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
             
             String line;
             while((line = br.readLine()) != null){
                 String[] nurseRecord = line.split("\\|");
-                nurses.add(new Nurse(nurseRecord[0], nurseRecord[1], nurseRecord[2], nurseRecord[3], nurseRecord[4], nurseRecord[5], Integer.parseInt(nurseRecord[6])));
+                nurseRecords.add(new Nurse(nurseRecord[0], nurseRecord[1], nurseRecord[2], nurseRecord[3], nurseRecord[4], nurseRecord[5], Integer.parseInt(nurseRecord[6])));
             }
         } catch (FileNotFoundException e) {
 
         } catch (IOException e){
             System.out.println("Error reading nurse data: " + e.getMessage());
         }
-    }
-
-    public List<Nurse> getNurses(){
-        return nurses;
+        return nurseRecords;
     }
 
     // list nurse information 
-    public void listNurse(){
+    public static void listNurse(List<Nurse> nurses){
         if(nurses.isEmpty()){
             System.out.println("No nurse information is registered yet.");
             return;
@@ -409,58 +551,57 @@ public class Hospital {
         }
     }
 
-    // search nurse information
-    public void searchNurse(){
-        System.out.print("Enter nurse id or nurse name to search information: ");
-        String searchID_Name = scanner.nextLine();
+    // search nurse 
+    public static void searchNurse(List<Nurse> nurses){
+        String search;
 
-        boolean exist = false;
+        while (true){
+            System.out.println("Search by:");
+            System.out.println("1. Nurse ID");
+            System.out.println("2. Nurse Name");
+            System.out.print("Enter choice: ");
 
-        for(Nurse nurse : nurses){
-            if(nurse.getId().equals(searchID_Name) || nurse.getName().equals(searchID_Name)){
-                System.out.println("Found the information");
-                System.out.println(nurse.toString());
-                exist = true;
+            String choice = scanner.nextLine();
+
+            if (choice.equals("1")){
+                search = getPersonId(Role.NURSE);
+                break;
+            } else if (choice.equals("2")){
+                search = getPersonName(Role.NURSE);
+                break;
+            } else {
+                System.out.println("Invalid choice. Please re-enter.");
             }
         }
 
-        if(!exist){
-            System.out.println("Information is not found");
+        boolean exist = false;
+
+        for (Nurse nurse: nurses){
+            if(nurse.getId().equals(search) || nurse.getName().equalsIgnoreCase(search)){
+                System.out.println("Found the information.");
+                System.out.println(nurse);
+                exist = true;
+                break;
+            }
+        }
+
+        if (!exist){
+            System.out.println("Information is not found.");
         }
     }
-
+    
     //patient managment system
-    public void patientManagement(){
+    public static void patientManagement(){
         System.out.println("Patient Management");
         System.out.println("1. Add Patient Information.");
         System.out.println("2. List all patient information");
         System.out.println("3. Search Information");
         System.out.println("4. Back to Main Menu");
         System.out.println("Enter choice: ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-
-        switch(selection){
-            case 1:
-                addPatientInformation();
-                break;
-            case 2:
-                readPatient();
-                listPatient();
-                break;
-            case 3:
-                searchPatient();
-                break;
-            case 4:
-                System.exit(0);
-            default:
-                System.out.println("Invalid choice. Please re-enter");
-        }
     }
 
     // add patient information 
-    public void addPatientInformation(){
+    public static Patient getNewPatientDetails(){
         // get person information
         List<String> personInfo = getPersonInformation(Role.PATIENT);
         String patientName = personInfo.get(0);
@@ -470,42 +611,30 @@ public class Hospital {
         String patientAddress = personInfo.get(4);
         String patientEmergencyContact = personInfo.get(5);
 
-        Patient patient = new Patient(patientIC, patientName, patientGender, patientContactNumber, patientAddress, patientEmergencyContact);
-
-        // write to file 
-        try(FileWriter fw = new FileWriter(PATIENT_FILE, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw)){
-            out.println(patient);
-            System.out.println("Nurse Information saved succesfully");
-        } catch (IOException e){
-            System.out.println("Error saving nurse information." + e.getMessage());
-        }
+        return new Patient(patientIC, patientName, patientGender, patientContactNumber, patientAddress, patientEmergencyContact);
     }
 
     // get all patient information 
-    public void readPatient(){
+    public static List<Patient> readPatient(String file){
+        List<Patient> patientRecords = new ArrayList<>();
+
         // read from the file 
-        try(BufferedReader br = new BufferedReader(new FileReader(PATIENT_FILE))){
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
             String line;
             while((line = br.readLine()) != null){
                 String[] patientRecord = line.split("\\|");
-                patients.add(new Patient(patientRecord[0], patientRecord[1], patientRecord[2], patientRecord[3], patientRecord[4], patientRecord[5]));
+                patientRecords.add(new Patient(patientRecord[0], patientRecord[1], patientRecord[2], patientRecord[3], patientRecord[4], patientRecord[5]));
             }
         } catch (FileNotFoundException e){
 
         } catch (IOException e){
             System.out.println("Error reading patient information."+ e.getMessage());
         }
-    }
-
-    // return a list of patients
-    public List<Patient> getPatient(){
-        return patients;
+        return patientRecords;
     }
 
     // list for all patient
-    public void listPatient(){
+    public static void listPatient(List<Patient> patients){
         if(patients.isEmpty()){
             System.out.println("No patient information is added.");
             return;
@@ -517,14 +646,32 @@ public class Hospital {
     }
 
     // search for patient 
-    public void searchPatient(){
-        System.out.print("Enter patient id or name to search information: ");
-        String searchID_Name = scanner.nextLine();
+    public static void searchPatient(List<Patient> patients){
+        String search;
 
+        while (true){
+            System.out.println("Search by:");
+            System.out.println("1. Patient ID");
+            System.out.println("2. Patient Name");
+            System.out.print("Enter choice: ");
+
+            String choice = scanner.nextLine();
+
+            if (choice.equals("1")){
+                search = getPersonId(Role.PATIENT);
+                break;
+            } else if (choice.equals("2")){
+                search = getPersonName(Role.PATIENT);
+                break;
+            } else {
+                System.out.println("Invalid choice. Please re-enter.");
+            }
+        }
+        
         boolean exist = false;
 
         for (Patient patient : patients){
-            if(patient.getId().equals(searchID_Name) || patient.getName().equalsIgnoreCase(searchID_Name)){
+            if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
                 System.out.println("Found the information");
                 System.out.println(patient);
                 exist = true;
@@ -536,4 +683,5 @@ public class Hospital {
             System.out.println("Information is not found.");
         }
     }
+
 }
