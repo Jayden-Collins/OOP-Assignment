@@ -41,6 +41,8 @@ public class Hospital {
             // display page based on choice selected
             if(Role.isStaff(userRole)){
                 switch (choice){
+
+                    // doctor management page
                     case 1:
                         doctorManagement();
 
@@ -48,6 +50,7 @@ public class Hospital {
                         scanner.nextLine();
                         
                         switch (choice){
+
                             // add doctor
                             case 1:
                                 clearScreen();
@@ -55,6 +58,7 @@ public class Hospital {
                                 doctors.add(newDoctor);
                                 storeRecord(DOCTOR_FILE, newDoctor.toFileFormat());
                                 break;
+
                             // list all doctors
                             case 2:
                                 clearScreen();
@@ -63,6 +67,7 @@ public class Hospital {
                                 doctors.addAll(readDoctors(DOCTOR_FILE));
                                 listdoctor(doctors);
                                 break;
+
                             // search for doctor
                             case 3:
                                 clearScreen();
@@ -76,6 +81,8 @@ public class Hospital {
                         scanner.nextLine();
                         clearScreen();
                         break;
+
+                    // nurse management page
                     case 2:
                         nurseManagement();
 
@@ -90,6 +97,7 @@ public class Hospital {
                                 nurses.add(newNurse);
                                 storeRecord(NURSE_FILE, newNurse.toFileFormat());
                                 break;
+
                             // list all nurses
                             case 2:
                                 clearScreen();
@@ -98,6 +106,7 @@ public class Hospital {
                                 nurses.addAll(readNurse(NURSE_FILE));
                                 listNurse(nurses);
                                 break;
+
                             // search for nurse
                             case 3:
                                 clearScreen();
@@ -109,6 +118,8 @@ public class Hospital {
 
                         clearScreen();
                         break;
+
+                    // patient management page
                     case 3:
                         patientManagement();
 
@@ -124,6 +135,7 @@ public class Hospital {
                                 break;
                             case 2:
                                 clearScreen();
+
                                 // clear patient array
                                 patients.clear();
                                 patients.addAll(readPatient(PATIENT_FILE));
@@ -142,7 +154,44 @@ public class Hospital {
 
                         clearScreen();
                         break;
+
+                    // department management
                     case 5:
+                        departmentManagement();    
+
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+                        
+                        switch(choice){
+                            
+                            // add new department
+                            case 1:
+                            clearScreen();
+                            Department newDepartment = getNewDepartmentDetails();
+                            departments.add(newDepartment);
+                            storeRecord(DEPARTMENT_FILE, newDepartment.toFileFormat());
+                            break;
+                            
+                            // list all existing departments
+                            case 2:
+                            clearScreen();
+                            // clear department array
+                            departments.clear();
+                            departments.addAll(readDepartments(DEPARTMENT_FILE));
+                            listDepartments(departments);
+                            break;
+
+                            default:
+                                System.out.println("Invalid selection. Please re-enter");
+                        }
+
+                        System.out.println("Press <Enter> to continue.");
+                        scanner.nextLine();
+                        clearScreen();
+                        break;
+
+                    // close program
+                    case 6:
                         System.out.println("Closed Program.");
                         System.exit(0);
                         break;
@@ -152,7 +201,6 @@ public class Hospital {
             } else {
                 switch(choice){
                     case 1:
-                        clearScreen();
                         System.out.println("Closed Program");
                         System.exit(0);
                         break;
@@ -225,7 +273,8 @@ public class Hospital {
         System.out.println("2. Nurse Management ");
         System.out.println("3. Patient Management");
         System.out.println("4. Generate Medical Report");
-        System.out.println("5. Exit");
+        System.out.println("5. Department Management");
+        System.out.println("6. Exit");
         System.out.print("Enter choice: ");
     }
 
@@ -371,26 +420,74 @@ public class Hospital {
     }
 
     // store record in file
+    // add role in feedback message
     public static void storeRecord(String file, String record){
         try(FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter out = new PrintWriter(bw)){
             out.println(record);
-            System.out.println("\nNew doctor information added successfully.");
+            System.out.println("\nInformation added successfully.");
         } catch (IOException e){
-            System.out.println("Error saving doctor information." + e.getMessage());
+            System.out.println("Error saving information." + e.getMessage());
         }
     }
 
+    // department management page
+    public static void departmentManagement(){
+        clearScreen();
+        System.out.println("Manage Departments");
+        System.out.println("1. Add New Department");
+        System.out.println("2. List All Departments");
+        System.out.print("Choose option: ");
+    }
+
     // add department
-    public static void addDepartment(){
-        // read department name
+    public static Department getNewDepartmentDetails(){
+        String name;
 
-        // create department object
+        while(true){
+            System.out.print("Enter New Department Name (e.g. Orthopedics): ");
+            name = scanner.nextLine();
+            if(ValidationCheck.validateName(name)){
+                return new Department(name);
+            } else{
+                System.out.println("\nInvalid Name format. Please re-enter: ");
+            }
+        }
+    }
 
-        // write department to file
+    // read departments from file
+    public static List<Department> readDepartments(String file){
+        List<Department> departmentRecords = new ArrayList<>();
+
+        // read text from line
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            String line;
+            while ((line = br.readLine()) != null){
+                String[] departmentRecord = line.split("\\|");
+                departmentRecords.add(new Department(departmentRecord[0], departmentRecord[1]));
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("Error reading doctor data: " + e.getMessage());
+        } catch (IOException e){
+            System.out.println("Error reading doctor data: " + e.getMessage());
+        }
+
+        return departmentRecords;
     }
     
+    // list all departments
+    public static void listDepartments(List<Department> departments){
+        if(departments.isEmpty()){
+            System.out.println("No departments added yet.");
+            return;
+        }
+
+        for (Department department : departments){
+            System.out.println(department);
+        }
+    }
+
     // doctor management system 
     public static void doctorManagement(){
         clearScreen();
@@ -434,6 +531,7 @@ public class Hospital {
         } catch (IOException e){
             System.out.println("Error reading doctor data: " + e.getMessage());
         }
+
         return doctorRecords;
     }
 
