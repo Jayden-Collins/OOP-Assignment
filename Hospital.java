@@ -1,4 +1,5 @@
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -7,6 +8,24 @@ public class Hospital {
     // scanner for user input
     public static final Scanner scanner = new Scanner(System.in);
     private static Role userRole = null;
+    private static final String STAFF_USERNAME = "Staff";
+    private static final String STAFF_PASSWORD = "12345";
+    private static final String PATIENT_USERNAME = "Patient";
+    private static final String PATIENT_PASSWORD = "123456";
+
+    // file paths 
+    private static final String DOCTOR_FILE = "doctor.txt";
+    private static final String NURSE_FILE = "nurse.txt";
+    private static final String PATIENT_FILE = "patient.txt";
+
+    //consultation room 
+    private List<Room> consultationRooms;
+
+    // list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
+    private List<
+    
+    Scanner scanner = new Scanner(System.in);
+    private String userAccess;
 
     public static void main(String[] args) {
 
@@ -169,6 +188,19 @@ public class Hospital {
 
     // clear screen method 
     public static void clearScreen(){
+        Hospital hospital = new Hospital();
+        hospital.combination();
+    }
+
+    // add room information 
+    public void addRoomInformation(){
+        consultationRooms.add(new Room("CR-001", "General"));
+        consultationRooms.add(new Room("CR-002", "General"));
+        consultationRooms.add(new Room("CR-003", "General"));
+    }
+
+    //clear screen method 
+    public static void clearScreen(){
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -217,6 +249,37 @@ public class Hospital {
         }
     }
 
+    // patient access page 
+    public void patientPage(){
+        clearScreen();
+        System.out.println("Hi");
+    }
+
+    //doctor management system 
+    public void doctorManagement(){
+        clearScreen();
+        System.out.println("Doctor Management");
+        System.out.println("1. Add Doctor Information.");
+        System.out.println("2. List all doctor");
+        System.out.println("3. Search Doctor");
+        System.out.print("Choose option: ");
+
+        int selection = scanner.nextInt();
+        scanner.nextLine();
+        
+        switch (selection){
+            case 1:
+                addDoctorInformation();
+                break;
+            case 2:
+                listdoctor();
+                break;
+            case 3:
+                searchDoctor();
+                break;
+            default:
+                System.out.println("Invalid selection");
+        }
     // display staff menu
     public static void displayStaffMenu(){
         Hospital.clearScreen();
@@ -257,11 +320,12 @@ public class Hospital {
                 personInfo.add(ic);
                 break;
             } else{
-                System.out.println("\nInvalid IC format. Please re-enter: ");
+                System.out.println("\nInvalid Name format. Please re-enter: ");
             }
         }
 
-        String gender;
+        //doctor gender 
+        String doctorGender;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Gender (Male/Female): ");
             gender = scanner.nextLine();
@@ -272,8 +336,9 @@ public class Hospital {
                 System.out.println("\nInvalid Gender format. Please re-enter: ");
             }
         }
-        
-        String contactNumber;
+
+        // doctor contact number 
+        String doctorContactNumber;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Contact Number (012-3456789): ");
             contactNumber = scanner.nextLine();
@@ -285,7 +350,8 @@ public class Hospital {
             }
         }
 
-        String address;
+        // doctor address 
+        String doctorAddress;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
             address = scanner.nextLine();
@@ -293,7 +359,7 @@ public class Hospital {
                 personInfo.add(address);
                 break;
             } else {
-                System.out.println("\nInvalid address format. Please re-enter: ");
+                System.out.println("\nInvalid address format. Please re-enter");
             }
         }
 
@@ -444,8 +510,14 @@ public class Hospital {
             return;
         }
 
-        for (Doctor doctor : doctors){
-            System.out.println(doctor);
+        for (String[] doctor : doctors){
+            System.out.println("ID: " + doctor[0]);
+            System.out.println("Name: " + doctor[1]);
+            System.out.println("Gender: " + doctor[2]);
+            System.out.println("Contact Number: " + doctor[3]);
+            System.out.println("Address: " + doctor[4]);
+            System.out.println("Year of Experience: " + doctor[5]);
+            System.out.println("Department: " + doctor[6]);
         }
     }
 
@@ -499,7 +571,6 @@ public class Hospital {
         System.out.println("1. Add Nurse Information");
         System.out.println("2. List all nurse");
         System.out.println("3. Search Nurse");
-        System.out.println("4. Back to Main Menu");
         System.out.print("Enter choice: : ");
     }
 
@@ -546,8 +617,14 @@ public class Hospital {
             return;
         }
 
-        for (Nurse nurse: nurses){
-            nurse.toString();
+        for (String[] nurse: nurses){
+            System.out.println("ID: " + nurse[0]);
+            System.out.println("Name: " + nurse[1]);
+            System.out.println("Gender: " + nurse[2]);
+            System.out.println("Contact Number: " + nurse[3]);
+            System.out.println("Address: " + nurse[4]);
+            System.out.println("Year of Experience: " + nurse[5]);
+            System.out.println("Department: " + nurse[6]);
         }
     }
 
@@ -596,7 +673,6 @@ public class Hospital {
         System.out.println("1. Add Patient Information.");
         System.out.println("2. List all patient information");
         System.out.println("3. Search Information");
-        System.out.println("4. Back to Main Menu");
         System.out.println("Enter choice: ");
     }
 
@@ -625,7 +701,7 @@ public class Hospital {
                 String[] patientRecord = line.split("\\|");
                 patientRecords.add(new Patient(patientRecord[0], patientRecord[1], patientRecord[2], patientRecord[3], patientRecord[4], patientRecord[5]));
             }
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e ){
 
         } catch (IOException e){
             System.out.println("Error reading patient information."+ e.getMessage());
@@ -640,8 +716,14 @@ public class Hospital {
             return;
         }
 
-        for (Patient patient : patients){
-            System.out.println(patient);
+        for (String[] patient : patients){
+            System.out.println("ID: " + patient[0]);
+            System.out.println("Name: " + patient[1]);
+            System.out.println("Gender: " + patient[2]);
+            System.out.println("Contact Number: " + patient[3]);
+            System.out.println("Address: " + patient[4]);
+            System.out.println("Year of Experience: " + patient[5]);
+            System.out.println("Department: " + patient[6]);
         }
     }
 
@@ -673,7 +755,13 @@ public class Hospital {
         for (Patient patient : patients){
             if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
                 System.out.println("Found the information");
-                System.out.println(patient);
+                System.out.println("ID: " + patient[0]);
+                System.out.println("Name: " + patient[1]);
+                System.out.println("Gender: " + patient[2]);
+                System.out.println("Contact Number: " + patient[3]);
+                System.out.println("Address: " + patient[4]);
+                System.out.println("Year of Experience: " + patient[5]);
+                System.out.println("Department: " + patient[6]);
                 exist = true;
                 break;
             }
@@ -683,5 +771,281 @@ public class Hospital {
             System.out.println("Information is not found.");
         }
     }
+
+    //patient management page 
+
+
+    //View doctor 
+    public void viewDoctorList(){
+        ArrayList<String[]> doctorLists = getDoctors();
+
+        if(doctorLists.isEmpty()){
+            System.out.println("No doctor information is added.");
+            return;
+        }
+
+        for (String[] doctorList : doctorLists){
+            System.out.println("ID: " + doctorList[0]);
+            System.out.println("Name: " + doctorList[1]);
+            System.out.println("Gender: " + doctorList[2]);
+            System.out.println("Contact Number: " + doctorList[3]);
+            System.out.println("Address: " + doctorList[4]);
+            System.out.println("Year of Experience: " + doctorList[5]);
+            System.out.println("Department: " + doctorList[6]);
+        }
+
+    }
+
+    //check own information 
+    public void checkPersonalInformation(){
+        System.out.print("Enter your own id or name to check own information (E.g Desmond/PA): ");
+        String search = scanner.nextLine();
+
+        ArrayList<String[]> ownLists = getPatient();
+        boolean exist = false;
+        boolean update = false;
+
+        for(String[] ownList : ownLists){
+            if(ownList[0].equalsIgnoreCase(search) || ownList[0].equalsIgnoreCase(search)){
+                System.out.println("ID: " + ownList[0]);
+                System.out.println("Name: " + ownList[1]);
+                System.out.println("Gender: " + ownList[2]);
+                System.out.println("Contact Number: " + ownList[3]);
+                System.out.println("Address: " + ownList[4]);
+                System.out.println("Year of Experience: " + ownList[5]);
+                System.out.println("Department: " + ownList[6]);
+                exist = true;
+            }
+        }
+
+        if(!exist){
+            System.out.println("Information not been stored.");
+        }
+    }
+
+    //check doctor is it available 
+    public boolean doctorAvailability(Doctor doctor, LocalDate date){
+        List<Appointment> appointments = doctor.getAppointments();
+        for(Appointment appointment : appointments){
+            if(appointment != null && appointment.getAppointmentDate().equals(date)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // get available rooms 
+    public List<Room> getAvailableRoom(String roomType){
+        List<Room> available = new ArrayList<>();
+        for(Room room : consultationRooms){
+            if(room.getAvailable() && (roomType != null || room.getRoomType().equals(roomType))){
+                available.add(room);
+            }
+        }
+        return available;
+    }
+
+    // find patient by id 
+    public Patient findPatientID(String patientID){
+        ArrayList<String[]> patients = new ArrayList<>();
+        for(String[] patient : patients){
+            if(patient[0].equals(patientID)){
+                return new Patient(patient[0], patient[1], patient[2], patient[3], patient[4]);
+            }
+        }
+        return null;
+    }
+
+    // Book Appointment page
+    // (Check patient is it new or exist) (Check available department) (Check available doctor) (Get appointment date and check with available doctor) (check available room) 
+    public void bookAppointment(){
+        clearScreen();
+        System.out.println("Booking Appointment Page");
+        
+        System.out.println("Visit before our hospital");
+        System.out.println("1. New Patient");
+        System.out.println("2. Existing Patient");
+        System.out.println("3. Exit Appointment page");
+        System.out.print("Select your choice: ");
+        int patientChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        Patient patient;
+        //check the choice is it new or exist patient 
+        if(patientChoice == 1){
+            patient = registerNewPatient();
+        } else if (patientChoice ==2 ){
+            patient = findExistPatient();
+        } else{
+            return;
+        }
+
+        // check departments, show and select 
+        System.out.println("\n Available Department");
+        System.out.println("1. Cardiology");
+        System.out.println("2. Oncology");
+        System.out.println("3. Radiology");
+        System.out.print("Select your choice: ");
+        int departmentChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        String department = getDepartmentChoice(departmentChoice);
+        if(department == null){
+            System.out.println("Invalid Department selection");
+            return;
+        }
+
+        // check available doctor 
+        System.out.println("Available doctor in " + department + " : ");
+
+        ArrayList<String[]> doctors = getDoctorDepartment(department);
+        if(doctors.isEmpty()){
+            System.out.println("No doctor is available on this department");
+            return;
+        }
+
+        // read the doctor array list, get the doctor id , doctor year of exp 
+        for (int i = 0; i < doctors.size(); i++){
+            System.out.println((i+1) + doctors.get(i)[1] + doctors.get(i)[5] + " years of experience.");
+        }
+        System.out.println("Select doctor: ");
+        int doctorSelection = scanner.nextInt();
+        
+        // check the doctor selection is it match the size of the doctors array 
+        if(doctorSelection < 1 || doctorSelection > doctors.size()){
+            System.out.println("Invalid doctor selection");
+            return;
+        }
+
+        // create array string for selected data to be present 
+        String[] selectedDoctor = doctors.get(doctorSelection -1);
+
+        // create a object for selected doctor present
+        Doctor doctor = new Doctor(selectedDoctor[0], selectedDoctor[1], selectedDoctor[2], selectedDoctor[3], selectedDoctor[4], selectedDoctor[5], selectedDoctor[6]);
+
+        // get appointment date 
+        System.out.print("Enter appointment date (yyyy-mm-dd): ");
+        // get date in string format;
+        String appointmentDate = scanner.nextLine(); 
+        LocalDate appointmentDate1; // default format yyyy-mm-dd 
+
+
+        //compare the date given is it follow the local date format
+        try {
+            appointmentDate1 = LocalDate.parse(appointmentDate);
+        } catch (Exception e) {
+            System.out.println("Invalid date format. Re-enter: ");
+            return;
+        }
+
+        // check doctor is it available
+        if(!doctorAvailability(doctor, appointmentDate1)){
+            System.out.println("This doctor is not available in this appointment date.");
+            return;
+        }
+
+        // find available room 
+        List<Room> availableRooms = getAvailableRoom(department);
+
+        // no available room check 
+        if(availableRooms.isEmpty()){
+            System.out.println("No available room in this " + department);
+            return;
+        }
+
+        // show available room 
+        System.out.println("Available Rooms: ");
+        for(int i =0;i < availableRooms.size();i++){
+            System.out.println((i+1) + ". " + availableRooms.get(i).getRoomID());
+        }
+
+        System.out.print("Select Room: ");
+        int roomSelection = scanner.nextInt();
+        scanner.nextLine();
+
+        //check choice fulfill the size
+        if(roomSelection < 1 || roomSelection > availableRooms.size()){
+            System.out.println("Invalid room selection");
+            return;
+        }
+
+        Room selectedRoom = availableRooms.get(roomSelection -1);
+
+        // create appointment
+        try {
+            Appointment appointment = new Appointment(doctor, patient, appointmentDate1, selectedRoom);
+
+            System.out.println("Appointment Successful");
+            System.out.println("AppointmentID: " + appointment.getAppointmentID());
+            System.out.println("Doctor: " + doctor.getName());
+            System.out.println("Patient: " + patient.getName());
+            System.out.println("Appointment Room: " + selectedRoom.getRoomID());
+        } catch (Exception e){
+            System.out.println("Unable to create the appointment." + e.getMessage());
+        }
+    }
+
+    //register new patient information
+    public Patient registerNewPatient(){
+        System.out.println("New Patient Registration\n");
+
+        System.out.print("Enter Patient Name: ");
+        String patientName = scanner.nextLine();
+
+        System.out.println("Enter Patient Gender (Male/Female): ");
+        String patientGender = scanner.nextLine();
+
+        System.out.println("Enter Patient Contact Number: ");
+        String patientContactNumber = scanner.nextLine();
+
+        System.out.println("Enter Patient Address: ");
+        String patientAddress = scanner.nextLine();
+
+        return new Patient(patientName, patientGender, patientAddress, patientContactNumber, patientAddress);
+    }
+
+    // find exist patient 
+    public Patient findExistPatient(){
+        System.out.print("Enter your patient id: ");
+        String compareID = scanner.nextLine();
+
+        Patient patient = findPatientID(compareID);
+        if(patient == null){
+            System.out.println("Invalid patient if or patient not found");
+            return null;
+        }
+
+        System.out.println("Information found: " + patient.getName());
+        return patient;
+    }
+
+    // convert department choice 
+    public String getDepartmentChoice(int choice){
+        switch (choice){
+            case 1:
+                return "Cardiology";
+            case 2:
+                return "Oncology";
+            case 3:
+                return "Radiology";
+            default:
+                return null;
+        }
+    }
+
+    // department choice
+    public ArrayList<String[]> getDoctorDepartment(String department){
+        ArrayList<String[]> doctors = getDoctors();
+        ArrayList<String[]> departmentDoctors = new ArrayList<>();
+
+        for (String[] doctor : doctors){
+            if(doctor[6].equalsIgnoreCase(department)){
+                departmentDoctors.add(doctor);
+            }
+        }
+        return departmentDoctors;
+    }
+
+    // 
 
 }
