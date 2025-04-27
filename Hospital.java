@@ -56,6 +56,7 @@ public class Hospital {
                                 storeRecord(DOCTOR_FILE, newDoctor.toFileFormat());
                                 break;
 
+
                             // list all doctors
                             case 2:
                                 clearScreen();
@@ -65,6 +66,7 @@ public class Hospital {
                                 listdoctor(doctors);
                                 break;
 
+                            
                             // search for doctor
                             case 3:
                                 clearScreen();
@@ -79,6 +81,7 @@ public class Hospital {
                                     System.out.println(doctor);
                                 }
                                 break;
+
                             // delete doctor record
                             case 4:
                                 doctors.clear();
@@ -89,10 +92,10 @@ public class Hospital {
                                     System.out.println("Matching Record Found!");
                                     System.out.println("\nDoctor Details:");
                                     System.out.println(doctor);
-                                    System.out.println("Delete doctor?");
+                                    System.out.println("Delete doctor record?");
                                     if (getYesOrNoInput()){
                                         doctors.remove(doctor);
-                                        overwriteFile(DOCTOR_FILE, doctors.stream().map(Doctor::toFileFormat).toList());
+                                        overwriteFile(DOCTOR_FILE, convertToFileFormat(new ArrayList<>(doctors)));
                                         System.out.println("\nDoctor information deleted successfully.");
                                     } else {
                                         clearScreen();
@@ -110,11 +113,13 @@ public class Hospital {
                         scanner.nextLine();
                         clearScreen();
                         break;
+
                     // nurse management page
                     case 2:
                         nurseManagement();
 
                         switch(getChoice()){
+
                             // add nurse
                             case 1:
                                 clearScreen();
@@ -123,9 +128,11 @@ public class Hospital {
                                 storeRecord(NURSE_FILE, newNurse.toFileFormat());
                                 break;
 
+
                             // list all nurses
                             case 2:
                                 clearScreen();
+
                                 // clear nurse array
                                 nurses.clear();
                                 nurses.addAll(readNurse(NURSE_FILE));
@@ -135,7 +142,41 @@ public class Hospital {
                             // search for nurse
                             case 3:
                                 clearScreen();
-                                searchNurse(nurses);
+                                nurses.clear();
+                                nurses.addAll(readNurse(NURSE_FILE));
+                                Nurse nurse = searchNurse(nurses);
+                                if (nurse == null){
+                                    System.out.println("Nurse information not found.");
+                                }
+                                else {
+                                    System.out.println("Matching record found!");
+                                    System.out.println(nurse);
+                                }
+                                break;
+                            
+                            // delete nurse record
+                            case 4:
+                                clearScreen();
+                                nurses.clear();
+                                nurses.addAll(readNurse(NURSE_FILE));
+                                nurse = searchNurse(nurses);
+                                if(nurse != null){
+                                    clearScreen();
+                                    System.out.println("Matching Record Found!");
+                                    System.out.println("\n Nurse Details:");
+                                    System.out.println(nurse);
+                                    System.out.println("Delete nurse record?");
+                                    if (getYesOrNoInput()){
+                                        nurses.remove(nurse);
+                                        overwriteFile(NURSE_FILE, convertToFileFormat(new ArrayList<>(nurses)));
+                                        System.out.println("\nNurse information deleted successfully.");
+                                    } else {
+                                        clearScreen();
+                                        System.out.println("\nOperation cancelled.");
+                                    }
+                                } else {
+                                    System.out.println("Nurse information not found.");
+                                }
                                 break;
                             default:
                                 System.out.println("Invalid selection. Re-enter");
@@ -151,25 +192,65 @@ public class Hospital {
                         patientManagement();
 
                         switch(getChoice()){
+                            
+                            // add new patient
                             case 1:
                                 clearScreen();
                                 Patient newPatient = getNewPatientDetails();
                                 patients.add(newPatient);
                                 storeRecord(PATIENT_FILE, newPatient.toFileFormat());
                                 break;
+                            
+                            // list all patients
                             case 2:
                                 clearScreen();
-
-                                // clear patient array
                                 patients.clear();
                                 patients.addAll(readPatient(PATIENT_FILE));
                                 listPatient(patients);
                                 break;
+                            
+                            // search for patient
                             case 3:
                                 clearScreen();
-                                searchPatient(patients);
+                                patients.clear();
+                                patients.addAll(readPatient(PATIENT_FILE));
+                                Patient patient = searchPatient(patients);
+                                if (patient == null){
+                                    System.out.println("Doctor information not found.");
+                                }
+                                else {
+                                    System.out.println("Matching record found!");
+                                    System.out.println(patient);
+                                }
                                 break;
+                            
+                            // delete patient record
                             case 4:
+                                clearScreen();
+                                patients.clear();
+                                patients.addAll(readPatient(PATIENT_FILE));
+                                patient = searchPatient(patients);
+                                if(patient != null){
+                                    clearScreen();
+                                    System.out.println("Matching Record Found!");
+                                    System.out.println("\nPatient Details:");
+                                    System.out.println(patient);
+                                    System.out.println("Delete patient record?");
+                                    if (getYesOrNoInput()){
+                                        patients.remove(patient);
+                                        overwriteFile(PATIENT_FILE, convertToFileFormat(new ArrayList<>(patients)));
+                                        System.out.println("\nPatient information deleted successfully.");
+                                    } else {
+                                        clearScreen();
+                                        System.out.println("\nOperation cancelled.");
+                                    }
+                                } else {
+                                    System.out.println("Patient information not found.");
+                                }
+                                break;
+
+                            // back
+                            case 5:
                                 clearScreen();
                                 System.exit(0);
                             default:
@@ -488,6 +569,11 @@ public class Hospital {
         }
     }
 
+    // return list of person as list of string
+    public static List<String> convertToFileFormat(List<Person> list){
+        return list.stream().map(Person::toFileFormat).toList();
+    }
+
     // overwrite file with new data after modifying data
     public static void overwriteFile(String file, List<String> records){
         try(FileWriter fw = new FileWriter(file);
@@ -652,12 +738,13 @@ public class Hospital {
 
     //nurse management system
     public static void nurseManagement(){
+        clearScreen();
         System.out.println("Nurse Management");
         System.out.println("1. Add Nurse Information");
         System.out.println("2. List all nurse");
         System.out.println("3. Search Nurse");
         System.out.println("4. Back to Main Menu");
-        System.out.print("Enter choice: : ");
+        System.out.print("Enter choice: ");
     }
 
     //add nurse information
@@ -709,7 +796,7 @@ public class Hospital {
     }
 
     // search nurse 
-    public static void searchNurse(List<Nurse> nurses){
+    public static Nurse searchNurse(List<Nurse> nurses){
         String search;
 
         while (true){
@@ -731,29 +818,24 @@ public class Hospital {
             }
         }
 
-        boolean exist = false;
-
         for (Nurse nurse: nurses){
             if(nurse.getId().equals(search) || nurse.getName().equalsIgnoreCase(search)){
-                System.out.println("Found the information.");
-                System.out.println(nurse);
-                exist = true;
-                break;
+                return nurse;
             }
         }
 
-        if (!exist){
-            System.out.println("Information is not found.");
-        }
+        return null;
     }
     
     //patient managment system
     public static void patientManagement(){
+        clearScreen();
         System.out.println("Patient Management");
-        System.out.println("1. Add Patient Information.");
-        System.out.println("2. List all patient information");
+        System.out.println("1. Register New Patient");
+        System.out.println("2. List All Patient Records");
         System.out.println("3. Search Information");
-        System.out.println("4. Back to Main Menu");
+        System.out.println("4. Delete Patient Record");
+        System.out.println("5. Back");
         System.out.println("Enter choice: ");
     }
 
@@ -803,7 +885,7 @@ public class Hospital {
     }
 
     // search for patient 
-    public static void searchPatient(List<Patient> patients){
+    public static Patient searchPatient(List<Patient> patients){
         String search;
 
         while (true){
@@ -823,22 +905,15 @@ public class Hospital {
             } else {
                 System.out.println("Invalid choice. Please re-enter.");
             }
-        }
-        
-        boolean exist = false;
+        }     
 
         for (Patient patient : patients){
             if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
-                System.out.println("Found the information");
-                System.out.println(patient);
-                exist = true;
-                break;
+                return patient;
             }
         }
 
-        if(!exist){
-            System.out.println("Information is not found.");
-        }
+        return null;
     }
 
 }
