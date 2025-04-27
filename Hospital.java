@@ -40,16 +40,13 @@ public class Hospital {
 
             // display page based on choice selected
             if(Role.isStaff(userRole)){
+                // admin/staff menu
                 switch (choice){
-
                     // doctor management page
-                    case 1:
+                    case 1 :
                         doctorManagement();
-
-                        choice = scanner.nextInt();
-                        scanner.nextLine();
                         
-                        switch (choice){
+                        switch (getChoice()){
 
                             // add doctor
                             case 1:
@@ -71,25 +68,53 @@ public class Hospital {
                             // search for doctor
                             case 3:
                                 clearScreen();
-                                searchDoctor(doctors);
+                                doctors.clear();
+                                doctors.addAll(readDoctors(DOCTOR_FILE));
+                                Doctor doctor = searchDoctor(doctors);
+                                if (doctor == null){
+                                    System.out.println("Doctor information not found.");
+                                }
+                                else {
+                                    System.out.println("Matching record found!");
+                                    System.out.println(doctor);
+                                }
+                                break;
+                            // delete doctor record
+                            case 4:
+                                doctors.clear();
+                                doctors.addAll(readDoctors(DOCTOR_FILE));
+                                doctor = searchDoctor(doctors);
+                                if(doctor != null){
+                                    clearScreen();
+                                    System.out.println("Matching Record Found!");
+                                    System.out.println("\nDoctor Details:");
+                                    System.out.println(doctor);
+                                    System.out.println("Delete doctor?");
+                                    if (getYesOrNoInput()){
+                                        doctors.remove(doctor);
+                                        overwriteFile(DOCTOR_FILE, doctors.stream().map(Doctor::toFileFormat).toList());
+                                        System.out.println("\nDoctor information deleted successfully.");
+                                    } else {
+                                        clearScreen();
+                                        System.out.println("\nOperation cancelled.");
+                                    }
+                                } else {
+                                    System.out.println("Doctor information not found.");
+                                }
                                 break;
                             default:
                                 System.out.println("Invalid selection.");
                         }
 
-                        System.out.println("Press <Enter> to continue.");
+                        System.out.println("\nPress <Enter> to continue.");
                         scanner.nextLine();
                         clearScreen();
                         break;
-
                     // nurse management page
                     case 2:
                         nurseManagement();
 
-                        choice = scanner.nextInt();
-                        scanner.nextLine();
-
-                        switch(choice){
+                        switch(getChoice()){
                             // add nurse
                             case 1:
                                 clearScreen();
@@ -116,6 +141,8 @@ public class Hospital {
                                 System.out.println("Invalid selection. Re-enter");
                         }
 
+                        System.out.println("Press <Enter> to continue.");
+                        scanner.nextLine();
                         clearScreen();
                         break;
 
@@ -123,10 +150,7 @@ public class Hospital {
                     case 3:
                         patientManagement();
 
-                        choice = scanner.nextInt();
-                        scanner.nextLine();
-
-                        switch(choice){
+                        switch(getChoice()){
                             case 1:
                                 clearScreen();
                                 Patient newPatient = getNewPatientDetails();
@@ -152,34 +176,33 @@ public class Hospital {
                                 System.out.println("Invalid selection. Please re-enter");
                         }
 
+                        System.out.println("Press <Enter> to continue.");
+                        scanner.nextLine();
                         clearScreen();
                         break;
 
                     // department management
                     case 5:
                         departmentManagement();    
-
-                        choice = scanner.nextInt();
-                        scanner.nextLine();
                         
-                        switch(choice){
+                        switch(getChoice()){
                             
                             // add new department
                             case 1:
-                            clearScreen();
-                            Department newDepartment = getNewDepartmentDetails();
-                            departments.add(newDepartment);
-                            storeRecord(DEPARTMENT_FILE, newDepartment.toFileFormat());
-                            break;
+                                clearScreen();
+                                Department newDepartment = getNewDepartmentDetails();
+                                departments.add(newDepartment);
+                                storeRecord(DEPARTMENT_FILE, newDepartment.toFileFormat());
+                                break;
                             
                             // list all existing departments
                             case 2:
-                            clearScreen();
-                            // clear department array
-                            departments.clear();
-                            departments.addAll(readDepartments(DEPARTMENT_FILE));
-                            listDepartments(departments);
-                            break;
+                                clearScreen();
+                                // clear department array
+                                departments.clear();
+                                departments.addAll(readDepartments(DEPARTMENT_FILE));
+                                listDepartments(departments);
+                                break;
 
                             default:
                                 System.out.println("Invalid selection. Please re-enter");
@@ -200,6 +223,7 @@ public class Hospital {
                 }
             } else {
                 switch(choice){
+                    // patient menu
                     case 1:
                         System.out.println("Closed Program");
                         System.exit(0);
@@ -212,7 +236,37 @@ public class Hospital {
     }
 
     // set the rooms 
-    private static void addRooms(){ 
+    private static void addRooms(){
+    }
+
+    // get and return choice for menus
+    public static int getChoice(){
+        while (true){
+            try{
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // consume the newline character
+                return choice;
+            } catch (Exception e){
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine(); // clear the invalid input
+            }
+        }
+    }
+
+    // get yes or no input
+    public static boolean getYesOrNoInput(){
+        String input;
+        while (true){
+            System.out.print("Enter Y or N: ");
+            input = scanner.nextLine().toUpperCase();
+            if(input.equals("Y")){
+                return true;
+            } else if(input.equals("N")){
+                return false;
+            } else {
+                System.out.println("Invalid input. Please enter Y or N.");
+            }
+        }
     }
 
     // clear screen method 
@@ -221,6 +275,7 @@ public class Hospital {
         System.out.flush();
     }
 
+    // make appointment method
     public static void makeAppointment()
     {
         System.out.println("Appointment created successfully.");
@@ -394,6 +449,7 @@ public class Hospital {
         String name;
 
         while(true){
+            clearScreen();
             System.out.print("Enter " + role.getRoleName() + " Name (e.g. John Smith): ");
             name = scanner.nextLine();
             if(ValidationCheck.validateName(name)){
@@ -409,9 +465,9 @@ public class Hospital {
         String id;
 
         while(true){
-            System.out.print("Enter " + role.getRoleName() + " ID (e.g. 123456): ");
+            System.out.print("Enter " + role.getRoleName() + " ID (e.g. DC-25-001): ");
             id = scanner.nextLine();
-            if(ValidationCheck.validateID(id)){
+            if(ValidationCheck.validateID(id, role.getRoleName())){
                 return id;
             } else {
                 System.out.println("\nInvalid ID format. Please re-enter: ");
@@ -427,6 +483,19 @@ public class Hospital {
             PrintWriter out = new PrintWriter(bw)){
             out.println(record);
             System.out.println("\nInformation added successfully.");
+        } catch (IOException e){
+            System.out.println("Error saving information." + e.getMessage());
+        }
+    }
+
+    // overwrite file with new data after modifying data
+    public static void overwriteFile(String file, List<String> records){
+        try(FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)){
+            for (String record : records){
+                out.println(record);
+            }
         } catch (IOException e){
             System.out.println("Error saving information." + e.getMessage());
         }
@@ -493,8 +562,9 @@ public class Hospital {
         clearScreen();
         System.out.println("Doctor Management");
         System.out.println("1. Add Doctor Information.");
-        System.out.println("2. List all doctor");
+        System.out.println("2. List All Doctors");
         System.out.println("3. Search Doctor");
+        System.out.println("4. Delete Doctor Record");
         System.out.print("Choose option: ");
     }
 
@@ -548,10 +618,11 @@ public class Hospital {
     }
 
     // search doctor 
-    public static void searchDoctor(List<Doctor> doctors){
+    public static Doctor searchDoctor(List<Doctor> doctors){
         String search;
 
         while (true){
+            clearScreen();
             System.out.println("Search by:");
             System.out.println("1. Doctor ID");
             System.out.println("2. Doctor Name");
@@ -570,25 +641,13 @@ public class Hospital {
             }
         }
 
-        boolean exist = false;
-
         for (Doctor doctor: doctors){
             if(doctor.getId().equals(search) || doctor.getName().equalsIgnoreCase(search)){
-                System.out.println("Found the information.");
-                System.out.println(doctor);
-                exist = true;
-                break;
+                return doctor;
             }
         }
 
-        if (!exist){
-            System.out.println("Information is not found.");
-        }
-    }
-
-    //delete doctor information 
-    public static void deleteDoctor(){
-
+        return null;
     }
 
     //nurse management system
