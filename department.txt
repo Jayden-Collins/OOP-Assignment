@@ -1,1 +1,5 @@
-DT-001|Orthopedics
+DT-001|Cardiology
+DT-002|Neurology
+DT-003|Pediatrics
+DT-004|Emergency
+DT-005|Oncology
