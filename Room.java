@@ -2,30 +2,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
-    private final String roomID;
-    private List<String> roomType = new ArrayList<>();
+    private final String ROOM_ID;
+    private String roomType = "Consultation";
+    private final List<String> AVAILABLE_ROOM_TYPES = new ArrayList<>();
     private boolean available;
     // as a reference variable
     private Appointment currentAppointment;
 
     // constructor
-    public Room(String roomID){
-        this.roomID = roomID;
+    public Room(int floor, String roomType){
+        this.ROOM_ID = IdGenerator.generateRoomId(floor);
         this.available = true;
         this.currentAppointment = null;
     }
 
     // get method 
     public String getRoomID(){
-        return roomID;
+        return ROOM_ID;
     }
 
-    public void setRoomType(String roomType){
-        this.roomType.add(roomType);
+    public boolean setRoomType(String roomType){
+        if (AVAILABLE_ROOM_TYPES.contains(roomType)){
+            this.roomType = roomType;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public List<String> getRoomType(){
-        return roomType;
+        return AVAILABLE_ROOM_TYPES;
     }
 
     public boolean getAvailable(){
@@ -54,7 +60,10 @@ public class Room {
 
     // to String method 
     public String toString(){
-        return String.format("Room ID: " + roomID + "\nRoom Type: " + roomType + "\nAvailable: " + available + "\nCurrentAppointment: " + currentAppointment);
+        return String.format("Room ID: " + ROOM_ID
+        + "\nRoom Type: " + roomType
+        + "\nAvailability: " + available
+        + "\nCurrentAppointment: " + currentAppointment);
     }
 
 }

@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MedicalRecords {
-    private final LocalDate creationDate = LocalDate.now();
-    private final Patient patient;
+    private final LocalDate CREATION_DATE = LocalDate.now();
+    private final Patient PATIENT;
     private Doctor doctor;
     private List<String> diagnoses;
     private List<String> prescribedMedications = new ArrayList<>();
@@ -14,7 +14,7 @@ public class MedicalRecords {
     private LocalDateTime nextFollowUp;
 
     public MedicalRecords(Patient patient, Doctor doctor){
-        this.patient = patient;
+        this.PATIENT = patient;
     }
 
     public void addDiagnosis(String diagnoses){
@@ -34,11 +34,11 @@ public class MedicalRecords {
     }
 
     public LocalDate getCreationDate() {
-        return creationDate;
+        return CREATION_DATE;
     }
 
     public Patient getPatient() {
-        return patient;
+        return PATIENT;
     }
 
     public Doctor getDoctor() {

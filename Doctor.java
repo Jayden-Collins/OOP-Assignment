@@ -3,7 +3,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Doctor extends Staff{
-    private final List<Appointment> appointments = new ArrayList<>(); // list of appointments for the doctor
+    private final List<Appointment> APPOINTMENTS = new ArrayList<>(); // list of appointments for the doctor
     private int appointmentCount = 0;
 
     // constructor for new doctors
@@ -18,13 +18,13 @@ public class Doctor extends Staff{
 
     // method to add appointment to the list of appointments
     public void addAppointment(Appointment appointment){
-        appointments.add(appointment);
+        APPOINTMENTS.add(appointment);
         appointmentCount++;
     }
 
     // getter method for appointments array 
     public List<Appointment> getAppointments(){
-        return Collections.unmodifiableList(appointments);
+        return Collections.unmodifiableList(APPOINTMENTS);
     }
 
     @Override

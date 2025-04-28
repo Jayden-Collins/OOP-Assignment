@@ -4,34 +4,33 @@ import java.util.List;
 
 public class Patient extends Person{
     private String emergencyContact;
-    private final MedicalRecords medicalRecord;
-    private List<Appointment> appointments = new ArrayList<>();
+    private final MedicalRecords MEDICAL_RECORD;
+    private final List<Appointment> APPOINTMENTS = new ArrayList<>();
     private int appointmentCount = 0;
 
     // parameterized constructor
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
-        this.medicalRecord = new MedicalRecords(this, null);
+        this.MEDICAL_RECORD = new MedicalRecords(this, null);
     }
 
     // constructor for file loading
     public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
-
-        this.medicalRecord = new MedicalRecords(this, null);
+        this.MEDICAL_RECORD = new MedicalRecords(this, null);
     }
 
     // add appoinment of patients to the appointment class 
     public void addAppointment(Appointment appointment){
-        appointments.add(appointment);
+        APPOINTMENTS.add(appointment);
         appointmentCount++;
     }
 
     // return for the calling of number of appoints and the count 
     public List<Appointment> getAppointment(){
-        return Collections.unmodifiableList(appointments);
+        return Collections.unmodifiableList(APPOINTMENTS);
     }
 
     //set emergency contact number and boolean method
@@ -46,6 +45,11 @@ public class Patient extends Person{
     // get emergency contact 
     public String getEmergencyContact(){
         return emergencyContact;
+    }
+
+    // get medical record
+    public MedicalRecords getMedicalRecord(){
+        return MEDICAL_RECORD;
     }
 
     // to file format for the patient class

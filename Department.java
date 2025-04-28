@@ -1,16 +1,16 @@
 public class Department {
-    private final String departmentID;
+    private final String DEPARTMENT_ID;
     private String departmentName;
 
     // parameterized constructor
     public Department(String departmentName){
-        this.departmentID = IdGenerator.generateDepartmentId();
+        this.DEPARTMENT_ID = IdGenerator.generateDepartmentId();
         this.departmentName = departmentName;
     }
     
     // constructor for file loading
     public Department(String departmentID, String departmentName){
-        this.departmentID = departmentID;
+        this.DEPARTMENT_ID = departmentID;
         this.departmentName = departmentName;
     }
 
@@ -24,7 +24,7 @@ public class Department {
     }
 
     public String getDepartmentID(){
-        return departmentID;
+        return DEPARTMENT_ID;
     }
 
     public String getDepartmentName(){
@@ -32,12 +32,12 @@ public class Department {
     }
 
     public String toFileFormat(){
-        return String.join("|", departmentID, departmentName);
+        return String.join("|", DEPARTMENT_ID, departmentName);
     }
 
     @Override
     public String toString(){
-        return "ID: " + departmentID + "\n" +
+        return "ID: " + DEPARTMENT_ID + "\n" +
                 "Name: " + departmentName;
     }
 }

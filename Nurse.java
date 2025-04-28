@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nurse extends Staff{
-    List<Patient> patients = new ArrayList<>(); // list of patients assigned to the nurse
+    private final List<Patient> PATIENTS = new ArrayList<>(); // list of patients assigned to the nurse
 
     // constructor for new nurses
     public Nurse(String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department, int yearOfExp){
@@ -21,7 +21,7 @@ public class Nurse extends Staff{
     }
     
     public List<Patient> getPatients(){
-        return patients;
+        return PATIENTS;
     }
 
     @Override

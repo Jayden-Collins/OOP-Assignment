@@ -4,10 +4,10 @@ public enum Role{
     NURSE("Nurse"),
     PATIENT("Patient");
 
-    private final String roleName;
+    private final String ROLE_NAME;
 
-    Role(String roleName){
-        this.roleName = roleName;
+    Role(String ROLE_NAME){
+        this.ROLE_NAME = ROLE_NAME;
     }
 
     public static boolean isStaff(Role role){
@@ -15,6 +15,6 @@ public enum Role{
     }
 
     public String getRoleName(){
-        return roleName;
+        return ROLE_NAME;
     }
 }

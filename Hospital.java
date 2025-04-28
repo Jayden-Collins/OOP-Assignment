@@ -7,14 +7,14 @@ import java.util.Scanner;
 public class Hospital {
     
     // scanner for user input
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
     private static Role userRole = null;
   
     private static final List<Department> DEPARTMENTS = new ArrayList<>();
     private static final List<Doctor> DOCTORS = new ArrayList<>();
-    private static final List<Nurse> nurses = new ArrayList<>();
-    private static final List<Patient> patients = new ArrayList<>();
-    private static final List<Room> consultationRooms = new ArrayList<>();
+    private static final List<Nurse> NURSES = new ArrayList<>();
+    private static final List<Patient> PATIENTS = new ArrayList<>();
+    private static final List<Room> CONSULTATION_ROOMS = new ArrayList<>();
 
     // constants file paths 
     private static final String DEPARTMENT_FILE = "department.txt";
@@ -121,7 +121,7 @@ public class Hospital {
 
                             if (choice != 5){
                                 System.out.print("Press any key to continue.");
-                                scanner.nextLine();
+                                SCANNER.nextLine();
                                 break;
                             }
 
@@ -135,7 +135,7 @@ public class Hospital {
                                 if (choice == 1){
                                     clearScreen();
                                     Nurse newNurse = getNewNurseDetails();
-                                    nurses.add(newNurse);
+                                    NURSES.add(newNurse);
                                     storeRecord(NURSE_FILE, newNurse.toFileFormat());
                                 }
 
@@ -144,17 +144,17 @@ public class Hospital {
                                     clearScreen();
 
                                     // clear nurse array
-                                    nurses.clear();
-                                    nurses.addAll(readNurse(NURSE_FILE));
-                                    listNurse(nurses);
+                                    NURSES.clear();
+                                    NURSES.addAll(readNurse(NURSE_FILE));
+                                    listNurse();
                                 }
 
                                 // search patient
                                 else if (choice == 3){
                                     clearScreen();
-                                    nurses.clear();
-                                    nurses.addAll(readNurse(NURSE_FILE));
-                                    Nurse nurse = searchNurse(nurses);
+                                    NURSES.clear();
+                                    NURSES.addAll(readNurse(NURSE_FILE));
+                                    Nurse nurse = searchNurse();
                                     if (nurse == null){
                                         System.out.println("Nurse information not found.");
                                     }
@@ -167,9 +167,9 @@ public class Hospital {
                                 // delete nurse record
                                 else if (choice == 4){
                                     clearScreen();
-                                    nurses.clear();
-                                    nurses.addAll(readNurse(NURSE_FILE));
-                                    Nurse nurse = searchNurse(nurses);
+                                    NURSES.clear();
+                                    NURSES.addAll(readNurse(NURSE_FILE));
+                                    Nurse nurse = searchNurse();
                                     if(nurse != null){
                                         clearScreen();
                                         System.out.println("Matching Record Found!");
@@ -177,8 +177,8 @@ public class Hospital {
                                         System.out.println(nurse);
                                         System.out.println("Delete nurse record?");
                                         if (getYesOrNoInput()){
-                                            nurses.remove(nurse);
-                                            overwriteFile(NURSE_FILE, convertToFileFormat(new ArrayList<>(nurses)));
+                                            NURSES.remove(nurse);
+                                            overwriteFile(NURSE_FILE, convertToFileFormat(new ArrayList<>(NURSES)));
                                             System.out.println("\nNurse information deleted successfully.");
                                         } else {
                                             clearScreen();
@@ -197,7 +197,7 @@ public class Hospital {
                             }
                             if (choice != 5){
                                 System.out.print("Press any key to continue.");
-                                scanner.nextLine().trim();
+                                SCANNER.nextLine();
                                 break;
                             }
                         } // patient management page
@@ -210,24 +210,24 @@ public class Hospital {
                                 if (choice == 1){
                                     clearScreen();
                                     Patient newPatient = getNewPatientDetails();
-                                    patients.add(newPatient);
+                                    PATIENTS.add(newPatient);
                                     storeRecord(PATIENT_FILE, newPatient.toFileFormat());
                                 }
 
                                 // list all patient
                                 else if (choice == 2){
                                     clearScreen();
-                                    patients.clear();
-                                    patients.addAll(readPatient(PATIENT_FILE));
-                                    listPatient(patients);
+                                    PATIENTS.clear();
+                                    PATIENTS.addAll(readPatient(PATIENT_FILE));
+                                    listPatient();
                                 }
                                 
                                 // search for patient
                                 else if (choice == 3){
                                     clearScreen();
-                                    patients.clear();
-                                    patients.addAll(readPatient(PATIENT_FILE));
-                                    Patient patient = searchPatient(patients);
+                                    PATIENTS.clear();
+                                    PATIENTS.addAll(readPatient(PATIENT_FILE));
+                                    Patient patient = searchPatient();
                                     if (patient == null){
                                         System.out.println("Doctor information not found.");
                                     }
@@ -240,9 +240,9 @@ public class Hospital {
                                 // delete patient record
                                 else if (choice == 4){
                                     clearScreen();
-                                    patients.clear();
-                                    patients.addAll(readPatient(PATIENT_FILE));
-                                    Patient patient = searchPatient(patients);
+                                    PATIENTS.clear();
+                                    PATIENTS.addAll(readPatient(PATIENT_FILE));
+                                    Patient patient = searchPatient();
                                     if(patient != null){
                                         clearScreen();
                                         System.out.println("Matching Record Found!");
@@ -250,8 +250,8 @@ public class Hospital {
                                         System.out.println(patient);
                                         System.out.println("Delete patient record?");
                                         if (getYesOrNoInput()){
-                                            patients.remove(patient);
-                                            overwriteFile(PATIENT_FILE, convertToFileFormat(new ArrayList<>(patients)));
+                                            PATIENTS.remove(patient);
+                                            overwriteFile(PATIENT_FILE, convertToFileFormat(new ArrayList<>(PATIENTS)));
                                             System.out.println("\nPatient information deleted successfully.");
                                         } else {
                                             clearScreen();
@@ -276,7 +276,7 @@ public class Hospital {
 
                             if (choice != 5){
                                 System.out.print("Press any key to continue.");
-                                scanner.nextLine().trim();
+                                SCANNER.nextLine().trim();
                                 break;
                             }
                         } // department management page
@@ -306,7 +306,7 @@ public class Hospital {
                             }
                             if (choice != 3){
                                 System.out.print("Press any key to continue.");
-                                scanner.nextLine();
+                                SCANNER.nextLine();
                                 break;
                             }
                         }
@@ -326,9 +326,24 @@ public class Hospital {
                     while (true){
                         displayPatientMenu();
                         choice = getChoice();
+
+                        // list all doctors
                         if (choice == 1){
-                            break;
-                        } else if (choice == 5){
+                            viewDoctorList();
+                        }
+
+                        // check personal information
+                        else if (choice == 2){
+                            checkPersonalInformation();
+                        }
+
+                        // book appoointment
+                        else if (choice == 3){
+                            bookAppointment();
+                        }
+                        
+                        // log out
+                        else if (choice == 4){
                             System.out.println("\nLog Out?\n");
                             if (getYesOrNoInput()){
                                 break;
@@ -339,6 +354,13 @@ public class Hospital {
                         } else {
                             System.out.println("Invalid selection. Please re-enter.");
                         }
+
+                    // back to previous page
+                    if (choice != 4){
+                        System.out.print("Press any key to continue.");
+                        SCANNER.nextLine();
+                        break;
+                    }
                     }
                 }
             }
@@ -366,12 +388,12 @@ public class Hospital {
         while (true){
             try{
                 System.out.print("Enter choice: ");
-                int choice = scanner.nextInt();
-                scanner.nextLine(); // consume the newline character
+                int choice = SCANNER.nextInt();
+                SCANNER.nextLine(); // consume the newline character
                 return choice;
             } catch (Exception e){
                 System.out.println("Invalid choice input. Please enter a number.");
-                scanner.nextLine(); // clear the invalid input
+                SCANNER.nextLine(); // clear the invalid input
             }
         }
     }
@@ -392,17 +414,11 @@ public class Hospital {
         }
     }
 
-    // clear screen method 
-    public static void clearScreen(){
-        Hospital hospital = new Hospital();
-        hospital.combination();
-    }
-
     // add room information 
     public void addRoomInformation(){
-        consultationRooms.add(new Room("CR-001", "General"));
-        consultationRooms.add(new Room("CR-002", "General"));
-        consultationRooms.add(new Room("CR-003", "General"));
+        CONSULTATION_ROOMS.add(new Room("CR-001", "Consultation"));
+        CONSULTATION_ROOMS.add(new Room("CR-002", "General"));
+        CONSULTATION_ROOMS.add(new Room("CR-003", "General"));
     }
 
     //clear screen method 
@@ -432,10 +448,10 @@ public class Hospital {
 
         while(true){
             System.out.print("Username: ");
-            String username = scanner.nextLine().trim();
+            String username = SCANNER.nextLine().trim();
 
             System.out.print("Password: ");
-            String password = scanner.nextLine().trim();
+            String password = SCANNER.nextLine().trim();
 
             if(username.equals(STAFF_USERNAME) && password.equals(STAFF_PASSWORD)){
                 clearScreen();
@@ -456,36 +472,11 @@ public class Hospital {
     }
 
     // patient access page 
-    public void patientPage(){
+    public static void patientPage(){
         clearScreen();
         System.out.println("Hi");
     }
 
-    //doctor management system 
-    public void doctorManagement(){
-        clearScreen();
-        System.out.println("Doctor Management");
-        System.out.println("1. Add Doctor Information.");
-        System.out.println("2. List all doctor");
-        System.out.println("3. Search Doctor");
-        System.out.print("Choose option: ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-        
-        switch (selection){
-            case 1:
-                addDoctorInformation();
-                break;
-            case 2:
-                listdoctor();
-                break;
-            case 3:
-                searchDoctor();
-                break;
-            default:
-                System.out.println("Invalid selection");
-        }
     // display staff menu
     public static void displayStaffMenu(){
         Hospital.clearScreen();
@@ -524,20 +515,20 @@ public class Hospital {
         String ic;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " IC (e.g. 123456-01-0123): ");
-            ic = scanner.nextLine().trim();
+            ic = SCANNER.nextLine().trim();
             if(ValidationCheck.validateIc(ic)){
                 personInfo.add(ic);
                 break;
             } else{
-                System.out.println("\nInvalid Name format. Please re-enter: ");
+                System.out.println("\nInvalid IC format. Please re-enter: ");
             }
         }
 
         //doctor gender 
-        String doctorGender;
+        String gender;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Gender (Male/Female): ");
-            gender = scanner.nextLine().trim();
+            gender = SCANNER.nextLine().trim();
             if(ValidationCheck.validateGender(gender)){
                 personInfo.add(gender);
                 break;
@@ -547,10 +538,10 @@ public class Hospital {
         }
 
         // doctor contact number 
-        String doctorContactNumber;
+        String contactNumber;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Contact Number (012-3456789): ");
-            contactNumber = scanner.nextLine().trim();
+            contactNumber = SCANNER.nextLine().trim();
             if(ValidationCheck.validateNumber(contactNumber)){
                 personInfo.add(contactNumber);
                 break;
@@ -560,10 +551,10 @@ public class Hospital {
         }
 
         // doctor address 
-        String doctorAddress;
+        String address;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
-            address = scanner.nextLine().trim();
+            address = SCANNER.nextLine().trim();
             if(ValidationCheck.validateAddress(address)){
                 personInfo.add(address);
                 break;
@@ -576,7 +567,7 @@ public class Hospital {
             String department;
             while(true){
                 System.out.print("Enter/Select" + role.getRoleName() + " Department (e.g. Cardiology): ");
-                department = scanner.nextLine().trim();
+                department = SCANNER.nextLine().trim();
                 if(ValidationCheck.validateDoctorDepartment(department)){
                     personInfo.add(department);
                     break;
@@ -588,7 +579,7 @@ public class Hospital {
             String yearOfExp;
             while(true){
                 System.out.print("Enter " + role.getRoleName() + " Year of Experience (e.g. 12): ");
-                yearOfExp = scanner.nextLine().trim();
+                yearOfExp = SCANNER.nextLine().trim();
                 if(ValidationCheck.validateYearOfExp(yearOfExp)){
                     personInfo.add(yearOfExp);
                     break;
@@ -601,7 +592,7 @@ public class Hospital {
             String emergencyContact;
             while(true){
                 System.out.print("Enter " + role.getRoleName() + " Emergency Contact Number (012-3456789): ");
-                emergencyContact = scanner.nextLine().trim();
+                emergencyContact = SCANNER.nextLine().trim();
                 if(ValidationCheck.validateNumber(emergencyContact)){
                     personInfo.add(emergencyContact);
                     break;
@@ -622,7 +613,7 @@ public class Hospital {
         while(true){
             clearScreen();
             System.out.print("Enter " + role.getRoleName() + " Name (e.g. John Smith): ");
-            name = scanner.nextLine().trim();
+            name = SCANNER.nextLine().trim();
             if(ValidationCheck.validateName(name)){
                 return name;
             } else{
@@ -637,7 +628,7 @@ public class Hospital {
 
         while(true){
             System.out.print("Enter " + role.getRoleName() + " ID (e.g. DC-25-001): ");
-            id = scanner.nextLine().trim();
+            id = SCANNER.nextLine().trim();
             if(ValidationCheck.validateID(id, role.getRoleName())){
                 return id;
             } else {
@@ -694,7 +685,7 @@ public class Hospital {
 
         while(true){
             System.out.print("Enter New Department Name (e.g. Orthopedics): ");
-            name = scanner.nextLine().trim();
+            name = SCANNER.nextLine().trim();
             if(ValidationCheck.validateName(name)){
                 return new Department(name);
             } else{
@@ -793,14 +784,8 @@ public class Hospital {
             return;
         }
 
-        for (String[] doctor : doctors){
-            System.out.println("ID: " + doctor[0]);
-            System.out.println("Name: " + doctor[1]);
-            System.out.println("Gender: " + doctor[2]);
-            System.out.println("Contact Number: " + doctor[3]);
-            System.out.println("Address: " + doctor[4]);
-            System.out.println("Year of Experience: " + doctor[5]);
-            System.out.println("Department: " + doctor[6]);
+        for (Doctor doctor : doctors){
+            System.out.println(doctor);
         }
     }
 
@@ -888,25 +873,19 @@ public class Hospital {
     }
 
     // list nurse information 
-    public static void listNurse(List<Nurse> nurses){
-        if(nurses.isEmpty()){
+    public static void listNurse(){
+        if(NURSES.isEmpty()){
             System.out.println("No nurse information is registered yet.");
             return;
         }
 
-        for (String[] nurse: nurses){
-            System.out.println("ID: " + nurse[0]);
-            System.out.println("Name: " + nurse[1]);
-            System.out.println("Gender: " + nurse[2]);
-            System.out.println("Contact Number: " + nurse[3]);
-            System.out.println("Address: " + nurse[4]);
-            System.out.println("Year of Experience: " + nurse[5]);
-            System.out.println("Department: " + nurse[6]);
+        for (Nurse nurse: NURSES){
+            System.out.println(nurse);
         }
     }
 
     // search nurse 
-    public static Nurse searchNurse(List<Nurse> nurses){
+    public static Nurse searchNurse(){
         String search;
 
         while (true){
@@ -929,7 +908,7 @@ public class Hospital {
             }
         }
 
-        for (Nurse nurse: nurses){
+        for (Nurse nurse: NURSES){
             if(nurse.getId().equals(search) || nurse.getName().equalsIgnoreCase(search)){
                 return nurse;
             }
@@ -985,25 +964,19 @@ public class Hospital {
     }
 
     // list for all patient
-    public static void listPatient(List<Patient> patients){
-        if(patients.isEmpty()){
+    public static void listPatient(){
+        if(PATIENTS.isEmpty()){
             System.out.println("No patient information is added.");
             return;
         }
 
-        for (String[] patient : patients){
-            System.out.println("ID: " + patient[0]);
-            System.out.println("Name: " + patient[1]);
-            System.out.println("Gender: " + patient[2]);
-            System.out.println("Contact Number: " + patient[3]);
-            System.out.println("Address: " + patient[4]);
-            System.out.println("Year of Experience: " + patient[5]);
-            System.out.println("Department: " + patient[6]);
+        for (Patient patient : PATIENTS){
+            System.out.println(patient);
         }
     }
 
     // search for patient 
-    public static Patient searchPatient(List<Patient> patients){
+    public static Patient searchPatient(){
         String search;
 
         while (true){
@@ -1026,7 +999,7 @@ public class Hospital {
             }
         }     
 
-        for (Patient patient : patients){
+        for (Patient patient : PATIENTS){
             if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
                 return patient;
             }
@@ -1039,45 +1012,29 @@ public class Hospital {
 
 
     //View doctor 
-    public void viewDoctorList(){
-        ArrayList<String[]> doctorLists = getDoctors();
-
-        if(doctorLists.isEmpty()){
+    public static void viewDoctorList(){
+        if(DOCTORS.isEmpty()){
             System.out.println("No doctor information is added.");
             return;
         }
 
-        for (String[] doctorList : doctorLists){
-            System.out.println("ID: " + doctorList[0]);
-            System.out.println("Name: " + doctorList[1]);
-            System.out.println("Gender: " + doctorList[2]);
-            System.out.println("Contact Number: " + doctorList[3]);
-            System.out.println("Address: " + doctorList[4]);
-            System.out.println("Year of Experience: " + doctorList[5]);
-            System.out.println("Department: " + doctorList[6]);
+        for (Doctor doctor : DOCTORS){
+            System.out.println(doctor);
         }
 
     }
 
     //check own information 
-    public void checkPersonalInformation(){
+    public static void checkPersonalInformation(){
         System.out.print("Enter your own id or name to check own information (E.g Desmond/PA): ");
-        String search = scanner.nextLine();
+        String search = SCANNER.nextLine();
 
-        ArrayList<String[]> ownLists = getPatient();
         boolean exist = false;
         boolean update = false;
 
-        for(String[] ownList : ownLists){
-            if(ownList[0].equalsIgnoreCase(search) || ownList[0].equalsIgnoreCase(search)){
-                System.out.println("ID: " + ownList[0]);
-                System.out.println("Name: " + ownList[1]);
-                System.out.println("Gender: " + ownList[2]);
-                System.out.println("Contact Number: " + ownList[3]);
-                System.out.println("Address: " + ownList[4]);
-                System.out.println("Year of Experience: " + ownList[5]);
-                System.out.println("Department: " + ownList[6]);
-                exist = true;
+        for(Patient patient : PATIENTS){
+            if(patient.getId().equals(search) || patient.getName().equals(search)){
+                System.out.println(patient);
             }
         }
 
@@ -1087,7 +1044,7 @@ public class Hospital {
     }
 
     //check doctor is it available 
-    public boolean doctorAvailability(Doctor doctor, LocalDate date){
+    public static boolean doctorAvailability(Doctor doctor, LocalDate date){
         List<Appointment> appointments = doctor.getAppointments();
         for(Appointment appointment : appointments){
             if(appointment != null && appointment.getAppointmentDate().equals(date)){
@@ -1098,9 +1055,9 @@ public class Hospital {
     }
 
     // get available rooms 
-    public List<Room> getAvailableRoom(String roomType){
+    public static List<Room> getAvailableRoom(String roomType){
         List<Room> available = new ArrayList<>();
-        for(Room room : consultationRooms){
+        for(Room room : CONSULTATION_ROOMS){
             if(room.getAvailable() && (roomType != null || room.getRoomType().equals(roomType))){
                 available.add(room);
             }
@@ -1109,11 +1066,10 @@ public class Hospital {
     }
 
     // find patient by id 
-    public Patient findPatientID(String patientID){
-        ArrayList<String[]> patients = new ArrayList<>();
-        for(String[] patient : patients){
-            if(patient[0].equals(patientID)){
-                return new Patient(patient[0], patient[1], patient[2], patient[3], patient[4]);
+    public static Patient findPatientID(String patientID){
+        for(Patient patient : PATIENTS){
+            if(patient.getId().equals(patientID)){
+                return patient;
             }
         }
         return null;
@@ -1121,7 +1077,7 @@ public class Hospital {
 
     // Book Appointment page
     // (Check patient is it new or exist) (Check available department) (Check available doctor) (Get appointment date and check with available doctor) (check available room) 
-    public void bookAppointment(){
+    public static void bookAppointment(){
         clearScreen();
         System.out.println("Booking Appointment Page");
         
@@ -1130,15 +1086,15 @@ public class Hospital {
         System.out.println("2. Existing Patient");
         System.out.println("3. Exit Appointment page");
         System.out.print("Select your choice: ");
-        int patientChoice = scanner.nextInt();
-        scanner.nextLine();
+        int patientChoice = SCANNER.nextInt();
+        SCANNER.nextLine();
 
         Patient patient;
         //check the choice is it new or exist patient 
         if(patientChoice == 1){
-            patient = registerNewPatient();
+            patient = getNewPatientDetails();
         } else if (patientChoice ==2 ){
-            patient = findExistPatient();
+            patient = searchPatient();
         } else{
             return;
         }
@@ -1149,8 +1105,8 @@ public class Hospital {
         System.out.println("2. Oncology");
         System.out.println("3. Radiology");
         System.out.print("Select your choice: ");
-        int departmentChoice = scanner.nextInt();
-        scanner.nextLine();
+        int departmentChoice = SCANNER.nextInt();
+        SCANNER.nextLine();
 
         String department = getDepartmentChoice(departmentChoice);
         if(department == null){
@@ -1161,7 +1117,7 @@ public class Hospital {
         // check available doctor 
         System.out.println("Available doctor in " + department + " : ");
 
-        ArrayList<String[]> doctors = getDoctorDepartment(department);
+        List<Doctor> doctors = getDoctorDepartment(department);
         if(doctors.isEmpty()){
             System.out.println("No doctor is available on this department");
             return;
@@ -1169,10 +1125,10 @@ public class Hospital {
 
         // read the doctor array list, get the doctor id , doctor year of exp 
         for (int i = 0; i < doctors.size(); i++){
-            System.out.println((i+1) + doctors.get(i)[1] + doctors.get(i)[5] + " years of experience.");
+            System.out.println((i+1) + doctors.get(i).getId() + doctors.get(i).getYearOfExp() + " years of experience.");
         }
         System.out.println("Select doctor: ");
-        int doctorSelection = scanner.nextInt();
+        int doctorSelection = SCANNER.nextInt();
         
         // check the doctor selection is it match the size of the doctors array 
         if(doctorSelection < 1 || doctorSelection > doctors.size()){
@@ -1181,15 +1137,12 @@ public class Hospital {
         }
 
         // create array string for selected data to be present 
-        String[] selectedDoctor = doctors.get(doctorSelection -1);
-
-        // create a object for selected doctor present
-        Doctor doctor = new Doctor(selectedDoctor[0], selectedDoctor[1], selectedDoctor[2], selectedDoctor[3], selectedDoctor[4], selectedDoctor[5], selectedDoctor[6]);
+        Doctor doctor = doctors.get(doctorSelection - 1);
 
         // get appointment date 
         System.out.print("Enter appointment date (yyyy-mm-dd): ");
         // get date in string format;
-        String appointmentDate = scanner.nextLine(); 
+        String appointmentDate = SCANNER.nextLine(); 
         LocalDate appointmentDate1; // default format yyyy-mm-dd 
 
 
@@ -1223,8 +1176,8 @@ public class Hospital {
         }
 
         System.out.print("Select Room: ");
-        int roomSelection = scanner.nextInt();
-        scanner.nextLine();
+        int roomSelection = SCANNER.nextInt();
+        SCANNER.nextLine();
 
         //check choice fulfill the size
         if(roomSelection < 1 || roomSelection > availableRooms.size()){
@@ -1248,42 +1201,8 @@ public class Hospital {
         }
     }
 
-    //register new patient information
-    public Patient registerNewPatient(){
-        System.out.println("New Patient Registration\n");
-
-        System.out.print("Enter Patient Name: ");
-        String patientName = scanner.nextLine();
-
-        System.out.println("Enter Patient Gender (Male/Female): ");
-        String patientGender = scanner.nextLine();
-
-        System.out.println("Enter Patient Contact Number: ");
-        String patientContactNumber = scanner.nextLine();
-
-        System.out.println("Enter Patient Address: ");
-        String patientAddress = scanner.nextLine();
-
-        return new Patient(patientName, patientGender, patientAddress, patientContactNumber, patientAddress);
-    }
-
-    // find exist patient 
-    public Patient findExistPatient(){
-        System.out.print("Enter your patient id: ");
-        String compareID = scanner.nextLine();
-
-        Patient patient = findPatientID(compareID);
-        if(patient == null){
-            System.out.println("Invalid patient if or patient not found");
-            return null;
-        }
-
-        System.out.println("Information found: " + patient.getName());
-        return patient;
-    }
-
     // convert department choice 
-    public String getDepartmentChoice(int choice){
+    public static String getDepartmentChoice(int choice){
         switch (choice){
             case 1:
                 return "Cardiology";
@@ -1296,13 +1215,12 @@ public class Hospital {
         }
     }
 
-    // department choice
-    public ArrayList<String[]> getDoctorDepartment(String department){
-        ArrayList<String[]> doctors = getDoctors();
-        ArrayList<String[]> departmentDoctors = new ArrayList<>();
+    // return a list of all doctors in a department
+    public static List<Doctor> getDoctorDepartment(String department){
+        List<Doctor> departmentDoctors = new ArrayList<>();
 
-        for (String[] doctor : doctors){
-            if(doctor[6].equalsIgnoreCase(department)){
+        for (Doctor doctor : DOCTORS){
+            if(doctor.getDepartment().equals(department)){
                 departmentDoctors.add(doctor);
             }
         }
@@ -1310,7 +1228,7 @@ public class Hospital {
     }
 
     // add list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
-    public List<String> getPresrcibedMedications(){
+    public static List<String> getPresrcibedMedications(){
         List<String> medications = new ArrayList<>();
         // cardiology 3 medicines
         medications.add("Cardiology : Statin");
@@ -1337,7 +1255,7 @@ public class Hospital {
     }
 
     //compare all medications and department medications , show specific medications with department
-    public List<String> getMedicationDepartment(String department){
+    public static List<String> getMedicationDepartment(String department){
         List<String> medications = getPresrcibedMedications();
         List<String> specificMedications = new ArrayList<>();
 
@@ -1351,7 +1269,7 @@ public class Hospital {
     }
 
     //
-    public List<String> getRoomType(){
+    public static List<String> getRoomType(){
         List<String> roomTypes = new ArrayList<>();
         // consultation room have 15 rooms 
         // room 1 
@@ -1379,7 +1297,8 @@ public class Hospital {
     }
 
     // specific floor and consultation room 
-    public List<String> getRoomFloor(String id){
+    // what is the purpose
+    public static List<String> getRoomFloor(String id){
         List<String> roomTypes = getRoomType();
         List<String> specificRoom = new ArrayList<>();
 
@@ -1391,7 +1310,4 @@ public class Hospital {
 
         return specificRoom;
     }
-
-    
-
 }

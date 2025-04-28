@@ -1,10 +1,10 @@
 import java.time.LocalDate;
 
 public class Appointment {
-    private final LocalDate creationDate = LocalDate.now();
-    private final String appointmentID = IdGenerator.generateAppointmentId();
-    private final Doctor doctor;
-    private final Patient patient;
+    private final LocalDate CREATION_DATE = LocalDate.now();
+    private final String APPOINTMENT_ID = IdGenerator.generateAppointmentId();
+    private final Doctor DOCTOR;
+    private final Patient PATIENT;
     private LocalDate appointmentDate;
     // get room string method 
     private Room consulationRoom;
@@ -16,8 +16,8 @@ public class Appointment {
         if(!consultationRoom.getAvailable()){
             throw new IllegalStateException("Consultation Room is not available.");
         }
-        this.doctor = doctor;
-        this.patient = patient;
+        this.DOCTOR = doctor;
+        this.PATIENT = patient;
         this.appointmentDate = appointmentDate;
         this.consulationRoom = consultationRoom;
         this.appointmentStatus = "Scheduled";
@@ -25,8 +25,8 @@ public class Appointment {
         //book the room
         consultationRoom.bookedRoom(this);
 
-        //link appointment with doctor and patient 
-        doctor.addAppointment(this);
+        //link appointment with DOCTOR and patient 
+        DOCTOR.addAppointment(this);
         patient.addAppointment(this);
     }
 
@@ -69,12 +69,12 @@ public class Appointment {
 
     // get creation date
     public LocalDate getCreationDate(){
-        return creationDate;
+        return CREATION_DATE;
     }
     
     // get mthod for appointment id 
     public String getAppointmentID(){
-        return appointmentID;
+        return APPOINTMENT_ID;
     }
 
     // get method for appointment date 
@@ -87,8 +87,18 @@ public class Appointment {
         return consulationRoom;
     }
 
-    //get method for appointment status
+    // get method for appointment status
     public String getAppointmentStatus(){
         return appointmentStatus;
+    }
+
+    // get method for DOCTOR
+    public Doctor getDoctor(){
+        return DOCTOR;
+    }
+
+    // get method for patient
+    public Patient getPatient(){
+        return PATIENT;
     }
 }
