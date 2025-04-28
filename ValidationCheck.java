@@ -31,12 +31,12 @@ public class ValidationCheck {
 
     //validation for address 
     public static boolean validateAddress(String address){
-        return address != null && address.matches("^[a-zA-z0-9 ]+$");
+        return address != null && address.matches("^[a-zA-z0-9, ]+$");
     }
 
     // validation for year of experience
     public static boolean validateYearOfExp(String yearOfExp){
-        return yearOfExp != null && yearOfExp.matches("^[0-9]+$");
+        return yearOfExp != null && yearOfExp.matches("^[0-9]+$") && Integer.parseInt(yearOfExp) >= 0;
     }
 
     //validation for patient medical history
