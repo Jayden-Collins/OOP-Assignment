@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class MedicalRecords {
     private final Patient patient;
     private Doctor doctor;
     private List<String> diagnoses;
-    private List<String> prescribedMedications;
+    private List<String> prescribedMedications = new ArrayList<>();
     private List<String> treatmentHistory;
     private LocalDateTime nextFollowUp;
 

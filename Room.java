@@ -1,14 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Room {
     private final String roomID;
-    private String roomType;
+    private List<String> roomType = new ArrayList<>();
     private boolean available;
     // as a reference variable
     private Appointment currentAppointment;
 
     // constructor
-    public Room(String roomID, String roomType){
+    public Room(String roomID){
         this.roomID = roomID;
-        this.roomType = roomType;
         this.available = true;
         this.currentAppointment = null;
     }
@@ -18,7 +20,11 @@ public class Room {
         return roomID;
     }
 
-    public String getRoomType(){
+    public void setRoomType(String roomType){
+        this.roomType.add(roomType);
+    }
+
+    public List<String> getRoomType(){
         return roomType;
     }
 
