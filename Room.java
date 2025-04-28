@@ -1,8 +1,9 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
     private final String roomID;
-    private List<String> roomType;
+    private List<String> roomType = new ArrayList<>();
     private boolean available;
     // as a reference variable
     private Appointment currentAppointment;
