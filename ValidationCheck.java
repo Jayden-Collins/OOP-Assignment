@@ -15,9 +15,7 @@ public class ValidationCheck {
             return id != null && id.matches("^DT-\\d{2}-\\d{3}$");
         } else if (type.equals("Room")) {
             return id != null && id.matches("^RM-\\d{4}$");
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     // validation check for ic matches the format 012345-67-8901 and is not null
