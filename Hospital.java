@@ -17,9 +17,6 @@ public class Hospital {
 
     //consultation room 
     private List<Room> consultationRooms;
-
-    // list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
-    private List<
     
     Scanner scanner = new Scanner(System.in);
     private String userAccess;
@@ -252,6 +249,7 @@ public class Hospital {
 
         return doctors;
     }
+
 
     // list doctor information 
     public void listdoctor(){
@@ -834,6 +832,89 @@ public class Hospital {
         return departmentDoctors;
     }
 
-    // 
+    // add list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
+    public List<String> getPresrcibedMedications(){
+        List<String> medications = new ArrayList<>();
+        // cardiology 3 medicines
+        medications.add("Cardiology : Statin");
+        medications.add("Cardiology : ACE Inhibitors");
+        medications.add("Cardiology : Beta-Blockers");
+        // neurology 3 medicines 
+        medications.add("Neurology : Anticonvulsants");
+        medications.add("Neurology : Benzodiazepines");
+        medications.add("Neurology : Gabapentin");
+        // emerngecy have 3 medicines 
+        medications.add("Emergency : Glucagon");
+        medications.add("Emergency : Glyceryl trinitrate");
+        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe");
+        // oncology have 3 meidicines 
+        medications.add("Oncology : cyclophosphamide");
+        medications.add("Oncology : doxorubicin");
+        medications.add("Oncology : doxorubicin");
+        // pediatrics have 3 medicines 
+        medications.add("Pediatrics : Cephalexin");
+        medications.add("Pediatrics : Amoxicillin");
+        medications.add("Pediatrics : Cefdinir");
+
+        return medications;
+    }
+
+    //compare all medications and department medications , show specific medications with department
+    public List<String> getMedicationDepartment(String department){
+        List<String> medications = getPresrcibedMedications();
+        List<String> specificMedications = new ArrayList<>();
+
+        for(String medication : medications){
+            if(medication.startsWith(department + " : ")){
+                specificMedications.add(medication);
+            }
+        }
+
+        return specificMedications;
+    }
+
+    //
+    public List<String> getRoomType(){
+        List<String> roomTypes = new ArrayList<>();
+        // consultation room have 15 rooms 
+        // room 1 
+        roomTypes.add("Floor 1 : Consultation Room 1");
+        roomTypes.add("Floor 1 : Consultation Room 2");
+        roomTypes.add("Floor 1 : Consultation Room 3");
+
+        // room 2 
+        roomTypes.add("Floor 2 : Consultation Room 4");
+        roomTypes.add("Floor 2 : Consultation Room 5");
+        roomTypes.add("Floor 2 : Consultation Room 6");
+        roomTypes.add("Floor 2 : Consultation Room 7");
+        roomTypes.add("Floor 2 : Consultation Room 8");
+        roomTypes.add("Floor 2 : Consultation Room 9");
+
+        // room 3 
+        roomTypes.add("Floor 3 : Consultation Room 10");
+        roomTypes.add("Floor 3 : Consultation Room 11");
+        roomTypes.add("Floor 3 : Consultation Room 12");
+        roomTypes.add("Floor 3 : Consultation Room 13");
+        roomTypes.add("Floor 3 : Consultation Room 14");
+        roomTypes.add("Floor 3 : Consultation Room 15");
+
+        return roomTypes;
+    }
+
+    // specific floor and consultation room 
+    public List<String> getRoomFloor(String id){
+        List<String> roomTypes = getRoomType();
+        List<String> specificRoom = new ArrayList<>();
+
+        for(String roomType : roomTypes){
+            if(roomType.startsWith(id + ":")){
+                specificRoom.add(roomType);
+            }
+        }
+
+        return specificRoom;
+    }
+
+    
 
 }
