@@ -1044,29 +1044,110 @@ public class Hospital {
         return departmentDoctors;
     }
 
+    // medication list 
+    public List<String> medicationLists(){
+        List<String> medicationLists = new ArrayList<>();
+        medicationLists.add("Statin");
+        medicationLists.add("ACE Inhibitors");
+        medicationLists.add("Beta-Blockers");
+        medicationLists.add("Anticonvulsants");
+        medicationLists.add("Benzodiazepines");
+        medicationLists.add("Gabapentin");
+        medicationLists.add("Glucagon");
+        medicationLists.add("Glyceryl trinitrate");
+        medicationLists.add("Epinephrine (adrenaline) pre-filled syringe");
+        medicationLists.add("cyclophosphamide");
+        medicationLists.add("doxorubicin");
+        medicationLists.add("doxorubicin");
+        medicationLists.add("Cephalexin");
+        medicationLists.add("Amoxicillin");
+        medicationLists.add("Cefdinir");
+
+        return medicationLists;
+    }
+
     // add list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
+    // search medication first, enter dosage store in list
+    // default dosage and custom dosage
     public List<String> getPresrcibedMedications(){
+        List<String> medicationLists = medicationLists();
+        // store the medication the l
         List<String> medications = new ArrayList<>();
-        // cardiology 3 medicines
-        medications.add("Cardiology : Statin");
-        medications.add("Cardiology : ACE Inhibitors");
-        medications.add("Cardiology : Beta-Blockers");
-        // neurology 3 medicines 
-        medications.add("Neurology : Anticonvulsants");
-        medications.add("Neurology : Benzodiazepines");
-        medications.add("Neurology : Gabapentin");
-        // emerngecy have 3 medicines 
-        medications.add("Emergency : Glucagon");
-        medications.add("Emergency : Glyceryl trinitrate");
-        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe");
-        // oncology have 3 meidicines 
-        medications.add("Oncology : cyclophosphamide");
-        medications.add("Oncology : doxorubicin");
-        medications.add("Oncology : doxorubicin");
-        // pediatrics have 3 medicines 
-        medications.add("Pediatrics : Cephalexin");
-        medications.add("Pediatrics : Amoxicillin");
-        medications.add("Pediatrics : Cefdinir");
+        // search by medication 
+        System.out.print("Enter your medication: ");
+        String medication = scanner.nextLine();
+        
+        // for each loop for the medication lists 
+        for(String medicationList : medicationLists){
+            if(medication == medicationList){
+                // enter default dose or custom dose 
+                System.out.println("Enter your doses(default dose = 1 / custom dose): ");
+                String dose = scanner.nextLine();
+                try {
+                    if(dose == "1"){
+                        //cardiology 3 medicines 
+                        medications.add("Cardiology : Statin, dosage = 1mg");
+                        medications.add("Cardiology : ACE Inhibitors, dosage = 1mg");
+                        medications.add("Cardiology : Beta-Blockers, dosage = 1mg");
+                        // neurology 3 medicines 
+
+                        medications.add("Neurology : Anticonvulsants, dosage = 1mg");
+                        medications.add("Neurology : Benzodiazepines, dosage = 1mg");
+                        medications.add("Neurology : Gabapentin, dosage = 1mg");
+                        // emerngecy have 3 medicines 
+
+                        medications.add("Emergency : Glucagon, dosage = 1mg");
+                        medications.add("Emergency : Glyceryl trinitrate, dosage = 1mg");
+                        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe, dosage = 1ml");
+                        // oncology have 3 meidicines 
+
+                        medications.add("Oncology : cyclophosphamide, dosage = 1ml");
+                        medications.add("Oncology : doxorubicin, dosage = 1ml");
+                        medications.add("Oncology : rituximab, dosage = 1ml");
+
+                        // pediatrics have 3 medicines 
+                        medications.add("Pediatrics : Cephalexin, dosage = 1ml");
+                        medications.add("Pediatrics : Amoxicillin, dosage = 1ml");
+                        medications.add("Pediatrics : Cefdinir, dosage = 1ml");
+
+                    } else if (medication == "Statin"){
+                        medications.add("Cardiology : Statin, dosage = " + dose + "mg");
+                    } else if (medication == "ACE Inhibitors"){
+                        medications.add("Neurology : Benzodiazepines, dosage = " + dose + "mg");
+                    } else if (medication == "Beta-Blockers"){
+                        medications.add("Cardiology : Beta-Blockers, dosage = " + dose + "mg");
+                    } else if (medication == "Anticonvulsants"){
+                        medications.add("Neurology : Anticonvulsants, dosage = " + dose + "mg");
+                    } else if (medication == "Benzodiazepines"){
+                        medications.add("Neurology : Benzodiazepines, dosage = " + dose + "mg");
+                    } else if (medication == "Gabapentin"){
+                        medications.add("Neurology : Gabapentin, dosage = " + dose + "mg");
+                    } else if (medication == "Glucagon"){
+                        medications.add("Emergency : Glucagon, dosage = " + dose + "mg");
+                    } else if (medication == "Glyceryl trinitrate"){
+                        medications.add("Emergency : Glyceryl trinitrate, dosage = " + dose + "mg");
+                    } else if (medication == "Epinephrine (adrenaline) pre-filled syringe"){
+                        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe, dosage = " + dose + "mg");
+                    } else if (medication == "cyclophosphamide"){
+                        medications.add("Oncology : cyclophosphamide, dosage = " + dose + "mg");
+                    } else if (medication == "doxorubicin"){
+                        medications.add("Oncology : doxorubicin, dosage = " + dose + "mg");
+                    } else if (medication == "rituximab"){
+                        medications.add("Oncology : rituximab, dosage = " + dose + "mg");
+                    } else if (medication == "Cephalexin"){
+                        medications.add("Pediatrics : Cephalexin, dosage = " + dose + "mg");
+                    } else if (medication == "Amoxicillin"){
+                        medications.add("Pediatrics : Amoxicillin, dosage = " + dose + "mg");
+                    } else if (medication == "Cefdinir"){
+                        medications.add("Pediatrics : Cefdinir, dosage = " + dose + "mg");
+                    }
+
+                } catch (Exception e){
+                    System.out.println("Invalid String format input");
+                }
+            }
+        }
+        
 
         return medications;
     }
@@ -1127,6 +1208,6 @@ public class Hospital {
         return specificRoom;
     }
 
-    
+
 
 }
