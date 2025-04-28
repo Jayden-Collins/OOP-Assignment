@@ -6,9 +6,9 @@ public class Doctor extends Staff{
     private final List<Appointment> APPOINTMENTS = new ArrayList<>(); // list of appointments for the doctor
     private int appointmentCount = 0;
 
-    // constructor for new doctors
+    // default constructor for new doctors
     public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
-        super(Role.DOCTOR, IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
+        this(IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
     // constructor for file loading

@@ -2,7 +2,7 @@ import java.time.LocalDate;
 
 public class Appointment {
     private final LocalDate CREATION_DATE = LocalDate.now();
-    private final String APPOINTMENT_ID = IdGenerator.generateAppointmentId();
+    private final String APPOINTMENT_ID;
     private final Doctor DOCTOR;
     private final Patient PATIENT;
     private LocalDate appointmentDate;
@@ -10,24 +10,24 @@ public class Appointment {
     private Room consulationRoom;
     private String appointmentStatus;
 
-    //parameter constructor 
+    // default constructor 
     public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, Room consultationRoom){
-        //check the room is it available or not 
+        // calls other constructor
+        this(IdGenerator.generateAppointmentId(), doctor, patient, appointmentDate, consultationRoom, "Scheduled");
+    }
+
+    // constructor for file loading
+    public Appointment(String appointmentId, Doctor doctor, Patient patient, LocalDate appointmentDate, Room consultationRoom, String appointmentStatus){
+        //check whether the room is available or not 
         if(!consultationRoom.getAvailable()){
             throw new IllegalStateException("Consultation Room is not available.");
         }
+        this.APPOINTMENT_ID = appointmentId;
         this.DOCTOR = doctor;
         this.PATIENT = patient;
         this.appointmentDate = appointmentDate;
         this.consulationRoom = consultationRoom;
-        this.appointmentStatus = "Scheduled";
-
-        //book the room
-        consultationRoom.bookedRoom(this);
-
-        //link appointment with DOCTOR and patient 
-        DOCTOR.addAppointment(this);
-        patient.addAppointment(this);
+        this.appointmentStatus = appointmentStatus;
     }
 
     //changing room 

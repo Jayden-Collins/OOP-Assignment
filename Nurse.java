@@ -4,12 +4,12 @@ import java.util.List;
 public class Nurse extends Staff{
     private final List<Patient> PATIENTS = new ArrayList<>(); // list of patients assigned to the nurse
 
-    // constructor for new nurses
+    // default constructor for new nurses
     public Nurse(String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department, int yearOfExp){
-        super(Role.NURSE, IdGenerator.generateNurseId(), nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
+        this(IdGenerator.generateNurseId(), nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
     }
 
-    // constructur for file reading
+    // constructur for file loading
     public Nurse(String nurseId, String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department, int yearOfExp){
         super(Role.NURSE, nurseId, nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
     }

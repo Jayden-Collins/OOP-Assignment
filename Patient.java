@@ -8,11 +8,9 @@ public class Patient extends Person{
     private final List<Appointment> APPOINTMENTS = new ArrayList<>();
     private int appointmentCount = 0;
 
-    // parameterized constructor
+    // default constructor for new patients
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
-        this.emergencyContact = emergencyContact;
-        this.MEDICAL_RECORD = new MedicalRecords(this, null);
+        this(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientAddress, patientPhoneNumber, emergencyContact);
     }
 
     // constructor for file loading

@@ -5,7 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class MedicalRecords {
-    private final LocalDate CREATION_DATE = LocalDate.now();
+    private final String MEDICAL_RECORD_ID;
+    private final LocalDate CREATION_DATE;
     private final Patient PATIENT;
     private Doctor doctor;
     private List<String> diagnoses;
@@ -13,8 +14,21 @@ public class MedicalRecords {
     private List<String> treatmentHistory;
     private LocalDateTime nextFollowUp;
 
+    // default constructor for new medical records
     public MedicalRecords(Patient patient, Doctor doctor){
+        this(IdGenerator.generateMedicalRecordId(), LocalDate.now(), patient, doctor, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
+    }
+
+    // constructor for file loading
+    public MedicalRecords(String medicalRecordId, LocalDate creationDate, Patient patient, Doctor doctor, List<String> diagnoses, List<String> prescribedMedications, List<String> treatmentHistory, LocalDateTime nextFollowUp){
+        this.MEDICAL_RECORD_ID = medicalRecordId;
+        this.CREATION_DATE = creationDate;
         this.PATIENT = patient;
+        this.doctor = doctor;
+        this.diagnoses = diagnoses;
+        this.prescribedMedications = prescribedMedications;
+        this.treatmentHistory = treatmentHistory;
+        this.nextFollowUp = nextFollowUp;
     }
 
     public void addDiagnosis(String diagnoses){
@@ -31,6 +45,10 @@ public class MedicalRecords {
 
     public void addFollowUp(LocalDateTime nextFollowUp){
         this.nextFollowUp = nextFollowUp;
+    }
+
+    public String getMedicalRecordId() {
+        return MEDICAL_RECORD_ID;
     }
 
     public LocalDate getCreationDate() {

@@ -9,11 +9,17 @@ public class Room {
     // as a reference variable
     private Appointment currentAppointment;
 
-    // constructor
+    // default constructor for new rooms
     public Room(int floor, String roomType){
-        this.ROOM_ID = IdGenerator.generateRoomId(floor);
-        this.available = true;
-        this.currentAppointment = null;
+        this(IdGenerator.generateRoomId(floor), roomType, true, null);
+    }
+
+    // constructor for file loading
+    public Room(String roomID, String roomType, boolean available, Appointment currentAppointment){
+        this.ROOM_ID = roomID;
+        this.roomType = roomType;
+        this.available = available;
+        this.currentAppointment = currentAppointment;
     }
 
     // get method 

@@ -2,10 +2,9 @@ public class Department {
     private final String DEPARTMENT_ID;
     private String departmentName;
 
-    // parameterized constructor
+    // default constructor for new department creation
     public Department(String departmentName){
-        this.DEPARTMENT_ID = IdGenerator.generateDepartmentId();
-        this.departmentName = departmentName;
+        this(IdGenerator.generateDepartmentId(), departmentName);
     }
     
     // constructor for file loading

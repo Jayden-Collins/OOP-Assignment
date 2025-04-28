@@ -1191,6 +1191,13 @@ public class Hospital {
         try {
             Appointment appointment = new Appointment(doctor, patient, appointmentDate1, selectedRoom);
 
+            //book the room
+            selectedRoom.bookedRoom(appointment);
+
+            //link appointment with DOCTOR and PATIENT
+            doctor.addAppointment(appointment);
+            patient.addAppointment(appointment);
+
             System.out.println("Appointment Successful");
             System.out.println("AppointmentID: " + appointment.getAppointmentID());
             System.out.println("Doctor: " + doctor.getName());

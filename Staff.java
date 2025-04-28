@@ -5,7 +5,6 @@ public abstract class Staff extends Person{
     // parameter constructor
     public Staff(Role role, String staffId, String staffIc, String staffName, String staffGender, String staffContactNumber, String staffAddress, String department, int yearOfExp){
         super(role, staffId, staffIc, staffName, staffGender, staffContactNumber, staffAddress);
-
         this.department = department;
         this.yearOfExp = yearOfExp;
     }
