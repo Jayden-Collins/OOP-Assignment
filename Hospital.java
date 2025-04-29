@@ -1,5 +1,6 @@
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1217,7 +1218,111 @@ public class Hospital {
         return specificRoom;
     }
 
-    
+    //generate medical records 
+    public static void generateMedicalRecord(){
+        clearScreen();
+        System.out.println("============Generate Medical Records============");
+        
+        //list patients to choose 
+        List<Patient> patients = readPatient(PATIENT_FILE);
+        if(patients.isEmpty()){
+            System.out.println("No patient informations are available");
+            return;
+        }
+
+        // list out patients information, key in patient id 
+        listPatient(patients);
+        System.out.print("Select patient ID: ");
+        String patientID = scanner.nextLine();
+
+        // selected patient object 
+        Patient selectedPatient = null;
+
+        for(Patient patient : patients){
+            if(patient.getId().equals(patientID)){
+                selectedPatient = patient;
+                break;
+            }
+        }
+
+        if(selectedPatient == null){
+            System.out.println("Patient not found");
+            return;
+        }
+
+        //List doctors to choose 
+        List<Doctor> doctors = readDoctors(DOCTOR_FILE);
+        if(doctors.isEmpty()){
+            System.out.println("No doctor informations are available");
+            return;
+        }
+
+        listdoctor(doctors);
+        System.out.print("Select doctor ID: ");
+        String doctorID = scanner.nextLine();
+
+        //selected doctor object 
+        Doctor selectedDoctor = null;
+
+        for(Doctor doctor : doctors){
+            if(doctor.getId().equals(doctorID)){
+                selectedDoctor = doctor;
+                break;
+            }
+        }
+
+        if(selectedDoctor == null){
+            System.out.println("Doctor not found");
+            return;
+        }
+
+
+        //medical records new object
+        MedicalRecords medicalRecord = new MedicalRecords(selectedPatient, selectedDoctor);
+
+        // diagnoses record 
+        System.out.print("Enter diagnoses: ");
+        String diagnoses = scanner.nextLine();
+        medicalRecord.addDiagnosis(diagnoses);
+
+        // medications record 
+        System.out.print("Enter medications: ");
+        String medication = scanner.nextLine();
+        medicalRecord.prescribeMedications(medication);
+
+        // treatment history records 
+        System.out.print("Enter treatment history: ");
+        String treatment = scanner.nextLine();
+        medicalRecord.addTreatmentNote(treatment);
+
+        // follow up date records 
+        System.out.print("Enter follow up date(yyyy-mm-dd)");
+        String followUp = scanner.nextLine();
+        if(!followUp.isEmpty()){
+            try {
+                LocalDateTime followUpDate = LocalDate.parse(followUp).atStartOfDay();
+                medicalRecord.addFollowUp(followUpDate);
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Re-enter");
+            }
+        }
+
+        // save medical records 
+        saveMedicalRecord(medicalRecord);
+        System.out.println("==================================");
+        System.out.println("Medical Record create successfully.");
+    }
+
+    public static void saveMedicalRecord(MedicalRecords medicalRecords){
+        try(FileWriter fw = new FileWriter(MEDICAL_RECORD_FILE, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw)){
+            out.println(medicalRecords.getID() + "|" + medicalRecords.getPatient().getId() + "|" + medicalRecords.getDoctor().getId() + "|" + medicalRecords.getCreationDate() + "|" + medicalRecords.getDiagnoses() + "|" + medicalRecords.getPrescribedMedications() + "|" + medicalRecords.getNextFollowUp());
+            System.out.println("\nNew medical record information added successfully.");
+        } catch (IOException e){
+            System.out.println("Error saving medical records." + e.getMessage());
+        }
+    }
 
 
 
