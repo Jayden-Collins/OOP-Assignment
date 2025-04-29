@@ -1,8 +1,11 @@
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.jar.Attributes;
+import javax.print.Doc;
 
 public class Hospital {
     // scanner for user input
@@ -20,9 +23,6 @@ public class Hospital {
 
     //consultation room 
     private List<Room> consultationRooms;
-    
-    Scanner scanner = new Scanner(System.in);
-    private String userAccess;
 
     public static void main(String[] args) {
 
@@ -179,23 +179,6 @@ public class Hospital {
         }
     }
 
-    // set the rooms 
-    private static void addRooms(){ 
-    }
-
-    // clear screen method 
-    public static void clearScreen(){
-        Hospital hospital = new Hospital();
-        hospital.combination();
-    }
-
-    // add room information 
-    public void addRoomInformation(){
-        consultationRooms.add(new Room("CR-001", "General"));
-        consultationRooms.add(new Room("CR-002", "General"));
-        consultationRooms.add(new Room("CR-003", "General"));
-    }
-
     //clear screen method 
     public static void clearScreen(){
         System.out.print("\033[H\033[2J");
@@ -252,31 +235,6 @@ public class Hospital {
         System.out.println("Hi");
     }
 
-    //doctor management system 
-    public void doctorManagement(){
-        clearScreen();
-        System.out.println("Doctor Management");
-        System.out.println("1. Add Doctor Information.");
-        System.out.println("2. List all doctor");
-        System.out.println("3. Search Doctor");
-        System.out.print("Choose option: ");
-
-        int selection = scanner.nextInt();
-        scanner.nextLine();
-        
-        switch (selection){
-            case 1:
-                addDoctorInformation();
-                break;
-            case 2:
-                listdoctor();
-                break;
-            case 3:
-                searchDoctor();
-                break;
-            default:
-                System.out.println("Invalid selection");
-        }
     // display staff menu
     public static void displayStaffMenu(){
         Hospital.clearScreen();
@@ -322,7 +280,7 @@ public class Hospital {
         }
 
         //doctor gender 
-        String doctorGender;
+        String gender;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Gender (Male/Female): ");
             gender = scanner.nextLine();
@@ -335,7 +293,7 @@ public class Hospital {
         }
 
         // doctor contact number 
-        String doctorContactNumber;
+        String contactNumber;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Contact Number (012-3456789): ");
             contactNumber = scanner.nextLine();
@@ -348,7 +306,7 @@ public class Hospital {
         }
 
         // doctor address 
-        String doctorAddress;
+        String address;
         while(true){
             System.out.print("Enter " + role.getRoleName() + " Address (3, Western Avenue, 11900, Bayan Lepas, Penang): ");
             address = scanner.nextLine();
@@ -503,20 +461,20 @@ public class Hospital {
 
     // list doctor information 
     public static void listdoctor(List<Doctor> doctors){
+
         if(doctors.isEmpty()){
-            System.out.println("No doctors is registered yet.");
+            System.out.println("No doctors is registered yet or stored in the system.");
             return;
         }
 
-        for (String[] doctor : doctors){
-            System.out.println("ID: " + doctor[0]);
-            System.out.println("Name: " + doctor[1]);
-            System.out.println("Gender: " + doctor[2]);
-            System.out.println("Contact Number: " + doctor[3]);
-            System.out.println("Address: " + doctor[4]);
-            System.out.println("Year of Experience: " + doctor[5]);
-            System.out.println("Department: " + doctor[6]);
+        TablePrinter table = new TablePrinter(Arrays.asList("ID", "IC", "Name", "Gender", "Contact Number", "Address", "Year of Experience", "Department"));
+
+        // Print each doctor's information
+        for(Doctor doctor : doctors) {
+            table.addRow(Arrays.asList(doctor.getId(), doctor.getIc(), doctor.getName(), doctor.getGender(), doctor.getContactNumber(), doctor.getAddress(), String.valueOf(doctor.getYearOfExp()), doctor.getDepartment()));
         }
+
+        table.print();
     }
 
     // search doctor 
@@ -610,19 +568,21 @@ public class Hospital {
 
     // list nurse information 
     public static void listNurse(List<Nurse> nurses){
-        if(nurses.isEmpty()){
+        List<Nurse> nurseLists = readNurse(NURSE_FILE);
+
+        if(nurseLists.isEmpty()){
             System.out.println("No nurse information is registered yet.");
             return;
         }
 
-        for (String[] nurse: nurses){
-            System.out.println("ID: " + nurse[0]);
-            System.out.println("Name: " + nurse[1]);
-            System.out.println("Gender: " + nurse[2]);
-            System.out.println("Contact Number: " + nurse[3]);
-            System.out.println("Address: " + nurse[4]);
-            System.out.println("Year of Experience: " + nurse[5]);
-            System.out.println("Department: " + nurse[6]);
+        for (Nurse nurse: nurseLists){
+            System.out.println("ID: " + nurse.getIc());
+            System.out.println("Name: " + nurse.getName());
+            System.out.println("Gender: " + nurse.getGender());
+            System.out.println("Contact Number: " + nurse.getContactNumber());
+            System.out.println("Address: " + nurse.getAddress());
+            System.out.println("Year of Experience: " + nurse.getYearOfExp());
+            System.out.println("Department: " + nurse.getDepartment());
         }
     }
 
@@ -709,19 +669,21 @@ public class Hospital {
 
     // list for all patient
     public static void listPatient(List<Patient> patients){
-        if(patients.isEmpty()){
+        List<Patient> patientLists = readPatient(PATIENT_FILE);
+
+        if(patientLists.isEmpty()){
             System.out.println("No patient information is added.");
             return;
         }
 
-        for (String[] patient : patients){
-            System.out.println("ID: " + patient[0]);
-            System.out.println("Name: " + patient[1]);
-            System.out.println("Gender: " + patient[2]);
-            System.out.println("Contact Number: " + patient[3]);
-            System.out.println("Address: " + patient[4]);
-            System.out.println("Year of Experience: " + patient[5]);
-            System.out.println("Department: " + patient[6]);
+
+        for (Patient patient : patientLists){
+            System.out.println("ID: " + patient.getId());
+            System.out.println("Name: " + patient.getName());
+            System.out.println("Gender: " + patient.getGender());
+            System.out.println("Contact Number: " + patient.getContactNumber());
+            System.out.println("Address: " + patient.getAddress());
+            System.out.println("Emergency Contact Number: " + patient.getEmergencyContact());
         }
     }
 
@@ -753,13 +715,12 @@ public class Hospital {
         for (Patient patient : patients){
             if(patient.getId().equals(search) || patient.getName().equalsIgnoreCase(search)){
                 System.out.println("Found the information");
-                System.out.println("ID: " + patient[0]);
-                System.out.println("Name: " + patient[1]);
-                System.out.println("Gender: " + patient[2]);
-                System.out.println("Contact Number: " + patient[3]);
-                System.out.println("Address: " + patient[4]);
-                System.out.println("Year of Experience: " + patient[5]);
-                System.out.println("Department: " + patient[6]);
+                System.out.println("ID: " + patient.getId());
+                System.out.println("Name: " + patient.getName());
+                System.out.println("Gender: " + patient.getGender());
+                System.out.println("Contact Number: " + patient.getContactNumber());
+                System.out.println("Address: " + patient.getAddress());
+                System.out.println("Emergency Contact Number: " + patient.getEmergencyContact());
                 exist = true;
                 break;
             }
@@ -774,22 +735,23 @@ public class Hospital {
 
 
     //View doctor 
-    public void viewDoctorList(){
-        ArrayList<String[]> doctorLists = getDoctors();
+    public void viewDoctorList(List<Doctor> doctors){
+        List<Doctor> doctorLists = readDoctors(DOCTOR_FILE);
+
 
         if(doctorLists.isEmpty()){
             System.out.println("No doctor information is added.");
             return;
         }
 
-        for (String[] doctorList : doctorLists){
-            System.out.println("ID: " + doctorList[0]);
-            System.out.println("Name: " + doctorList[1]);
-            System.out.println("Gender: " + doctorList[2]);
-            System.out.println("Contact Number: " + doctorList[3]);
-            System.out.println("Address: " + doctorList[4]);
-            System.out.println("Year of Experience: " + doctorList[5]);
-            System.out.println("Department: " + doctorList[6]);
+        for (Doctor doctorList : doctorLists){
+            System.out.println("ID: " + doctorList.getId());
+            System.out.println("Name: " + doctorList.getName());
+            System.out.println("Gender: " + doctorList.getGender());
+            System.out.println("Contact Number: " + doctorList.getContactNumber());
+            System.out.println("Address: " + doctorList.getAddress());
+            System.out.println("Year of Experience: " + doctorList.getYearOfExp());
+            System.out.println("Department: " + doctorList.getDepartment());
         }
 
     }
@@ -799,21 +761,21 @@ public class Hospital {
         System.out.print("Enter your own id or name to check own information (E.g Desmond/PA): ");
         String search = scanner.nextLine();
 
-        ArrayList<String[]> ownLists = getPatient();
+        List<Patient> ownLists = readPatient(PATIENT_FILE);
         boolean exist = false;
         boolean update = false;
 
-        for(String[] ownList : ownLists){
-            if(ownList[0].equalsIgnoreCase(search) || ownList[0].equalsIgnoreCase(search)){
-                System.out.println("ID: " + ownList[0]);
-                System.out.println("Name: " + ownList[1]);
-                System.out.println("Gender: " + ownList[2]);
-                System.out.println("Contact Number: " + ownList[3]);
-                System.out.println("Address: " + ownList[4]);
-                System.out.println("Year of Experience: " + ownList[5]);
-                System.out.println("Department: " + ownList[6]);
+        for(Patient ownList : ownLists){
+            if(ownList.getId().equalsIgnoreCase(search) || ownList.getName().equalsIgnoreCase(search)){
+                System.out.println("ID: " + ownList.getId());
+                System.out.println("Name: " + ownList.getName());
+                System.out.println("Gender: " + ownList.getGender());
+                System.out.println("Contact Number: " + ownList.getContactNumber());
+                System.out.println("Address: " + ownList.getAddress());
+                System.out.println("Emergency Contact Number: " + ownList.getEmergencyContact());
                 exist = true;
             }
+
         }
 
         if(!exist){
@@ -844,11 +806,19 @@ public class Hospital {
     }
 
     // find patient by id 
-    public Patient findPatientID(String patientID){
-        ArrayList<String[]> patients = new ArrayList<>();
-        for(String[] patient : patients){
-            if(patient[0].equals(patientID)){
-                return new Patient(patient[0], patient[1], patient[2], patient[3], patient[4]);
+    public Patient findPatientID(List<Patient> patientLists){
+        List<Patient> patients = readPatient(PATIENT_FILE);
+        System.out.print("Enter your own id: ");
+        String personalID = scanner.nextLine();
+
+        for(Patient patient : patients){
+            if(patient.getId().equals(personalID)){
+                System.out.println("IC: " + patient.getIc());
+                System.out.println("Name: " + patient.getName());
+                System.out.println("Gender: " + patient.getGender());
+                System.out.println("Contact Number: " + patient.getContactNumber());
+                System.out.println("Address: " + patient.getAddress());
+                System.out.println("Emergency Contact Number: " + patient.getEmergencyContact());
             }
         }
         return null;
@@ -984,8 +954,11 @@ public class Hospital {
     }
 
     //register new patient information
-    public Patient registerNewPatient(){
+    public Patient registerNewPatient(List<Patient> patient){
         System.out.println("New Patient Registration\n");
+
+        System.out.print("Enter Patient IC: ");
+        String patientIC = scanner.nextLine();
 
         System.out.print("Enter Patient Name: ");
         String patientName = scanner.nextLine();
@@ -999,7 +972,7 @@ public class Hospital {
         System.out.println("Enter Patient Address: ");
         String patientAddress = scanner.nextLine();
 
-        return new Patient(patientName, patientGender, patientAddress, patientContactNumber, patientAddress);
+        return new Patient(patientIC, patientName, patientGender, patientAddress, patientContactNumber, patientAddress);
     }
 
     // find exist patient 
@@ -1089,18 +1062,18 @@ public class Hospital {
                         medications.add("Cardiology : Statin, dosage = 1mg");
                         medications.add("Cardiology : ACE Inhibitors, dosage = 1mg");
                         medications.add("Cardiology : Beta-Blockers, dosage = 1mg");
+                        
                         // neurology 3 medicines 
-
                         medications.add("Neurology : Anticonvulsants, dosage = 1mg");
                         medications.add("Neurology : Benzodiazepines, dosage = 1mg");
                         medications.add("Neurology : Gabapentin, dosage = 1mg");
+                        
                         // emerngecy have 3 medicines 
-
                         medications.add("Emergency : Glucagon, dosage = 1mg");
                         medications.add("Emergency : Glyceryl trinitrate, dosage = 1mg");
                         medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe, dosage = 1ml");
+                        
                         // oncology have 3 meidicines 
-
                         medications.add("Oncology : cyclophosphamide, dosage = 1ml");
                         medications.add("Oncology : doxorubicin, dosage = 1ml");
                         medications.add("Oncology : rituximab, dosage = 1ml");
@@ -1148,9 +1121,11 @@ public class Hospital {
             }
         }
         
-
         return medications;
     }
+
+    // read medications list and store to the file 
+    
 
     //compare all medications and department medications , show specific medications with department
     public List<String> getMedicationDepartment(String department){
@@ -1166,32 +1141,65 @@ public class Hospital {
         return specificMedications;
     }
 
-    //
+    // consultation room list 
+    public List<String> roomTypeList(){
+        List<String> roomTypeList = new ArrayList<>();
+
+        // store information into the array list 
+        roomTypeList.add("Consultation Room 1");
+        roomTypeList.add("Consultation Room 2");
+        roomTypeList.add("Consultation Room 3");
+        roomTypeList.add("Consultation Room 4");
+        roomTypeList.add("Consultation Room 5");
+        roomTypeList.add("Consultation Room 6");
+        roomTypeList.add("Consultation Room 7");
+        roomTypeList.add("Consultation Room 8");
+        roomTypeList.add("Consultation Room 9");
+        roomTypeList.add("Consultation Room 10");
+        roomTypeList.add("Consultation Room 11");
+        roomTypeList.add("Consultation Room 12");
+        roomTypeList.add("Consultation Room 13");
+        roomTypeList.add("Consultation Room 14");
+        roomTypeList.add("Consultation Room 15");
+
+        return roomTypeList;
+    }
+
+    //list of floor by room 
     public List<String> getRoomType(){
-        List<String> roomTypes = new ArrayList<>();
+        // room type lists from the previous room type method 
+        List<String> roomLists = roomTypeList();
+        
+        // store custom room type lists 
+        List<String> roomTypeLists = new ArrayList<>();
+
+        //String for room type needed
+        System.out.print("Enter your room: ");
+        String roomType = scanner.nextLine();
+
         // consultation room have 15 rooms 
         // room 1 
-        roomTypes.add("Floor 1 : Consultation Room 1");
-        roomTypes.add("Floor 1 : Consultation Room 2");
-        roomTypes.add("Floor 1 : Consultation Room 3");
+        roomTypeLists.add("Floor 1 : Consultation Room 1");
+        roomTypeLists.add("Floor 1 : Consultation Room 2");
+        roomTypeLists.add("Floor 1 : Consultation Room 3");
 
         // room 2 
-        roomTypes.add("Floor 2 : Consultation Room 4");
-        roomTypes.add("Floor 2 : Consultation Room 5");
-        roomTypes.add("Floor 2 : Consultation Room 6");
-        roomTypes.add("Floor 2 : Consultation Room 7");
-        roomTypes.add("Floor 2 : Consultation Room 8");
-        roomTypes.add("Floor 2 : Consultation Room 9");
+        roomTypeLists.add("Floor 2 : Consultation Room 4");
+        roomTypeLists.add("Floor 2 : Consultation Room 5");
+        roomTypeLists.add("Floor 2 : Consultation Room 6");
+        roomTypeLists.add("Floor 2 : Consultation Room 7");
+        roomTypeLists.add("Floor 2 : Consultation Room 8");
+        roomTypeLists.add("Floor 2 : Consultation Room 9");
 
         // room 3 
-        roomTypes.add("Floor 3 : Consultation Room 10");
-        roomTypes.add("Floor 3 : Consultation Room 11");
-        roomTypes.add("Floor 3 : Consultation Room 12");
-        roomTypes.add("Floor 3 : Consultation Room 13");
-        roomTypes.add("Floor 3 : Consultation Room 14");
-        roomTypes.add("Floor 3 : Consultation Room 15");
+        roomTypeLists.add("Floor 3 : Consultation Room 10");
+        roomTypeLists.add("Floor 3 : Consultation Room 11");
+        roomTypeLists.add("Floor 3 : Consultation Room 12");
+        roomTypeLists.add("Floor 3 : Consultation Room 13");
+        roomTypeLists.add("Floor 3 : Consultation Room 14");
+        roomTypeLists.add("Floor 3 : Consultation Room 15");
 
-        return roomTypes;
+        return roomTypeLists;
     }
 
     // specific floor and consultation room 
