@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -8,13 +9,16 @@ public class MedicalRecords {
     private final LocalDate creationDate = LocalDate.now();
     private final Patient patient;
     private Doctor doctor;
-    private List<String> diagnoses;
+    private List<String> diagnoses = new ArrayList<>();
     private List<String> prescribedMedications = new ArrayList<>();
-    private List<String> treatmentHistory;
+    private List<String> treatmentHistory = new ArrayList<>();
     private LocalDateTime nextFollowUp;
 
     public MedicalRecords(Patient patient, Doctor doctor){
+        // generate medical record id 
+        IdGenerator.generateMedicalRecordId();
         this.patient = patient;
+        this.doctor = doctor;
     }
 
     public void addDiagnosis(String diagnoses){
@@ -59,5 +63,9 @@ public class MedicalRecords {
 
     public LocalDateTime getNextFollowUp() {
         return nextFollowUp;
+    }
+
+    public String toString(){
+        return String.format("Medical Record ID: %s\nRecord Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: %s\n", IdGenerator.generateMedicalRecordId(), creationDate, patient.getName(), doctor.getName(), prescribedMedications, treatmentHistory, nextFollowUp);
     }
 }

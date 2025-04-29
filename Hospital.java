@@ -20,6 +20,7 @@ public class Hospital {
     private static final String DOCTOR_FILE = "doctor.txt";
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
+    private static final String MEDICAL_RECORD_FILE = "medical_records.txt";
 
     //consultation room 
     private List<Room> consultationRooms;
@@ -1215,6 +1216,8 @@ public class Hospital {
 
         return specificRoom;
     }
+
+    
 
 
 
