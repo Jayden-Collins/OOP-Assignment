@@ -15,9 +15,9 @@ public class MedicalRecords {
     private List<String> treatmentHistory = new ArrayList<>();
     private LocalDateTime nextFollowUp;
 
-    public MedicalRecords(String medicalRecordID, Patient patient, Doctor doctor){
+    public MedicalRecords(Patient patient, Doctor doctor){
         // generate medical record id 
-        this.medicalRecordID = medicalRecordID;
+        this.medicalRecordID = IdGenerator.generateMedicalRecordId();
         this.patient = patient;
         this.doctor = doctor;
     }
@@ -71,6 +71,6 @@ public class MedicalRecords {
     }
 
     public String toString(){
-        return String.format("Medical Record ID: %s\nRecord Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: %s\n", IdGenerator.generateMedicalRecordId(), creationDate, patient.getName(), doctor.getName(), prescribedMedications, treatmentHistory, nextFollowUp);
+        return String.format("Medical Record ID: %s\nRecord Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: %s\n", medicalRecordID, creationDate, patient.getName(), doctor.getName(), String.join(", ", diagnoses), String.join(", ",prescribedMedications), String.join(", ", treatmentHistory), nextFollowUp);
     }
 }

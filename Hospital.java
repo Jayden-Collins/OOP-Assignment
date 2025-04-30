@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.jar.Attributes;
-import javax.print.Doc;
 
 public class Hospital {
     // scanner for user input
@@ -1289,11 +1287,8 @@ public class Hospital {
             return;
         }
 
-        System.out.print("Enter medical record ID: ");
-        String medicalRecordID = scanner.nextLine();
-
         //medical records new object
-        MedicalRecords medicalRecord = new MedicalRecords(medicalRecordID, selectedPatient, selectedDoctor);
+        MedicalRecords medicalRecord = new MedicalRecords(selectedPatient, selectedDoctor);
 
         // diagnoses record 
         System.out.print("Enter diagnoses: ");

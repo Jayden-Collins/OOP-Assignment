@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Patient extends Person{
     private String emergencyContact;
-    private final MedicalRecords medicalRecord;
+    private final List<MedicalRecords> medicalRecords = new ArrayList<>();
     private List<Appointment> appointments = new ArrayList<>();
     private int appointmentCount = 0;
 
@@ -12,15 +12,16 @@ public class Patient extends Person{
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
         super(Role.PATIENT, IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
         this.emergencyContact = emergencyContact;
-        this.medicalRecord = new MedicalRecords(this, null);
     }
 
-    // constructor for file loading
-    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
-        this.emergencyContact = emergencyContact;
-
-        this.medicalRecord = new MedicalRecords(this, null);
+    // add medical record
+    public void addMedicalRecord(MedicalRecords medicalRecord){
+        medicalRecords.add(medicalRecord);
+    }
+    
+    // get medical record 
+    public List<MedicalRecords> getMedicalRecords(){
+        return Collections.unmodifiableList(medicalRecords);
     }
 
     // add appoinment of patients to the appointment class 
