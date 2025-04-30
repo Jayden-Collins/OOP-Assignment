@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MedicalRecords {
+    private final String medicalRecordID;
     private final LocalDate creationDate = LocalDate.now();
     private final Patient patient;
     private Doctor doctor;
@@ -14,11 +15,15 @@ public class MedicalRecords {
     private List<String> treatmentHistory = new ArrayList<>();
     private LocalDateTime nextFollowUp;
 
-    public MedicalRecords(Patient patient, Doctor doctor){
+    public MedicalRecords(String medicalRecordID, Patient patient, Doctor doctor){
         // generate medical record id 
-        IdGenerator.generateMedicalRecordId();
+        this.medicalRecordID = medicalRecordID;
         this.patient = patient;
         this.doctor = doctor;
+    }
+
+    public String getID(){
+        return medicalRecordID;
     }
 
     public void addDiagnosis(String diagnoses){

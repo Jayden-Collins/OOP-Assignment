@@ -160,6 +160,13 @@ public class Hospital {
 
                         clearScreen();
                         break;
+                    case 4:
+                        clearScreen();
+                        generateMedicalRecord();
+                        System.out.println("Press <Enter> to continue: ");
+                        scanner.nextLine();
+                        clearScreen();
+                        break;
                     case 5:
                         System.out.println("Closed Program.");
                         System.exit(0);
@@ -173,6 +180,12 @@ public class Hospital {
                         clearScreen();
                         System.out.println("Closed Program");
                         System.exit(0);
+                        break;
+                    case 4:
+                        clearScreen();
+                        viewMedicalRecord();
+                        System.out.println("Press <Enter> to continue");
+                        scanner.nextLine();
                         break;
                     default:
                         System.out.println("Invalid selection. Re-enter");
@@ -1276,9 +1289,11 @@ public class Hospital {
             return;
         }
 
+        System.out.print("Enter medical record ID: ");
+        String medicalRecordID = scanner.nextLine();
 
         //medical records new object
-        MedicalRecords medicalRecord = new MedicalRecords(selectedPatient, selectedDoctor);
+        MedicalRecords medicalRecord = new MedicalRecords(medicalRecordID, selectedPatient, selectedDoctor);
 
         // diagnoses record 
         System.out.print("Enter diagnoses: ");
@@ -1313,6 +1328,7 @@ public class Hospital {
         System.out.println("Medical Record create successfully.");
     }
 
+    // save medical records 
     public static void saveMedicalRecord(MedicalRecords medicalRecords){
         try(FileWriter fw = new FileWriter(MEDICAL_RECORD_FILE, true);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -1323,6 +1339,98 @@ public class Hospital {
             System.out.println("Error saving medical records." + e.getMessage());
         }
     }
+
+    // view medical records for patients 
+    public static void viewMedicalRecord(){
+        clearScreen();
+        System.out.println("--------View Medical Record----------");
+
+        System.out.print("Enter own patient ID: ");
+        String patientID = scanner.nextLine();
+
+        // List for a medical records based on patient id
+        List<MedicalRecords> medicalRecords = readPatientByPatientMedicalRecord(patientID);
+
+        // check if the medical records for a patient is it exist or not
+        if(medicalRecords.isEmpty()){
+            System.out.println("No medical records found for this patient from it's own id");
+            return;
+        }
+    }
+
+    // read patient by patient medical records based on the patient id 
+    public static List<MedicalRecords> readPatientByPatientMedicalRecord(String patientID){
+        List<MedicalRecords> medicalRecords = new ArrayList<>();
+        List<Patient> patients = readPatient(PATIENT_FILE);
+        List<Doctor> doctors = readDoctors(DOCTOR_FILE);
+
+        try (BufferedReader br = new BufferedReader(new FileReader(MEDICAL_RECORD_FILE))){
+            String line;
+            while((line = br.readLine()) != null){
+                String[] medicalrecord = line.split("\\|");
+                if(medicalrecord.length >= 7 && medicalrecord[1].equals(patientID)){
+                    // find patient and doctor 
+                    Patient patient = null;
+                    Doctor doctor = null;
+
+                    //check patient ID 
+                    for(Patient pat : patients){
+                        if(pat.getId().equals(medicalrecord[1])){
+                            pat = patient;
+                            break;
+                        }
+                    }
+
+                    //check doctor id 
+                    for(Doctor doct : doctors){
+                        if(doct.getId().equals(medicalrecord[2])){
+                            doct = doctor;
+                            break;
+                        }
+                    }
+
+                    if(patient != null && doctor != null){
+                        MedicalRecords medicalRecord = new MedicalRecords(medicalrecordID, patient, doctor);
+
+                        // check for the diagnoses
+                        if(!medicalrecord[3].isEmpty()){
+                            medicalRecord.addDiagnosis(medicalrecord[3]);
+                        }
+
+                        // check for medications
+                        if(!medicalrecord[4].isEmpty()){
+                            medicalRecord.prescribeMedications(medicalrecord[4]);
+                        }
+
+                        // check for treatment history 
+                        if(!medicalrecord[5].isEmpty()){
+                            medicalRecord.addTreatmentNote(medicalrecord[5]);
+                        }
+
+                        // check for follow up date 
+                        if(!medicalrecord[6].isEmpty()){
+                            try {
+                                LocalDateTime followUpDate = LocalDate.parse(medicalrecord[6]).atStartOfDay();
+                                medicalRecord.addFollowUp(followUpDate);
+                            } catch (Exception e) {
+                                System.out.println("Invalid date format. Re-enter");
+                            }
+                        }
+
+                        medicalRecords.add(medicalRecord);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("Medical Record file not found");
+        } catch (IOException e){
+            System.out.println("Error reading medical records" + e.getMessage());
+        }
+
+        return medicalRecords;
+    }
+
+
 
 
 
