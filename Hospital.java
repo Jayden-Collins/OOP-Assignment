@@ -1,10 +1,12 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import javax.print.attribute.standard.Media;
 
 public class Hospital {
     // scanner for user input
@@ -179,11 +181,21 @@ public class Hospital {
                         System.out.println("Closed Program");
                         System.exit(0);
                         break;
+                    case 3:
+                        clearScreen();
+                        bookAppointment();
+                        System.out.println("Press <Enter> to continue");
+                        scanner.nextLine();
+                        break;
                     case 4:
                         clearScreen();
                         viewMedicalRecord();
                         System.out.println("Press <Enter> to continue");
                         scanner.nextLine();
+                        break;
+                    case 5:
+                        System.out.println("Closed Program");
+                        System.exit(0);
                         break;
                     default:
                         System.out.println("Invalid selection. Re-enter");
@@ -213,7 +225,7 @@ public class Hospital {
         final String PATIENT_PASSWORD = "123456";
         
         clearScreen();
-        System.out.println("Hospital Login System.");
+        System.out.println("---------Hospital Login System-----------");
 
         while(true){
             System.out.print("Username: ");
@@ -1385,7 +1397,7 @@ public class Hospital {
                     }
 
                     if(patient != null && doctor != null){
-                        MedicalRecords medicalRecord = new MedicalRecords(medicalrecordID, patient, doctor);
+                        MedicalRecords medicalRecord = new MedicalRecords(patient, doctor);
 
                         // check for the diagnoses
                         if(!medicalrecord[3].isEmpty()){
@@ -1425,7 +1437,81 @@ public class Hospital {
         return medicalRecords;
     }
 
+    public static void deleteMedicalRecord(){
+        clearScreen();
+        System.out.println("========Delete Medical Record========");
 
+        List<Patient> patients = readPatient(PATIENT_FILE);
+        if(patients.isEmpty()){
+            System.out.println("No patients is found in the file");
+            return;
+        }
+
+        listPatient(patients);
+        System.out.print("Enter patient ID: ");
+        String patientID = scanner.nextLine();
+
+        List<MedicalRecords> medicalRecords = readPatientByPatientMedicalRecord(patientID);
+        if(medicalRecords.isEmpty()){
+            System.out.println("No medical record information is found ");
+            return;
+        }
+
+        // show medical record 
+        for(int i = 0; i < medicalRecords.size(); i++){
+            System.out.printf("Medical Record ID: %s\nRecord Date: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: ", medicalRecords.get(i).getID(), medicalRecords.get(i).getCreationDate(), medicalRecords.get(i).getDiagnoses(), medicalRecords.get(i).getPrescribedMedications(), medicalRecords.get(i).getTreatmentHistory(), medicalRecords.get(i).getNextFollowUp());
+        }
+
+        System.out.print("Select medical record to delete: ");
+        int medicalRecordChoice = Integer.parseInt(scanner.nextLine()) -1;
+
+        if(medicalRecordChoice < 0 || medicalRecordChoice >= medicalRecords.size()){
+            System.out.println("Invalid selection. Re-enter");
+            return;
+        }
+
+        // confirmation delete record 
+        System.out.print("--------Confirm Delete Medical Record--------");
+        String confirmation = scanner.nextLine();
+        if(!confirmation.equalsIgnoreCase("Y")){
+            System.out.println("Don't want delete");
+            return;
+        }
+
+        // remove medical record 
+        String deleteMedicalRecord = medicalRecords.get(medicalRecordChoice).getID();
+        medicalRecords.remove(medicalRecordChoice);
+
+        //update file 
+        updateMedicalRecord(deleteMedicalRecord);
+        System.out.println("Medical Record deleted");
+    }
+
+    // update medical record file after delete 
+    public static void updateMedicalRecord(String medicalRecordID){
+        List<String> updateRecord = new ArrayList<>();
+
+        try(BufferedReader br = new BufferedReader(new FileReader(MEDICAL_RECORD_FILE))){
+            String line;
+            while((line = br.readLine()) != null){
+                if (!line.startsWith(medicalRecordID + "|")) {
+                    updateRecord.add(line);
+                }
+            }
+        } catch (IOException e){
+            System.out.println("Unable to read records" + e.getMessage());
+            return;
+        }
+
+        // return back update file 
+        try(PrintWriter pr = new PrintWriter(new FileWriter(MEDICAL_RECORD_FILE))){
+            for(String update : updateRecord){
+                out.println(update);
+            }
+        }catch(IOException e){
+            System.out.println("Error saving medical recods" + e.getMessage());
+        }
+    }
 
 
 
