@@ -22,7 +22,7 @@ public class Department {
         return false;
     }
 
-    public String getDepartmentID(){
+    public String getDepartmentId(){
         return DEPARTMENT_ID;
     }
 

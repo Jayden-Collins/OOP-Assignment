@@ -5,26 +5,37 @@ public class Room {
     private final String ROOM_ID;
     private String roomType = "Consultation";
     private final List<String> AVAILABLE_ROOM_TYPES = new ArrayList<>();
-    private boolean available;
     // as a reference variable
     private Appointment currentAppointment;
 
     // default constructor for new rooms
-    public Room(int floor, String roomType){
-        this(IdGenerator.generateRoomId(floor), roomType, true, null);
+    public Room(int floor){
+        this(IdGenerator.generateRoomId(floor));
     }
 
     // constructor for file loading
-    public Room(String roomID, String roomType, boolean available, Appointment currentAppointment){
+    public Room(String roomID){
         this.ROOM_ID = roomID;
-        this.roomType = roomType;
-        this.available = available;
-        this.currentAppointment = currentAppointment;
     }
 
     // get method 
     public String getRoomID(){
         return ROOM_ID;
+    }
+
+    // returns the floor a room is located on
+    public int getFloor(){
+        return Character.getNumericValue(ROOM_ID.charAt(3));
+    }
+
+    // checks whether a room is on a certain floor
+    public boolean onFloor(int floor){
+        return getFloor() == floor;
+    }
+
+    // return the location of the room as a string
+    public String getLocation(){
+        return "Floor " + getFloor() + ", Room " + ROOM_ID.substring(4);
     }
 
     public boolean setRoomType(String roomType){
@@ -36,40 +47,32 @@ public class Room {
         }
     }
 
-    public List<String> getRoomType(){
+    public List<String> getAvailableRoomTypes(){
         return AVAILABLE_ROOM_TYPES;
     }
 
-    public boolean getAvailable(){
-        return available;
+    public String getRoomType(){
+        return roomType;
     }
 
     public Appointment getCurrentAppointmentID(){
         return currentAppointment;
     }
 
-    //check available for room 
-    public boolean bookedRoom(Appointment appointment){
-        if(available){
-            this.currentAppointment = appointment;
-            this.available = false;
-            return true;
-        } 
-        return false;
-    }
-
     // room to free 
     public void freeRoom(){
         this.currentAppointment = null;
-        this.available = true;
+    }
+
+    // to file format
+    public String toFileFormat(){
+        return String.join("|", ROOM_ID, roomType); 
     }
 
     // to String method 
+    @Override
     public String toString(){
         return String.format("Room ID: " + ROOM_ID
-        + "\nRoom Type: " + roomType
-        + "\nAvailability: " + available
-        + "\nCurrentAppointment: " + currentAppointment);
+        + "\nRoom Type: " + roomType);
     }
-
 }

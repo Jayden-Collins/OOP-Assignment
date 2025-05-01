@@ -6,7 +6,7 @@ public class ValidationCheck {
         } else if (type.equals(Role.NURSE.getRoleName())) {
             return id != null && id.matches("^NS-\\d{2}-\\d{3}$");
         } else if (type.equals(Role.PATIENT.getRoleName())) {
-            return id != null && id.matches("^PT-\\d{2}-\\d{2}-\\d{3}$");
+            return id != null && id.matches("^PC-\\d{2}-\\d{2}-\\d{3}$");
         } else if (type.equals("Appointment")) {
             return id != null && id.matches("^AP-\\d{2}-\\d{2}-\\d{3}$");
         } else if (type.equals("Medical Record")) {

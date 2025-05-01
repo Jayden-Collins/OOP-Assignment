@@ -32,7 +32,7 @@ public class Patient extends Person{
     }
 
     //set emergency contact number and boolean method
-    public boolean setPatientEmergencyNumber(String emergencyContact){
+    public boolean setEmergencyContactNumber(String emergencyContact){
         if(emergencyContact.matches("^\\d{3}-\\d{7}$") || emergencyContact.matches("^\\d{3}-\\d{8}$") || emergencyContact.matches("^\\d{10}$") || emergencyContact.matches("^\\d{11}$")){
             this.emergencyContact = emergencyContact;
             return true;
@@ -58,7 +58,7 @@ public class Patient extends Person{
 
     @Override
     public String toString(){
-        return super.toString() + "\n" +
-                "Emergency Contact: " + emergencyContact + "\n" ;
+        return super.toString() +
+                "Emergency Contact: " + emergencyContact;
     }
 }

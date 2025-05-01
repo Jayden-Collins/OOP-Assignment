@@ -7,12 +7,12 @@ public class Doctor extends Staff{
     private int appointmentCount = 0;
 
     // default constructor for new doctors
-    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
+    public Doctor(String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, Department doctorDepartment, int yearOfExp){
         this(IdGenerator.generateDoctorId(), doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 
     // constructor for file loading
-    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, String doctorDepartment, int yearOfExp){
+    public Doctor(String doctorId, String doctorIc, String doctorName, String doctorGender, String doctorContactNumber, String doctorAddress, Department doctorDepartment, int yearOfExp){
         super(Role.DOCTOR, doctorId, doctorIc, doctorName, doctorGender, doctorContactNumber, doctorAddress, doctorDepartment, yearOfExp);
     }
 

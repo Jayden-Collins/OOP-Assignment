@@ -1,56 +1,48 @@
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Appointment {
-    private final LocalDate CREATION_DATE = LocalDate.now();
+    private final LocalDateTime CREATION_DATE_TIME;
     private final String APPOINTMENT_ID;
+    private LocalDateTime appointmentDateTime;
     private final Doctor DOCTOR;
     private final Patient PATIENT;
-    private LocalDate appointmentDate;
     // get room string method 
-    private Room consulationRoom;
+    private Room consultationRoom;
     private String appointmentStatus;
 
     // default constructor 
-    public Appointment(Doctor doctor, Patient patient, LocalDate appointmentDate, Room consultationRoom){
+    public Appointment(LocalDateTime appointmentDateTime, Doctor doctor, Patient patient, Room consultationRoom){
         // calls other constructor
-        this(IdGenerator.generateAppointmentId(), doctor, patient, appointmentDate, consultationRoom, "Scheduled");
+        this(LocalDateTime.now(), IdGenerator.generateAppointmentId(), appointmentDateTime, doctor, patient, consultationRoom, "Scheduled");
     }
 
     // constructor for file loading
-    public Appointment(String appointmentId, Doctor doctor, Patient patient, LocalDate appointmentDate, Room consultationRoom, String appointmentStatus){
-        //check whether the room is available or not 
-        if(!consultationRoom.getAvailable()){
-            throw new IllegalStateException("Consultation Room is not available.");
-        }
+    public Appointment(LocalDateTime creationDateTime, String appointmentId, LocalDateTime appointmentDateTime, Doctor doctor, Patient patient, Room consultationRoom, String appointmentStatus){
+        this.CREATION_DATE_TIME = creationDateTime;
         this.APPOINTMENT_ID = appointmentId;
         this.DOCTOR = doctor;
         this.PATIENT = patient;
-        this.appointmentDate = appointmentDate;
-        this.consulationRoom = consultationRoom;
+        this.appointmentDateTime = appointmentDateTime;
+        this.consultationRoom = consultationRoom;
         this.appointmentStatus = appointmentStatus;
     }
 
     //changing room 
-    public boolean changeRoom(Room changeRoom){
-        if(changeRoom.getAvailable()){
-            this.consulationRoom.freeRoom();
-            this.consulationRoom = changeRoom;
-            changeRoom.bookedRoom(this);
-            return true;
-        }
-        return false;
+    public void changeRoom(Room changeRoom){
+        this.consultationRoom.freeRoom();
+        this.consultationRoom = changeRoom;
     }
 
     // set appointment status 
     public void completeAppointment(){
         this.appointmentStatus = "Completed";
-        this.consulationRoom.freeRoom();
+        this.consultationRoom.freeRoom();
     }
 
     // cancel appointment 
     public void cancelAppointment(){
         this.appointmentStatus = "Cancelled";
-        this.consulationRoom.freeRoom();
+        this.consultationRoom.freeRoom();
     }
 
     // setter and boolean for appointmentStatus
@@ -63,13 +55,13 @@ public class Appointment {
     }
 
     // reschedule appointment
-    public void rescheduleAppointment(LocalDate newDate){
-        this.appointmentDate = newDate;
+    public void rescheduleAppointment(LocalDateTime newDateTime){
+        this.appointmentDateTime = newDateTime;
     }
 
     // get creation date
-    public LocalDate getCreationDate(){
-        return CREATION_DATE;
+    public LocalDateTime getCreationDateTime(){
+        return CREATION_DATE_TIME;
     }
     
     // get mthod for appointment id 
@@ -78,13 +70,13 @@ public class Appointment {
     }
 
     // get method for appointment date 
-    public LocalDate getAppointmentDate(){
-        return appointmentDate;
+    public LocalDateTime getAppointmentDateTime(){
+        return appointmentDateTime;
     }
 
     // get method for consultation room
     public Room getConsultationRoom(){
-        return consulationRoom;
+        return consultationRoom;
     }
 
     // get method for appointment status
@@ -100,5 +92,16 @@ public class Appointment {
     // get method for patient
     public Patient getPatient(){
         return PATIENT;
+    }
+
+    // to file format
+    public String toFileFormat(){
+        return String.join("|", CREATION_DATE_TIME.toString(), APPOINTMENT_ID, appointmentDateTime.toString(), DOCTOR.getId(), PATIENT.getId(), consultationRoom.getRoomID(), appointmentStatus);
+    }
+
+    @Override
+    public String toString(){
+        return String.format("Appointment ID: %s\nDoctor: %s\nPatient: %s\nRoom: %s\nDate and Time: %s", 
+            APPOINTMENT_ID, DOCTOR.getName(), PATIENT.getName(), consultationRoom.getLocation(), appointmentDateTime);
     }
 }

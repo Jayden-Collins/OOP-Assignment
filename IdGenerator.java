@@ -13,6 +13,34 @@ public class IdGenerator {
         // Private constructor to prevent instantiation
     }
 
+    public static void setDoctorCount(int count) {
+        doctorCount = count;
+    }
+
+    public static void setNurseCount(int count) {
+        nurseCount = count;
+    }
+
+    public static void setPatientCount(int count) {
+        patientCount = count;
+    }
+
+    public static void setAppointmentCount(int count) {
+        appointmentCount = count;
+    }
+
+    public static void setMedicalRecordCount(int count) {
+        medicalRecordCount = count;
+    }
+
+    public static void setRoomCount(int count) {
+        roomCount = count;
+    }
+
+    public static void setDepartmentCount(int count) {
+        departmentCount = count;
+    }
+
     //Returns the last two digits of the current year
     private static int getYear() {
         return LocalDate.now().getYear() % 100;
