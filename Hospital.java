@@ -90,12 +90,13 @@ public class Hospital {
                                     clearScreen();
                                     readDoctors();
                                     Doctor doctor = searchDoctor();
-                                    if (doctor == null){
-                                        System.out.println("Doctor information not found.");
-                                    }
-                                    else {
-                                        System.out.println("Matching record found!");
+                                    if (doctor != null){
+                                        System.out.println("\nMatching record found!");
+                                        System.out.println("-----------------------");
                                         System.out.println(doctor);
+                                        System.out.println("-----------------------");
+                                        System.out.print("Press any key to continue.");
+                                        SCANNER.nextLine();
                                     }
                                 }
 
@@ -119,8 +120,38 @@ public class Hospital {
                                     }
                                 }
 
-                                // back
+                                // view doctor appointments
                                 else if (choice == 5){
+                                    clearScreen();
+                                    while(true){
+                                        readDoctors();
+                                        Doctor doctor = searchDoctor();
+                                        if (doctor == null){
+                                            break;
+                                        } else {
+                                            readAppointments();
+                                            List<Appointment> doctorAppointments = getDoctorAppointments(doctor);
+                                            if (doctorAppointments.isEmpty()){
+                                                clearScreen();
+                                                System.out.println("No appointments found for this doctor.");
+                                            } else {
+                                                clearScreen();
+                                                System.out.println("Doctor's Appointments:");
+                                                System.out.println("-----------------------");
+                                                for (int i = 0; i < doctorAppointments.size(); i++){
+                                                    System.out.println("Appointment #" + (i + 1));
+                                                    System.out.println(doctorAppointments.get(i));
+                                                    System.out.println("-----------------------");
+                                                }
+                                                System.out.println("\nPress any key to continue.");
+                                                SCANNER.nextLine();
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // go back
+                                else if (choice == 6){
                                     break;
                                 }
                                 
@@ -129,12 +160,12 @@ public class Hospital {
                                     System.out.println("Invalid selection.");
                                 }
 
-                                if (choice != 5){
+                                if (choice != 6 || choice != 3){
                                     System.out.print("\nPress any key to continue.");
                                     SCANNER.nextLine();
                                 }
                             }
-                            if (choice != 5){
+                            if (choice != 6){
                                 System.out.print("\nPress any key to continue.");
                                 SCANNER.nextLine();
                                 break;
@@ -298,7 +329,8 @@ public class Hospital {
                                 SCANNER.nextLine();
                                 break;
                             }
-                        } // department management page
+                        }
+                        // department management page
                         else if (choice == 5){
                             while(true){
                                 departmentManagement();    
@@ -381,17 +413,7 @@ public class Hospital {
 
                                 while(true){
                                     
-                                    // display the name and year of experience for all available doctors in the selected department
-                                    clearScreen();
-                                    System.out.println("Available Doctors in " + department.getDepartmentName() + " Department");
-                                    System.out.println("-----------------------------------------");
-
-                                    for (int i = 0; i < availableDoctors.size(); i++){
-                                        System.out.println((i+1) + ". " + availableDoctors.get(i).getName() + ", " + availableDoctors.get(i).getYearOfExp() + " years of experience");
-                                    }
-
-                                    System.out.println((availableDoctors.size() + 1) + ". Back");
-                                    System.out.println("-----------------------------------------");
+                                    displayDoctorInDepartment(availableDoctors, department);
                                     System.out.println("Select Doctor to View Details.");
 
                                     choice = getChoice();
@@ -563,7 +585,7 @@ public class Hospital {
                                     }
 
                                     // patient has been found or created
-                                    if (patient != null){
+                                    if (patient != null && patient.getAppointments().size() < 5){
                                         while(true){
                                             // prompt user to select department
                                             clearScreen();
@@ -584,19 +606,8 @@ public class Hospital {
                                                 continue;
                                             }
                                             else {
-                                                while(true){
-                                                    
-                                                    // display the name and year of experience for all available doctors in the selected department
-                                                    clearScreen();
-                                                    System.out.println("Available Doctors in " + department.getDepartmentName() + " Department");
-                                                    System.out.println("-----------------------------------------");
-
-                                                    for (int i = 0; i < availableDoctors.size(); i++){
-                                                        System.out.println((i+1) + ". " + availableDoctors.get(i).getName() + ", " + availableDoctors.get(i).getYearOfExp() + " years of experience");
-                                                    }
-
-                                                    System.out.println((availableDoctors.size() + 1) + ". Back");
-                                                    System.out.println("-----------------------------------------");
+                                                while(true){                                                   
+                                                    displayDoctorInDepartment(availableDoctors, department);
 
                                                     choice = getChoice();
                                                     if (choice >= 1 && choice <= availableDoctors.size()){
@@ -741,8 +752,37 @@ public class Hospital {
                             }
                         }
                         
-                        // log out
+                        // view appointments
                         else if (choice == 5){
+                            clearScreen();
+                            readAppointments();
+                            while(true){
+                                Patient patient = searchPatient();
+                                if (patient == null){
+                                    break;
+                                } else {
+                                    List<Appointment> appointments = getPatientAppointments(patient);
+                                    if (appointments.isEmpty()){
+                                        clearScreen();
+                                        System.out.println("No appointments found for this doctor.");
+                                    } else {
+                                        clearScreen();
+                                        System.out.println("Patient's Appointments:");
+                                        System.out.println("-----------------------");
+                                        for (int i = 0; i < appointments.size(); i++){
+                                            System.out.println("Appointment #" + (i + 1));
+                                            System.out.println(appointments.get(i));
+                                            System.out.println("-----------------------");
+                                        }
+                                        System.out.println("\nPress any key to continue.");
+                                        SCANNER.nextLine();
+                                    }
+                                }
+                            }
+                        }
+
+                        // log out
+                        else if (choice == 6){
                             System.out.println("\nLog Out?\n");
                             if (getYesOrNoInput()){
                                 break;
@@ -883,11 +923,12 @@ public class Hospital {
         clearScreen();
         System.out.println("Patient Page");
         System.out.println("------------");
-        System.out.println("1. View Available Doctor");
-        System.out.println("2. Check Patient Information");
-        System.out.println("3. Book Appoinments");
+        System.out.println("1. View Available Doctors");
+        System.out.println("2. View and Manage Personal Details");
+        System.out.println("3. Book Appoinment");
         System.out.println("4. View Medical Report");
-        System.out.println("5. Log Out");
+        System.out.println("5. View Appointments");
+        System.out.println("6. Log Out");
         System.out.println("------------");
     }
 
@@ -1103,31 +1144,21 @@ public class Hospital {
         return null;
     }
 
-    // select a doctor by department
-    private static Doctor displayDoctorInDepartment(Department department){
-
-        // list of available doctors in the selected department
-        List<Doctor> availableDoctors = getDoctorInDepartment(department);
-
-        // if no doctors available, prompt user to select another department
-        if(availableDoctors.isEmpty()){
-            System.out.println("No doctors available in this department.\nPlease select another department.");
-            return null;
-        }
-        
-        // display the name and year of experience for all available doctors in the selected department
+    // display the name and year of experience for all available doctors in the selected department
+    private static void displayDoctorInDepartment(List<Doctor> availableDoctors, Department department){
         clearScreen();
         System.out.println("Available Doctors in " + department.getDepartmentName() + " Department : ");
         System.out.println("-----------------------------------------");
 
         for (int i = 0; i < availableDoctors.size(); i++){
-            System.out.println((i+1) + ". " + availableDoctors.get(i).getName() + ", " + availableDoctors.get(i).getYearOfExp() + " years of experience.");
+            System.out.println((i+1) + ". " + availableDoctors.get(i).getName() + ", " + availableDoctors.get(i).getYearOfExp() + " years of experience");
         }
 
         System.out.println((availableDoctors.size() + 1) + ". Back");
         System.out.println("-----------------------------------------");
-        return null;
     }
+
+
 
     // get staff year of experience
     private static int getPersonYearOfExp(Role role){
@@ -1225,7 +1256,7 @@ public class Hospital {
             System.out.println("Error reading doctor data: " + e.getMessage());
         }
 
-        IdGenerator.setDepartmentCount(DEPARTMENTS.size());
+        Department.setDepartmentCount(DEPARTMENTS.size());
     }
     
     // doctor management system 
@@ -1237,7 +1268,8 @@ public class Hospital {
         System.out.println("2. List All Doctors");
         System.out.println("3. Search Doctor");
         System.out.println("4. Delete Doctor Record");
-        System.out.println("5. Back");
+        System.out.println("5. View Doctor Appointments");
+        System.out.println("6. Back");
         System.out.println("-----------------");
     }
 
@@ -1274,7 +1306,7 @@ public class Hospital {
             System.out.println("Error reading doctor data: " + e.getMessage());
         }
 
-        IdGenerator.setDoctorCount(DOCTORS.size());
+        Doctor.setDoctorCount(DOCTORS.size());
     }
 
 
@@ -1296,12 +1328,12 @@ public class Hospital {
         String search;
 
         while (true){
-            clearScreen();
             System.out.println("Search by:");
             System.out.println("----------");
             System.out.println("1. Doctor ID");
             System.out.println("2. Doctor IC");
             System.out.println("3. Doctor Name");
+            System.out.println("4. Back");
             System.out.println("----------");
 
             int choice = getChoice();
@@ -1311,9 +1343,12 @@ public class Hospital {
                 break;
             } else if (choice == 2){
                 search = getPersonIc(Role.DOCTOR);
+                break;
             } else if (choice == 3){
                 search = getPersonName(Role.DOCTOR);
                 break;
+            } else if (choice == 4){
+                return null; // Go back
             } else {
                 System.out.println("Invalid choice. Please re-enter.");
             }
@@ -1327,6 +1362,7 @@ public class Hospital {
             }
         }
 
+        System.out.println("Doctor record not found.\nPlease try again.\n");
         return null;
     }
 
@@ -1406,7 +1442,7 @@ public class Hospital {
             System.out.println("Error reading nurse data: " + e.getMessage());
         }
     
-        IdGenerator.setNurseCount(NURSES.size());
+        Nurse.setNurseCount(NURSES.size());
     }
 
     // list nurse information 
@@ -1513,7 +1549,7 @@ public class Hospital {
             System.out.println("Error reading patient information."+ e.getMessage());
         }
 
-        IdGenerator.setPatientCount(PATIENTS.size());
+        Patient.setPatientCount(PATIENTS.size());
     }
 
     // list for all patient
@@ -1614,6 +1650,9 @@ public class Hospital {
 
     // read appointment records from file
     private static void readAppointments(){
+        readDoctors();
+        readPatient();
+        readRooms();
         APPOINTMENTS.clear();
 
         // read from the file 
@@ -1621,7 +1660,12 @@ public class Hospital {
             String line;
             while ((line = br.readLine()) != null){
                 String[] appointmentRecord = line.split("\\|");
-                APPOINTMENTS.add(new Appointment(LocalDateTime.parse(appointmentRecord[0]), appointmentRecord[1], LocalDateTime.parse(appointmentRecord[2]), findDoctorById(appointmentRecord[3]), findPatientById(appointmentRecord[4]), findRoomById(appointmentRecord[5]), appointmentRecord[6]));
+                Doctor doctor = findDoctorById(appointmentRecord[3]);
+                Patient patient = findPatientById(appointmentRecord[4]);
+                Appointment appointment = new Appointment(LocalDateTime.parse(appointmentRecord[0]), appointmentRecord[1], LocalDateTime.parse(appointmentRecord[2]), doctor, patient, findRoomById(appointmentRecord[5]), appointmentRecord[6]);
+                APPOINTMENTS.add(appointment);
+                doctor.addAppointment(appointment);
+                patient.addAppointment(appointment);
             }
         }catch (FileNotFoundException e){
 
@@ -1629,7 +1673,7 @@ public class Hospital {
             System.out.println("Error reading appointment information."+ e.getMessage());
         }
 
-        IdGenerator.setPatientCount(PATIENTS.size());
+        Appointment.setAppointmentCount(APPOINTMENTS.size());
     }
 
     // check room availability at given date and time
@@ -1691,6 +1735,31 @@ public class Hospital {
         return departmentDoctors;
     }
 
+    private static List<Appointment> getDoctorAppointments(Doctor doctor){
+        List<Appointment> doctorAppointments = new ArrayList<>();
+
+        readAppointments();
+        for (Appointment appointment : APPOINTMENTS){
+            if(appointment.getDoctor().equals(doctor)){
+                doctorAppointments.add(appointment);
+            }
+        }
+        return doctorAppointments;
+    }
+
+    // returns a list of all appointments for a patient
+    private static List<Appointment> getPatientAppointments(Patient patient){
+        List<Appointment> patientAppointments = new ArrayList<>();
+
+        readAppointments();
+        for (Appointment appointment : APPOINTMENTS){
+            if(appointment.getPatient().equals(patient)){
+                patientAppointments.add(appointment);
+            }
+        }
+        return patientAppointments;
+    }
+    
     // add list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
     // not dependent on medications
     private static List<String> getPresrcibedMedications(){
@@ -1728,15 +1797,15 @@ public class Hospital {
             String line;
             while((line = br.readLine()) != null){
                 String[] roomRecord = line.split("\\|");
-                CONSULTATION_ROOMS.add(new Room(roomRecord[0]));
+                Room newRoom = new Room(roomRecord[0]);
+                CONSULTATION_ROOMS.add(newRoom);
+                Room.incrementRoomCount(newRoom.getFloor());
             }
         } catch (FileNotFoundException e){
 
         } catch (IOException e){
             System.out.println("Error reading room data: " + e.getMessage());
         }
-
-        IdGenerator.setRoomCount(CONSULTATION_ROOMS.size());
     }
 
     // returns all rooms on a specific floor

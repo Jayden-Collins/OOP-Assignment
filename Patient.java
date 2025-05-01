@@ -6,7 +6,8 @@ public class Patient extends Person{
     private String emergencyContact;
     private final MedicalRecords MEDICAL_RECORD;
     private final List<Appointment> APPOINTMENTS = new ArrayList<>();
-    private int appointmentCount = 0;
+    private static int patientCount = 0;
+    private static final int MAX_APPOINTMENTS = 5; // maximum number of appointments
 
     // default constructor for new patients
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
@@ -23,11 +24,10 @@ public class Patient extends Person{
     // add appoinment of patients to the appointment class 
     public void addAppointment(Appointment appointment){
         APPOINTMENTS.add(appointment);
-        appointmentCount++;
     }
 
     // return for the calling of number of appoints and the count 
-    public List<Appointment> getAppointment(){
+    public List<Appointment> getAppointments(){
         return Collections.unmodifiableList(APPOINTMENTS);
     }
 
@@ -48,6 +48,21 @@ public class Patient extends Person{
     // get medical record
     public MedicalRecords getMedicalRecord(){
         return MEDICAL_RECORD;
+    }
+
+    // get method for patient count
+    public static int getPatientCount(){
+        return patientCount;
+    }
+
+    // increment method for patient count
+    public static void incrementPatientCount(){
+        patientCount++;
+    }
+
+    // set method for patient count
+    public static void setPatientCount(int count){
+        patientCount = count;
     }
 
     // to file format for the patient class

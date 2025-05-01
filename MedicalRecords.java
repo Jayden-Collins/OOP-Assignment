@@ -13,6 +13,7 @@ public class MedicalRecords {
     private List<String> prescribedMedications = new ArrayList<>();
     private List<String> treatmentHistory;
     private LocalDateTime nextFollowUp;
+    private static int medicalRecordCount = 0;
 
     // default constructor for new medical records
     public MedicalRecords(Patient patient, Doctor doctor){
@@ -77,5 +78,20 @@ public class MedicalRecords {
 
     public LocalDateTime getNextFollowUp() {
         return nextFollowUp;
+    }
+
+    // get method for medical record count
+    public static int getMedicalRecordCount() {
+        return medicalRecordCount;
+    }
+
+    // increment method for medical record count
+    public static void incrementMedicalRecordCount() {
+        medicalRecordCount++;
+    }
+
+    // set method for medical record count
+    public static void setMedicalRecordCount(int medicalRecordCount) {
+        MedicalRecords.medicalRecordCount = medicalRecordCount;
     }
 }

@@ -1,6 +1,7 @@
 public class Department {
     private final String DEPARTMENT_ID;
     private String departmentName;
+    private static int departmentCount = 0;
 
     // default constructor for new department creation
     public Department(String departmentName){
@@ -28,6 +29,21 @@ public class Department {
 
     public String getDepartmentName(){
         return departmentName;
+    }
+
+    // get method for department count
+    public static int getDepartmentCount(){
+        return departmentCount;
+    }
+
+    // increment department count
+    public static void incrementDepartmentCount(){
+        departmentCount++;
+    }
+
+    // set method for department count
+    public static void setDepartmentCount(int departmentCount){
+        Department.departmentCount = departmentCount;
     }
 
     public String toFileFormat(){

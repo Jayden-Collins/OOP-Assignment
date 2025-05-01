@@ -9,6 +9,7 @@ public class Appointment {
     // get room string method 
     private Room consultationRoom;
     private String appointmentStatus;
+    private static int appointmentCount = 0;
 
     // default constructor 
     public Appointment(LocalDateTime appointmentDateTime, Doctor doctor, Patient patient, Room consultationRoom){
@@ -29,20 +30,17 @@ public class Appointment {
 
     //changing room 
     public void changeRoom(Room changeRoom){
-        this.consultationRoom.freeRoom();
         this.consultationRoom = changeRoom;
     }
 
     // set appointment status 
     public void completeAppointment(){
         this.appointmentStatus = "Completed";
-        this.consultationRoom.freeRoom();
     }
 
     // cancel appointment 
     public void cancelAppointment(){
         this.appointmentStatus = "Cancelled";
-        this.consultationRoom.freeRoom();
     }
 
     // setter and boolean for appointmentStatus
@@ -92,6 +90,21 @@ public class Appointment {
     // get method for patient
     public Patient getPatient(){
         return PATIENT;
+    }
+
+    // get method for appointment count
+    public static int getAppointmentCount(){
+        return appointmentCount;
+    }
+
+    // increment method for appointment count
+    public static void incrementAppointmentCount(){
+        appointmentCount++;
+    }
+
+    // set method for appointment count
+    public static void setAppointmentCount(int appointmentCount){
+        Appointment.appointmentCount = appointmentCount;
     }
 
     // to file format

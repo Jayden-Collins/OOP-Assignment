@@ -96,16 +96,18 @@ public abstract class Person {
                 "Address: " + address + "\n";
     }
 
-/*     // equals method to compare two Person objects based on their ID
+    // equals method to compare two Person objects based on their ID
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // Check if the same object
         if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is null or not of the same class
         Person person = (Person) obj; // Cast to Person
-        return id.equals(person.id); // Compare IDs for equality
+        return ID.equals(person.ID); // Compare IDs for equality
     }
 
+    @Override
     // hashCode method to generate a hash code based on the ID
     public int hashCode() {
-        return id.hashCode(); // Generate hash code based on ID
-    } */
+        return ID.hashCode(); // Generate hash code based on ID
+    }
 }

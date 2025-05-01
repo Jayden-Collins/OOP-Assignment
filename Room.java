@@ -5,8 +5,9 @@ public class Room {
     private final String ROOM_ID;
     private String roomType = "Consultation";
     private final List<String> AVAILABLE_ROOM_TYPES = new ArrayList<>();
-    // as a reference variable
-    private Appointment currentAppointment;
+    // implement different room counts for different floors
+    private static List<Integer> roomCounts = new ArrayList<>();
+
 
     // default constructor for new rooms
     public Room(int floor){
@@ -55,13 +56,33 @@ public class Room {
         return roomType;
     }
 
-    public Appointment getCurrentAppointmentID(){
-        return currentAppointment;
+    // get the number of rooms on a certain floor
+    public static int getRoomCount(int floor){
+        if (floor > roomCounts.size()){
+            return 0;
+        } else {
+            return roomCounts.get(floor - 1);
+        }
     }
 
-    // room to free 
-    public void freeRoom(){
-        this.currentAppointment = null;
+    // increment the number of rooms on a certain floor
+    public static void incrementRoomCount(int floor){
+        if (floor > roomCounts.size()){
+            for (int i = roomCounts.size(); i < floor; i++){
+                roomCounts.add(0);
+            }
+        }
+        roomCounts.set(floor - 1, roomCounts.get(floor - 1) + 1);
+    }
+
+    // set the number of rooms on a certain floor
+    public static void setRoomCount(int floor, int count){
+        if (floor > roomCounts.size()){
+            for (int i = roomCounts.size(); i < floor; i++){
+                roomCounts.add(0);
+            }
+        }
+        roomCounts.set(floor - 1, count);
     }
 
     // to file format
@@ -69,7 +90,7 @@ public class Room {
         return String.join("|", ROOM_ID, roomType); 
     }
 
-    // to String method 
+    // to String method
     @Override
     public String toString(){
         return String.format("Room ID: " + ROOM_ID
