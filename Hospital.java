@@ -162,9 +162,7 @@ public class Hospital {
                         break;
                     case 4:
                         clearScreen();
-                        generateMedicalRecord();
-                        System.out.println("Press <Enter> to continue: ");
-                        scanner.nextLine();
+                        medicalRecordManagment();
                         clearScreen();
                         break;
                     case 5:
@@ -267,7 +265,7 @@ public class Hospital {
         System.out.println("1. Doctor Management ");
         System.out.println("2. Nurse Management ");
         System.out.println("3. Patient Management");
-        System.out.println("4. Generate Medical Report");
+        System.out.println("4. Medical Record Management");
         System.out.println("5. Exit");
         System.out.print("Enter choice: ");
     }
@@ -831,7 +829,7 @@ public class Hospital {
     }
 
     // find patient by id 
-    public Patient findPatientID(List<Patient> patientLists){
+    public static Patient findPatientID(List<Patient> patientLists){
         List<Patient> patients = readPatient(PATIENT_FILE);
         System.out.print("Enter your own id: ");
         String personalID = scanner.nextLine();
@@ -851,7 +849,7 @@ public class Hospital {
 
     // Book Appointment page
     // (Check patient is it new or exist) (Check available department) (Check available doctor) (Get appointment date and check with available doctor) (check available room) 
-    public void bookAppointment(){
+    public static void bookAppointment(){
         clearScreen();
         System.out.println("Booking Appointment Page");
         
@@ -979,7 +977,7 @@ public class Hospital {
     }
 
     //register new patient information
-    public Patient registerNewPatient(List<Patient> patient){
+    public static Patient registerNewPatient(List<Patient> patient){
         System.out.println("New Patient Registration\n");
 
         System.out.print("Enter Patient IC: ");
@@ -1001,7 +999,7 @@ public class Hospital {
     }
 
     // find exist patient 
-    public Patient findExistPatient(){
+    public static Patient findExistPatient(){
         System.out.print("Enter your patient id: ");
         String compareID = scanner.nextLine();
 
@@ -1406,6 +1404,11 @@ public class Hospital {
             System.out.println("No medical records found for this patient from it's own id");
             return;
         }
+
+        System.out.println("--------Medical Record--------");
+        for(MedicalRecords medicalRecord : medicalRecords){
+            System.out.println(medicalRecord.toString());
+        }
     }
 
     // read patient by patient medical records based on the patient id 
@@ -1426,7 +1429,7 @@ public class Hospital {
                     //check patient ID 
                     for(Patient pat : patients){
                         if(pat.getId().equals(medicalrecord[1])){
-                            pat = patient;
+                            patient = pat;
                             break;
                         }
                     }
@@ -1434,7 +1437,7 @@ public class Hospital {
                     //check doctor id 
                     for(Doctor doct : doctors){
                         if(doct.getId().equals(medicalrecord[2])){
-                            doct = doctor;
+                            doctor = doct;
                             break;
                         }
                     }
@@ -1482,7 +1485,7 @@ public class Hospital {
 
     public static void deleteMedicalRecord(){
         clearScreen();
-        System.out.println("========Delete Medical Record========");
+        System.out.println("--------Delete Medical Record--------");
 
         List<Patient> patients = readPatient(PATIENT_FILE);
         if(patients.isEmpty()){
@@ -1549,7 +1552,7 @@ public class Hospital {
         // return back update file 
         try(PrintWriter pr = new PrintWriter(new FileWriter(MEDICAL_RECORD_FILE))){
             for(String update : updateRecord){
-                out.println(update);
+                pr.println(update);
             }
         }catch(IOException e){
             System.out.println("Error saving medical recods" + e.getMessage());
