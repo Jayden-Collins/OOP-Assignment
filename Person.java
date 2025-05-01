@@ -1,16 +1,16 @@
 public abstract class Person {
-    private final Role role;
-    private final String id;
-    private final String ic;
+    private final Role ROLE;
+    private final String ID;
+    private final String IC;
     private String name;
     private String gender;
     private String contactNumber;
     private String address;
 
     protected Person(Role role, String id, String ic, String name, String gender, String contactNumber, String address){
-        this.role = role;
-        this.id = id; // Generate a unique ID for the person
-        this.ic = ic;
+        this.ROLE = role;
+        this.ID = id; // Generate a unique ID for the person
+        this.IC = ic;
         this.name = name;
         this.gender = gender;
         this.contactNumber = contactNumber;
@@ -54,15 +54,15 @@ public abstract class Person {
 
     // get method 
     public Role getRole(){
-        return role;
+        return ROLE;
     }
     
     public String getId(){
-        return id;
+        return ID;
     }
 
     public String getIc(){
-        return ic;
+        return IC;
     }
     
     public String getName(){
@@ -82,29 +82,32 @@ public abstract class Person {
     }
 
     public String toFileFormat(){
-        return String.join("|", id, ic, name, gender, contactNumber, address);
+        return String.join("|", ID, IC, name, gender, contactNumber, address);
     }
 
     // toString method to return a string representation of the person
     @Override
     public String toString() {
-        return "ID: " + id + "\n" +
+        return "ID: " + ID + "\n" +
+                "IC: " + IC + "\n" +
                 "Name: " + name + "\n" +
                 "Gender: " + gender + "\n" +
                 "Contact Number: " + contactNumber + "\n" +
                 "Address: " + address + "\n";
     }
 
-/*     // equals method to compare two Person objects based on their ID
+    // equals method to compare two Person objects based on their ID
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true; // Check if the same object
         if (obj == null || getClass() != obj.getClass()) return false; // Check if the object is null or not of the same class
         Person person = (Person) obj; // Cast to Person
-        return id.equals(person.id); // Compare IDs for equality
+        return ID.equals(person.ID); // Compare IDs for equality
     }
 
+    @Override
     // hashCode method to generate a hash code based on the ID
     public int hashCode() {
-        return id.hashCode(); // Generate hash code based on ID
-    } */
+        return ID.hashCode(); // Generate hash code based on ID
+    }
 }

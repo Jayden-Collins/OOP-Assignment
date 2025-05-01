@@ -1,1 +1,15 @@
-DC-25-001|123456-01-2345|John Smith|Male|012-3456789|dasddasda,dsa,das,dad,as,da,sdsa,dsadasdsa|Cardiology|12
+DC-25-001|890101-01-1234|John Smith|Male|012-3456789|3 Western Ave|DT-001|12
+DC-25-002|900202-02-2345|Sarah Tan|Female|013-4567890|15 Jalan Merdeka|DT-001|8
+DC-25-003|870303-03-3456|Michael Wong|Male|014-5678901|22 Parkview Heights|DT-001|15
+DC-25-004|104041-04-4567|Lisa Lim|Female|016-6789012|8 Sunway Residency|DT-002|10
+DC-25-005|805051-05-5678|David Raj|Male|017-7890123|45 Bangsar Avenue|DT-002|17
+DC-25-006|306061-06-6789|Priya Kaur|Female|018-8901234|12 KLCC Penthouse|DT-002|5
+DC-25-007|407071-07-7890|Ahmad bin Ali|Male|019-9012345|7 Taman Tun Homes|DT-003|9
+DC-25-008|508081-08-8901|Emily Chen|Female|011-0123456|33 Damansara Heights|DT-003|18
+DC-25-009|509091-09-9012|Robert Teo|Male|010-1234567|1 Mont Kiara Villa|DT-003|6
+DC-25-010|910101-10-0123|Nurul Hasanah|Female|012-2345678|9 Putrajaya Precinct|DT-004|11
+DC-25-011|211111-11-1234|James Ho|Male|013-3456789|27 Subang Jaya|DT-004|7
+DC-25-012|612121-12-2345|Anita Devi|Female|014-4567890|5 Petaling Heights|DT-004|16
+DC-25-013|313131-13-3456|Christopher Lee|Male|015-5678901|14 Cyberjaya Homes|DT-005|13
+DC-25-014|414141-14-4567|Siti Aminah|Female|016-6789012|19 Shah Alam Residency|DT-005|8
+DC-25-015|715151-15-5678|Daniel Lim|Male|017-7890123|2 Puchong Terrace|DT-005|14

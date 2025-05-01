@@ -2,59 +2,98 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
-    private final String roomID;
-    private List<String> roomType = new ArrayList<>();
-    private boolean available;
-    // as a reference variable
-    private Appointment currentAppointment;
+    private final String ROOM_ID;
+    private String roomType = "Consultation";
+    private final List<String> AVAILABLE_ROOM_TYPES = new ArrayList<>();
+    // implement different room counts for different floors
+    private static List<Integer> roomCounts = new ArrayList<>();
 
-    // constructor
+
+    // default constructor for new rooms
+    public Room(int floor){
+        this(IdGenerator.generateRoomId(floor));
+    }
+
+    // constructor for file loading
     public Room(String roomID){
-        this.roomID = roomID;
-        this.available = true;
-        this.currentAppointment = null;
+        this.ROOM_ID = roomID;
     }
 
     // get method 
     public String getRoomID(){
-        return roomID;
+        return ROOM_ID;
     }
 
-    public void setRoomType(String roomType){
-        this.roomType.add(roomType);
+    // returns the floor a room is located on
+    public int getFloor(){
+        return Character.getNumericValue(ROOM_ID.charAt(3));
     }
 
-    public List<String> getRoomType(){
+    // checks whether a room is on a certain floor
+    public boolean onFloor(int floor){
+        return getFloor() == floor;
+    }
+
+    // return the location of the room as a string
+    public String getLocation(){
+        return "Floor " + getFloor() + ", Room " + ROOM_ID.substring(4);
+    }
+
+    public boolean setRoomType(String roomType){
+        if (AVAILABLE_ROOM_TYPES.contains(roomType)){
+            this.roomType = roomType;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public List<String> getAvailableRoomTypes(){
+        return AVAILABLE_ROOM_TYPES;
+    }
+
+    public String getRoomType(){
         return roomType;
     }
 
-    public boolean getAvailable(){
-        return available;
+    // get the number of rooms on a certain floor
+    public static int getRoomCount(int floor){
+        if (floor > roomCounts.size()){
+            return 0;
+        } else {
+            return roomCounts.get(floor - 1);
+        }
     }
 
-    public Appointment getCurrentAppointmentID(){
-        return currentAppointment;
+    // increment the number of rooms on a certain floor
+    public static void incrementRoomCount(int floor){
+        if (floor > roomCounts.size()){
+            for (int i = roomCounts.size(); i < floor; i++){
+                roomCounts.add(0);
+            }
+        }
+        roomCounts.set(floor - 1, roomCounts.get(floor - 1) + 1);
     }
 
-    //check available for room 
-    public boolean bookedRoom(Appointment appointment){
-        if(available){
-            this.currentAppointment = appointment;
-            this.available = false;
-            return true;
-        } 
-        return false;
+    // set the number of rooms on a certain floor
+    public static void setRoomCount(int floor, int count){
+        if (floor > roomCounts.size()){
+            for (int i = roomCounts.size(); i < floor; i++){
+                roomCounts.add(0);
+            }
+        }
+        roomCounts.set(floor - 1, count);
     }
 
-    // room to free 
-    public void freeRoom(){
-        this.currentAppointment = null;
-        this.available = true;
+    // to file format
+    public String toFileFormat(){
+        return String.join("|", ROOM_ID, roomType); 
     }
 
-    // to String method 
+    // to String method
+    @Override
     public String toString(){
-        return String.format("Room ID: " + roomID + "\nRoom Type: " + roomType + "\nAvailable: " + available + "\nCurrentAppointment: " + currentAppointment);
+        return String.format("Room ID: " + ROOM_ID
+        + "\nRoom Type: " + roomType);
     }
-
 }

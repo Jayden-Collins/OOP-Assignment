@@ -2,26 +2,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Nurse extends Staff{
-    List<Patient> patients = new ArrayList<>(); // list of patients assigned to the nurse
+    private final List<Patient> PATIENTS = new ArrayList<>(); // list of patients assigned to the nurse
+    private static int nurseCount = 0; // count of nurses
 
-    // constructor for new nurses
-    public Nurse(String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department, int yearOfExp){
-        super(Role.NURSE, IdGenerator.generateNurseId(), nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
+    // default constructor for new nurses
+    public Nurse(String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, Department department, int yearOfExp){
+        this(IdGenerator.generateNurseId(), nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
     }
 
-    // constructur for file reading
-    public Nurse(String nurseId, String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, String department, int yearOfExp){
+    // constructur for file loading
+    public Nurse(String nurseId, String nurseIc, String nurseName, String nurseGender, String nurseContactNumber, String nurseAddress, Department department, int yearOfExp){
         super(Role.NURSE, nurseId, nurseIc, nurseName, nurseGender, nurseContactNumber, nurseAddress, department, yearOfExp);
     }
 
-    // to file format for file loading
-    @Override
-    public String toFileFormat(){
-        return String.join("|", this.getId(), this.getIc(), this.getName(), this.getGender(), this.getContactNumber(), this.getAddress(), this.getDepartment(), String.valueOf(this.getYearOfExp()));
+    // add patient to the nurse's list of patients
+    public void addPatient(Patient patient){
+        PATIENTS.add(patient);
     }
     
     public List<Patient> getPatients(){
-        return patients;
+        return PATIENTS;
+    }
+
+    // get method for nurseCount
+    public static int getNurseCount(){
+        return nurseCount;
+    }
+
+    // increment method for nurseCount
+    public static void incrementNurseCount(){
+        nurseCount++;
+    }
+    
+    // set method for nurseCount
+    public static void setNurseCount(int nurseCount){
+        Nurse.nurseCount = nurseCount;
     }
 
     @Override
