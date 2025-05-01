@@ -1241,6 +1241,49 @@ public class Hospital {
         return specificRoom;
     }
 
+    // medical records management page for staff
+    public static void medicalRecordManagment(){
+        clearScreen();
+        System.out.println("--------Medical Record Management--------");
+        System.out.println("1. Generate Medical Record");
+        System.out.println("2. View Medical Record");
+        System.out.println("3. Delete Medical Record");
+        System.out.println("4. Exit");
+        System.out.print("Enter choice: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch(choice){
+            case 1:
+                clearScreen();
+                generateMedicalRecord();
+                System.out.println("Press <Enter> to continue");
+                scanner.nextLine();
+                break;
+            case 2:
+                clearScreen();
+                viewMedicalRecord();
+                System.out.println("Press <Enter> to continue");
+                scanner.nextLine();
+                break;
+            case 3:
+                clearScreen();
+                deleteMedicalRecord();
+                System.out.println("Press <Enter> to continue");
+                scanner.nextLine();
+                break;
+            case 4:
+                System.out.println("Closed Program");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Invalid choice. Re-enter");
+
+        }
+    
+    }
+
     //generate medical records 
     public static void generateMedicalRecord(){
         clearScreen();
