@@ -1655,7 +1655,7 @@ public class Hospital {
         readRooms();
         APPOINTMENTS.clear();
 
-        // read from the file 
+        // read from the file
         try(BufferedReader br = new BufferedReader(new FileReader(APPOINTMENT_FILE))){
             String line;
             while ((line = br.readLine()) != null){
