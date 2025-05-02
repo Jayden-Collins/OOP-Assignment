@@ -470,7 +470,7 @@ public class Hospital {
                                     generateTop3ExperienceDoctorsReport();
                                     System.out.print("\nPress any key to return.");
                                     SCANNER.nextLine();
-                                    break;
+                                    clearScreen();
                                 }
 
                                 // view all medications
@@ -479,7 +479,7 @@ public class Hospital {
                                     generateMonthlyAppointmentReport();
                                     System.out.print("\nPress any key to return.");
                                     SCANNER.nextLine();
-                                    break;
+                                    clearScreen();
                                 }
 
                                 // view new patients
@@ -489,7 +489,7 @@ public class Hospital {
                                     reportNewPatients();
                                     System.out.print("\nPress any key to return.");
                                     SCANNER.nextLine();
-                                    break;
+                                    clearScreen();
                                 }
 
                                 // view most used medications
@@ -498,7 +498,7 @@ public class Hospital {
                                     generateTop5MedicationsReport();
                                     System.out.print("\nPress any key to return.");
                                     SCANNER.nextLine();
-                                    break;
+                                    clearScreen();
                                 }
 
                                 // back
