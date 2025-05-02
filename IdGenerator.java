@@ -27,7 +27,7 @@ public class IdGenerator {
     //Nurse: NC-24-001
     public static String generateNurseId() {
         Nurse.incrementNurseCount();
-        return String.format("NC-%02d-%03d", getYear(), Nurse.getNurseCount());
+        return String.format("NR-%02d-%03d", getYear(), Nurse.getNurseCount());
     }
 
     //Patient: PC-24-04-0001

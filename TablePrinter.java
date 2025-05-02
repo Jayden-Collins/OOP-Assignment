@@ -19,7 +19,7 @@ public class TablePrinter {
 
     public void addRow(List<String> row) {
         if (row.size() != headers.size()) {
-            throw new IllegalArgumentException("Row size doesn't match header size");
+            throw new IllegalArgumentException("Row size doesn't match header size.");
         }
         rows.add(row);
         

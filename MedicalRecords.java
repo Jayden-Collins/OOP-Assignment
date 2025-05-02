@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +10,7 @@ import java.util.List;
 
 public class MedicalRecords {
     private final String MEDICAL_RECORD_ID;
-    private final LocalDate CREATION_DATE;
+    private final LocalDateTime CREATION_DATE;
     private final Patient PATIENT;
     private Doctor doctor;
     private List<String> diagnoses = new ArrayList<>();
@@ -23,11 +22,11 @@ public class MedicalRecords {
 
     // default constructor for new medical records
     public MedicalRecords(Patient patient, Doctor doctor){
-        this(IdGenerator.generateMedicalRecordId(), LocalDate.now(), patient, doctor, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
+        this(IdGenerator.generateMedicalRecordId(), LocalDateTime.now(), patient, doctor, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
     }
 
     // constructor for file loading
-    public MedicalRecords(String medicalRecordId, LocalDate creationDate, Patient patient, Doctor doctor, List<String> diagnoses, List<Medication> prescribedMedications, List<String> treatmentHistory, LocalDateTime nextFollowUp){
+    public MedicalRecords(String medicalRecordId, LocalDateTime creationDate, Patient patient, Doctor doctor, List<String> diagnoses, List<Medication> prescribedMedications, List<String> treatmentHistory, LocalDateTime nextFollowUp){
         this.MEDICAL_RECORD_ID = medicalRecordId;
         this.CREATION_DATE = creationDate;
         this.PATIENT = patient;
@@ -62,7 +61,7 @@ public class MedicalRecords {
         return MEDICAL_RECORD_ID;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return CREATION_DATE;
     }
 

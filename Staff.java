@@ -39,6 +39,6 @@ public abstract class Staff extends Person{
     //toString method 
     public String toString(){
         return super.toString() + "Department: " + department.getDepartmentName() + "\n" +
-                "Year of Experience: " + yearOfExp + "\n";
+                "Year of Experience: " + yearOfExp;
     }
 }

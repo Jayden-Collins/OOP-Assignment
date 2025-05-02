@@ -2,7 +2,7 @@ public enum Role{
     STAFF("Staff", ""),
     DOCTOR("Doctor", "DC-25-001"),
     NURSE("Nurse", "NR-25-001"),
-    PATIENT("Patient", "PC-25-04-001");
+    PATIENT("Patient", "PT-25-05-0001");
 
     private final String ROLE_NAME;
     private final String ROLE_ID_EXAMPLE;

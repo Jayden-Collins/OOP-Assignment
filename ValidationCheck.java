@@ -4,13 +4,13 @@ public class ValidationCheck {
         if (type.equals(Role.DOCTOR.getRoleName())) {
             return id != null && id.matches("^DC-\\d{2}-\\d{3}$");
         } else if (type.equals(Role.NURSE.getRoleName())) {
-            return id != null && id.matches("^NS-\\d{2}-\\d{3}$");
+            return id != null && id.matches("^NR-\\d{2}-\\d{3}$");
         } else if (type.equals(Role.PATIENT.getRoleName())) {
-            return id != null && id.matches("^PC-\\d{2}-\\d{2}-\\d{3}$");
+            return id != null && id.matches("^PT-\\d{2}-\\d{2}-\\d{4}$");
         } else if (type.equals("Appointment")) {
-            return id != null && id.matches("^AP-\\d{2}-\\d{2}-\\d{3}$");
+            return id != null && id.matches("^AP-\\d{2}-\\d{2}-\\d{4}$");
         } else if (type.equals("Medical Record")) {
-            return id != null && id.matches("^MR-\\d{2}-\\d{2}-\\d{3}$");
+            return id != null && id.matches("^MR-\\d{2}-\\d{2}-\\d{4}$");
         } else if (type.equals("Department")) {
             return id != null && id.matches("^DT-\\d{2}-\\d{3}$");
         } else if (type.equals("Room")) {
@@ -30,7 +30,7 @@ public class ValidationCheck {
 
     //validation for gender 
     public static boolean validateGender(String gender){
-        return (gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female") || gender.equalsIgnoreCase("Others"));
+        return (gender.equalsIgnoreCase("Male") || gender.equalsIgnoreCase("Female"));
     }
 
     //validation for doctor department 
