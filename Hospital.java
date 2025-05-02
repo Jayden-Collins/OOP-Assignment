@@ -1347,10 +1347,6 @@ public class Hospital {
         }
 
         table.print();
-        for (int i = 0; i < DOCTORS.size(); i++){
-            System.out.println("Doctor #" + (i + 1));
-            System.out.println(DOCTORS.get(i));
-        }
     }
 
     // search doctor 
