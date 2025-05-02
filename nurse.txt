@@ -8,4 +8,3 @@ NR-25-007|930404-03-1234|Jason Lee Kok Wai|Male|014-6677883|15, Jalan Imbi, 5510
 NR-25-008|911212-11-5678|Aisha bt Abdullah|Female|015-9876545|7, Jalan Bangsar, 59200 Kuala Lumpur|DT-004|8
 NR-25-009|860202-14-3456|Dr. Lim Wei Chong|Male|017-3344559|55, Jalan Ampang, 50450 Kuala Lumpur|DT-005|13
 NR-25-010|921212-05-6789|Dr. Priya a/p Nadarajah|Female|016-7788993|42, Jalan Sultan Ismail, 50250 Kuala Lumpur|DT-005|8
-NR-25-011|121212-01-0123|nurse|Male|012-1212129|place|DT-004|0

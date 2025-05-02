@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,15 +91,18 @@ public class MedicalRecords {
     }
 
     // don't display null values in toString
+    // format dates to be more readable
+    @Override
     public String toString(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return String.format("Medical Record ID: %s\nCreation Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nPrescribed Medications: %s\nTreatment History: %s",
-                MEDICAL_RECORD_ID, CREATION_DATE, PATIENT.getName(), doctor.getName(),
+                MEDICAL_RECORD_ID, CREATION_DATE.format(formatter), PATIENT.getName(), doctor.getName(),
                 String.join(", ", diagnoses),
                 String.join(", ", prescribedMedications.stream()
                     .map(Medication::toString)
                     .toArray(String[]::new)),
                 String.join(", ", treatmentHistory)) +
-                 (nextFollowUp != null ? "\nNext Follow Up: " + nextFollowUp.toString() : "");
+                 (nextFollowUp != null ? "\nNext Follow Up: " + nextFollowUp.format(formatter) : "");
     }
 
     public String toFileFormat(){

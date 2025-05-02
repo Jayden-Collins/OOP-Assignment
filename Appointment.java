@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Appointment {
     private final LocalDateTime CREATION_DATE_TIME;
@@ -113,8 +114,11 @@ public class Appointment {
     }
 
     @Override
+    // format appointment date time to be more readable
     public String toString(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String formattedDateTime = appointmentDateTime.format(formatter);
         return String.format("Appointment ID: %s\nDoctor: %s\nPatient: %s\nRoom: %s\nDate and Time: %s", 
-            APPOINTMENT_ID, DOCTOR.getName(), PATIENT.getName(), consultationRoom.getLocation(), appointmentDateTime);
+            APPOINTMENT_ID, DOCTOR.getName(), PATIENT.getName(), consultationRoom.getLocation(), formattedDateTime);
     }
 }

@@ -74,7 +74,7 @@ public class Hospital {
                                     Doctor newDoctor = getNewDoctorDetails();
                                     // go back
                                     if (newDoctor == null){
-                                        break;
+                                        continue;
                                     }
                                     System.out.println("\nNew Doctor Details:");
                                     System.out.println("-------------------");
@@ -178,6 +178,7 @@ public class Hospital {
                                                 }
                                                 System.out.println("\nPress any key to return.");
                                                 SCANNER.nextLine();
+                                                break;
                                             }
                                         }
                                     }
@@ -206,7 +207,7 @@ public class Hospital {
                                     Nurse newNurse = getNewNurseDetails();
                                     // go back
                                     if (newNurse == null){
-                                        break;
+                                        continue;
                                     }
                                     System.out.println("\nNew Nurse Details:");
                                     System.out.println("-------------------");
@@ -231,6 +232,7 @@ public class Hospital {
                                         listNurse();
                                         System.out.print("\nPress any key to return.");
                                         SCANNER.nextLine();
+                                        break;
                                     }
                                 }
 
@@ -248,33 +250,37 @@ public class Hospital {
                                             System.out.print("\nPress any key to return.");
                                             SCANNER.nextLine();
                                             break;
-                                        } 
+                                        } else {
+                                            break;
+                                        }
                                     }
                                 }
 
                                 // delete nurse record
                                 else if (choice == 4){
                                     clearScreen();
-                                    readNurse();
-                                    Nurse nurse = searchNurse();
-                                    if(nurse != null){
-                                        clearScreen();
-                                        System.out.println("Matching Record Found!");
-                                        System.out.println("-----------------------");
-                                        System.out.println("\n Nurse Details:");
-                                        System.out.println(nurse);
-                                        System.out.println("-----------------------");
-                                        System.out.println("Delete nurse record?");
-                                        if (getYesOrNoInput()){
-                                            NURSES.remove(nurse);
-                                            overwriteFile(NURSE_FILE, convertToFileFormat(new ArrayList<>(NURSES)));
-                                            System.out.println("\nNurse information deleted successfully.");
-                                            System.out.print("\nPress any key to return.");
-                                            SCANNER.nextLine();
+                                    while(true){
+                                        readNurse();
+                                        Nurse nurse = searchNurse();
+                                        if(nurse != null){
+                                            clearScreen();
+                                            System.out.println("Matching Record Found!");
+                                            System.out.println("\n-----------------------");
+                                            System.out.println("Nurse Details:");
+                                            System.out.println(nurse);
+                                            System.out.println("-----------------------");
+                                            System.out.println("Delete nurse record?");
+                                            if (getYesOrNoInput()){
+                                                NURSES.remove(nurse);
+                                                overwriteFile(NURSE_FILE, convertToFileFormat(new ArrayList<>(NURSES)));
+                                                System.out.println("\nNurse information deleted successfully.");
+                                                System.out.print("\nPress any key to return.");
+                                                SCANNER.nextLine();
+                                                break;
+                                            }
+                                        } else {
                                             break;
                                         }
-                                    } else {
-                                        System.out.println("Nurse information not found.");
                                     }
                                 }
                                 else if (choice == 5) {
@@ -283,11 +289,6 @@ public class Hospital {
                                     System.out.println("Invalid selection. Re-enter");
                                 }
                             
-                            }
-                            if (choice != 5){
-                                System.out.print("\nPress any key to return.");
-                                SCANNER.nextLine();
-                                break;
                             }
                         } // patient management page
                         // patient management page
@@ -301,11 +302,13 @@ public class Hospital {
                                     clearScreen();
                                     Patient newPatient = getNewPatientDetails();
                                     if (newPatient == null){
-                                        break;
+                                        continue;
                                     } else {
                                     PATIENTS.add(newPatient);
                                     storeRecord(PATIENT_FILE, newPatient.toFileFormat());
                                     System.out.println("\nNew patient registered successfully.");
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
                                     }
                                 }
 
@@ -314,6 +317,8 @@ public class Hospital {
                                     clearScreen();
                                     readPatient();
                                     listPatient();
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
                                 }
                                 
                                 // search for patient
@@ -329,6 +334,8 @@ public class Hospital {
                                             System.out.println("-----------------------");
                                             System.out.print("\nPress any key to return.");
                                             SCANNER.nextLine();
+                                            break;
+                                        } else {
                                             break;
                                         }
                                     }
@@ -347,12 +354,17 @@ public class Hospital {
                                             clearScreen();
                                             System.out.println("Matching Record Found!");
                                             System.out.println("\nPatient Details:");
+                                            System.out.println("-----------------------");
                                             System.out.println(patient);
+                                            System.out.println("-----------------------");
                                             System.out.println("Delete patient record?");
                                             if (getYesOrNoInput()){
                                                 PATIENTS.remove(patient);
                                                 overwriteFile(PATIENT_FILE, convertToFileFormat(new ArrayList<>(PATIENTS)));
                                                 System.out.println("\nPatient information deleted successfully.");
+                                                System.out.print("\nPress any key to return.");
+                                                SCANNER.nextLine();
+                                                break;
                                             }
                                         }
                                     }
@@ -368,17 +380,6 @@ public class Hospital {
                                 else {
                                     System.out.println("Invalid selection. Please re-enter");
                                 }
-
-                                if (choice != 5){
-                                    System.out.print("\nPress any key to return.");
-                                    SCANNER.nextLine();
-                                }
-                            }
-
-                            if (choice != 5){
-                                System.out.print("\nPress any key to return.");
-                                SCANNER.nextLine();
-                                break;
                             }
                         }
                         // medical record management page
@@ -502,7 +503,9 @@ public class Hospital {
                                 }
 
                                 else {
-                                    System.out.println("\nMatching record found!");
+                                    clearScreen();
+                                    System.out.println("Matching record found!");
+                                    System.out.println("------------------------");
                                     System.out.println(patient);
                                     System.out.println("------------------------");
                                     System.out.println("1. Update Personal Information");
@@ -513,8 +516,8 @@ public class Hospital {
 
                                     // update personal information
                                     if (choice == 1){
+                                        clearScreen();
                                         while(true){
-                                            clearScreen();
                                             System.out.println("Update Personal Information");
                                             System.out.println("----------------------------");
                                             System.out.println("1. Update Name");
@@ -552,6 +555,7 @@ public class Hospital {
                                             } else if (choice == 5){
                                                 break;
                                             } else {
+                                                clearScreen();
                                                 System.out.println("Invalid selection. Please re-enter");
                                             }
                                         }
@@ -568,244 +572,10 @@ public class Hospital {
                         
                         // book appointment
                         else if (choice == 3){
-                            while(true){
-                                // get patient details
-                                Patient patient = null;
-
-                                while(true){
-                                    clearScreen();
-                                    System.out.println("Booking Appointment Page");
-                                    System.out.println("------------------------");
-                                    System.out.println("1. New Patient");
-                                    System.out.println("2. Existing Patient");
-                                    System.out.println("3. Back");
-                                    System.out.println("------------------------");
-
-                                    choice = getChoice();
-
-                                    // get new patient details
-                                    if(choice == 1){
-                                        patient = getNewPatientDetails();
-                                        if (patient != null){
-                                            PATIENTS.add(patient);
-                                            storeRecord(PATIENT_FILE, patient.toFileFormat());
-                                            System.out.println("\nNew patient registered successfully.");
-                                        }
-                                    }
-
-                                    // retrieve existing patient details
-                                    else if (choice == 2){
-                                        clearScreen();
-                                        while(true){
-                                            System.out.print("Enter Your IC (.e.g. 123456-07-1234 or -1 to quit): ");
-                                            String ic = getIc();
-                                            if (ic.equals("-1")){
-                                                break;
-                                            }
-                                            else if (ic.equals("")){
-                                                System.out.println("Invalid IC format.\nPlease re-enter.\n");
-                                            }
-                                            else {
-                                                patient = searchPatientByIc(ic);
-                                                if (patient != null){
-                                                    System.out.println("\nMatching Record found!");
-                                                    System.out.println("\nPatient Details:");
-                                                    System.out.println("------------------");
-                                                    System.out.println(patient);
-                                                    System.out.println("------------------");
-                                                    System.out.println("\nBook Appointment?");
-                                                    if (getYesOrNoInput()){
-                                                        break;
-                                                    }
-                                                    else {
-                                                        patient = null;
-                                                        break;
-                                                    }
-                                                } else {
-                                                    clearScreen();
-                                                    System.out.println("Patient not found.\nPlease try again.\n");
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    // back
-                                    else if (choice == 3){
-                                        break;
-                                    } 
-                                    
-                                    // invalid selection
-                                    else {
-                                        System.out.println("Invalid selection. Please re-enter.");
-                                    }
-
-                                    // patient has been found or created
-                                    if (patient != null && patient.getAppointments().size() < 5){
-                                        while(true){
-                                            // prompt user to select department
-                                            clearScreen();
-                                            System.out.println("Select Appointment Doctor:\n");
-                                            Department department = selectDepartment();
-
-                                            // if department is null, user wants to go back
-                                            if(department == null){
-                                                continue;
-                                            }
-
-                                            // list of available doctors in the selected department
-                                            List<Doctor> availableDoctors = getDoctorInDepartment(department);
-
-                                            // if no doctors available, prompt user to select another department
-                                            if(availableDoctors.isEmpty()){
-                                                System.out.println("No doctors available in this department.\nPlease select another department.");
-                                            }
-                                            else {
-                                                while(true){                                                   
-                                                    displayDoctorInDepartment(availableDoctors, department);
-
-                                                    choice = getChoice();
-                                                    if (choice >= 1 && choice <= availableDoctors.size()){
-
-                                                        Doctor doctor = availableDoctors.get(choice - 1);
-
-                                                        // get appointment date 
-                                                        clearScreen();
-                                                        while (true){
-                                                            System.out.print("Enter appointment date (2025-04-25): ");
-                                                            try {
-                                                                LocalDate appointmentDate = LocalDate.parse(SCANNER.nextLine());
-
-                                                                // the earliest appointment date is the next day
-                                                                // prompt user to select a future date if the date is today or earlier
-                                                                if(!appointmentDate.isAfter(LocalDate.now())){
-                                                                    clearScreen();
-                                                                    System.out.println("The earliest appointment date is tomorrow.\nPlease select a future date.");
-                                                                }
-                                                                // check if the date is a weekend
-                                                                else if (appointmentDate.getDayOfWeek() == DayOfWeek.SATURDAY || appointmentDate.getDayOfWeek() == DayOfWeek.SUNDAY){
-                                                                    clearScreen();
-                                                                    System.out.println("The hospital is closed on weekends.\nPlease select a weekday.");
-                                                                } else {
-                                                                    // get appointment time
-                                                                    System.out.println("Select appointment time: ");
-
-                                                                    int hour;
-                                                                    int minutes;
-
-                                                                    while(true){
-                                                                        clearScreen();
-                                                                        System.out.println("Selected Date: " + appointmentDate);
-                                                                        System.out.print("Enter hour (9 - 19): ");
-                                                                        try {
-                                                                            hour = SCANNER.nextInt();
-                                                                            SCANNER.nextLine(); // consume the newline character
-                                                                            // appointments must be between 9am and 8pm
-                                                                            if (hour >= 9 && hour <= 19){
-                                                                                while(true){
-                                                                                    System.out.print("Enter minutes (0, 15, 30, 45): ");
-                                                                                    minutes = SCANNER.nextInt();
-                                                                                    SCANNER.nextLine(); // consume the newline character
-                                                                                    if (minutes == 0 || minutes == 15 || minutes == 30 || minutes == 45){
-                                                                                        LocalDateTime appointmentDateTime = appointmentDate.atTime(hour, minutes);
-
-                                                                                        // option to select another time
-
-                                                                                        // check doctor availability at given date and time
-                                                                                        if(!doctorAvailability(doctor, appointmentDateTime)){
-                                                                                            System.out.println("This doctor is not available at the selected time.");
-                                                                                        } else {
-                                                                                            // find available room
-                                                                                            readRooms();
-                                                                                            Room room = getNextAvailableRoom("Consultation", appointmentDateTime);
-
-                                                                                            // no available room check
-                                                                                            if(room == null){
-                                                                                                System.out.println("No rooms available.\nPlease select another date or time.");
-                                                                                                break;
-                                                                                            }
-
-                                                                                            clearScreen();
-                                                                                            System.out.println("\nAppointment Details:");
-                                                                                            System.out.println("---------------------");
-                                                                                            System.out.println("Appointment Date: " + appointmentDateTime.toLocalDate());
-                                                                                            System.out.println("Appointment Time: " + appointmentDateTime.toLocalTime());
-                                                                                            System.out.println("Doctor: " + doctor.getName());
-                                                                                            System.out.println("Patient Name: " + patient.getName());
-                                                                                            System.out.println("Patient IC: " + patient.getIc());
-                                                                                            System.out.println("---------------------");
-                                                                                            System.out.println("\nBook Appointment?");
-
-                                                                                            if (getYesOrNoInput()){
-                                                                                                // create appointment
-                                                                                                try {
-                                                                                                    Appointment appointment = new Appointment(appointmentDateTime, doctor, patient, room);
-
-                                                                                                    //link appointment with DOCTOR and PATIENT
-                                                                                                    doctor.addAppointment(appointment);
-                                                                                                    patient.addAppointment(appointment);
-                                                                                                    
-                                                                                                    APPOINTMENTS.add(appointment);
-                                                                                                    storeRecord(APPOINTMENT_FILE, appointment.toFileFormat());
-
-                                                                                                    clearScreen();
-                                                                                                    System.out.println("\nAppointment Booked Successfully!");
-                                                                                                    System.out.println("---------------------------------");
-                                                                                                    System.out.println("Doctor: " + doctor.getName());
-                                                                                                    System.out.println("Patient Name: " + patient.getName());
-                                                                                                    System.out.println("Patient IC: " + patient.getIc());
-                                                                                                    System.out.println("Appointment Room: " + room.getLocation());
-                                                                                                    break;
-                                                                                                } catch (Exception e){
-                                                                                                    System.out.println("Unable to create the appointment.\nPlease try again." + e.getMessage());
-                                                                                                }
-                                                                                            } else {
-                                                                                                break;
-                                                                                            }
-                                                                                        }
-                                                                                    } else {
-                                                                                        System.out.println("Invalid minute. Please re-enter.");
-                                                                                    }
-                                                                                }
-                                                                                break;
-                                                                            } else {
-                                                                                clearScreen();
-                                                                                System.out.println("Invalid hour. Please re-enter.");
-                                                                            }
-                                                                        } catch (Exception e) {
-                                                                            System.out.println("Invalid input. Please enter a number.");
-                                                                            SCANNER.nextLine(); // clear the invalid input
-                                                                        }
-                                                                    }
-                                                                    break;
-                                                                }
-                                                                }
-                                                            catch (Exception e) {
-                                                                clearScreen();
-                                                                System.out.println("Invalid date format.\nPlease re-enter.");
-                                                            }
-                                                        }
-                                                        break;
-                                                    } else if (choice == availableDoctors.size() + 1){
-                                                        break;
-                                                    } else {
-                                                        System.out.println("Invalid selection. Please re-enter.");
-                                                    }
-                                                }
-                                                break;
-                                            }   
-                                        }
-                                        break;
-                                    }
-                                }  
-                                
-                                //if (patient == null){
-                                //    break;
-                                //}
-
-                                break;
-                            }
+                            clearScreen();
+                            bookAppointment();
                         }
-                        
+
                         // view medical report
                         else if (choice == 4){
                             clearScreen();
@@ -827,10 +597,10 @@ public class Hospital {
                                         System.out.println("No appointments found for this doctor.");
                                     } else {
                                         clearScreen();
-                                        System.out.println("Patient's Appointments:");
-                                        System.out.println("-----------------------");
+                                        System.out.println("Patient's Appointments:\n\n");
                                         for (int i = 0; i < appointments.size(); i++){
                                             System.out.println("Appointment #" + (i + 1));
+                                            System.out.println("-----------------------");
                                             System.out.println(appointments.get(i));
                                             System.out.println("-----------------------");
                                         }
@@ -853,12 +623,6 @@ public class Hospital {
                         else {
                             System.out.println("Invalid selection. Please re-enter.");
                         }
-
-                        if (choice != 5 || choice != 3){
-                            System.out.print("\nPress any key to return.");
-                            SCANNER.nextLine();
-                        }
-
                     }
                 }
             }
@@ -996,10 +760,12 @@ public class Hospital {
     // get staff information
     private static String getPersonId(Role role){
         while(true){
-            System.out.print("Enter " + role.getRoleName() + " ID (e.g. " + role.getRoleIdExample() + "): ");
+            System.out.print("Enter " + role.getRoleName() + " ID (e.g. " + role.getRoleIdExample() + " or -1 to return): ");
             String id = SCANNER.nextLine().trim();
             if(ValidationCheck.validateID(id, role.getRoleName())){
                 return id;
+            } else if(id.equals("-1")){
+                return "-1";
             } else {
                 System.out.println("\nInvalid ID format. Please re-enter: ");
             }
@@ -1078,7 +844,7 @@ public class Hospital {
     private static String getPersonIc(Role role){
         clearScreen();
         while(true){
-            System.out.print("Enter " + role.getRoleName() + " IC (e.g. 123456-01-0123): ");
+            System.out.print("Enter " + role.getRoleName() + " IC (e.g. 123456-01-0123 or -1 to return): ");
             String ic = getIc();
             if (ValidationCheck.validateIc(ic)){
                 return ic;
@@ -1596,7 +1362,7 @@ public class Hospital {
         System.out.println("-----------------");
         System.out.println("1. Register New Patient");
         System.out.println("2. List All Patient Records");
-        System.out.println("3. Search Information");
+        System.out.println("3. Search Patient");
         System.out.println("4. Delete Patient Record");
         System.out.println("5. Back");
         System.out.println("-----------------");
@@ -1605,6 +1371,9 @@ public class Hospital {
     // add patient information 
     private static Patient getNewPatientDetails(){
         String patientName = getPersonName(Role.PATIENT);
+        if (patientName.equals("-1")){
+            return null; // Go back
+        }
         String patientIC = getPersonIc(Role.PATIENT);
         String patientGender = getPersonGender(Role.PATIENT);
         String patientContactNumber = getPersonContactNumber(Role.PATIENT);
@@ -1614,7 +1383,7 @@ public class Hospital {
         Patient newPatient = new Patient(patientIC, patientName, patientGender, patientContactNumber, patientAddress, patientEmergencyContact);
 
         clearScreen();
-        System.out.println("\nNew Patient Details:");
+        System.out.println("New Patient Details:");
         System.out.println("---------------------");
         System.out.println(newPatient);
         System.out.println("---------------------");
@@ -1885,6 +1654,243 @@ public class Hospital {
         return roomsOnFloor;
     }
 
+    // book appointment page
+    private static void bookAppointment(){
+        clearScreen();
+        while(true){
+            // get patient details
+            Patient patient = null;
+
+            while(true){
+                clearScreen();
+                System.out.println("Booking Appointment Page");
+                System.out.println("------------------------");
+                System.out.println("1. New Patient");
+                System.out.println("2. Existing Patient");
+                System.out.println("3. Back");
+                System.out.println("------------------------");
+
+                int choice = getChoice();
+
+                // get new patient details
+                if(choice == 1){
+                    patient = getNewPatientDetails();
+                    if (patient != null){
+                        PATIENTS.add(patient);
+                        storeRecord(PATIENT_FILE, patient.toFileFormat());
+                        System.out.println("\nNew patient registered successfully.");
+                    }
+                }
+
+                // retrieve existing patient details
+                else if (choice == 2){
+                    clearScreen();
+                    while(true){
+                        System.out.print("Enter Your IC (.e.g. 123456-07-1234 or -1 to quit): ");
+                        String ic = getIc();
+                        if (ic.equals("-1")){
+                            break;
+                        }
+                        else if (ic.equals("")){
+                            System.out.println("Invalid IC format.\nPlease re-enter.\n");
+                        }
+                        else {
+                            patient = searchPatientByIc(ic);
+                            if (patient != null){
+                                System.out.println("\nMatching Record found!");
+                                System.out.println("\nPatient Details:");
+                                System.out.println("------------------");
+                                System.out.println(patient);
+                                System.out.println("------------------");
+                                System.out.println("\nBook Appointment?");
+                                if (getYesOrNoInput()){
+                                    break;
+                                }
+                                else {
+                                    patient = null;
+                                    break;
+                                }
+                            } else {
+                                clearScreen();
+                                System.out.println("Patient not found.\nPlease try again.\n");
+                            }
+                        }
+                    }
+                }
+
+                // back
+                else if (choice == 3){
+                    return;
+                } 
+                
+                // invalid selection
+                else {
+                    System.out.println("Invalid selection. Please re-enter.");
+                }
+
+                // patient has been found or created
+                if (patient != null && patient.getAppointments().size() < 5){
+                    while(true){
+                        // prompt user to select department
+                        clearScreen();
+                        System.out.println("Select Appointment Doctor:\n");
+                        Department department = selectDepartment();
+
+                        // if department is null, user wants to go back
+                        if(department == null){
+                            break;
+                        }
+
+                        // list of available doctors in the selected department
+                        List<Doctor> availableDoctors = getDoctorInDepartment(department);
+
+                        // if no doctors available, prompt user to select another department
+                        if(availableDoctors.isEmpty()){
+                            System.out.println("No doctors available in this department.\nPlease select another department.");
+                        }
+                        else {
+                            while(true){                                                   
+                                displayDoctorInDepartment(availableDoctors, department);
+
+                                choice = getChoice();
+                                if (choice >= 1 && choice <= availableDoctors.size()){
+
+                                    Doctor doctor = availableDoctors.get(choice - 1);
+
+                                    // get appointment date 
+                                    clearScreen();
+                                    while (true){
+                                        System.out.print("Enter appointment date (2025-04-25): ");
+                                        try {
+                                            LocalDate appointmentDate = LocalDate.parse(SCANNER.nextLine());
+
+                                            // the earliest appointment date is the next day
+                                            // prompt user to select a future date if the date is today or earlier
+                                            if(!appointmentDate.isAfter(LocalDate.now())){
+                                                clearScreen();
+                                                System.out.println("The earliest appointment date is tomorrow.\nPlease select a future date.");
+                                            }
+                                            // check if the date is a weekend
+                                            else if (appointmentDate.getDayOfWeek() == DayOfWeek.SATURDAY || appointmentDate.getDayOfWeek() == DayOfWeek.SUNDAY){
+                                                clearScreen();
+                                                System.out.println("The hospital is closed on weekends.\nPlease select a weekday.");
+                                            } else {
+                                                // get appointment time
+                                                System.out.println("Select appointment time: ");
+
+                                                int hour;
+                                                int minutes;
+
+                                                while(true){
+                                                    clearScreen();
+                                                    System.out.println("Selected Date: " + appointmentDate);
+                                                    System.out.print("Enter hour (9 - 19): ");
+                                                    try {
+                                                        hour = SCANNER.nextInt();
+                                                        SCANNER.nextLine(); // consume the newline character
+                                                        // appointments must be between 9am and 8pm
+                                                        if (hour >= 9 && hour <= 19){
+                                                            while(true){
+                                                                System.out.print("Enter minutes (0, 15, 30, 45): ");
+                                                                minutes = SCANNER.nextInt();
+                                                                SCANNER.nextLine(); // consume the newline character
+                                                                if (minutes == 0 || minutes == 15 || minutes == 30 || minutes == 45){
+                                                                    LocalDateTime appointmentDateTime = appointmentDate.atTime(hour, minutes);
+
+                                                                    // option to select another time
+
+                                                                    // check doctor availability at given date and time
+                                                                    if(!doctorAvailability(doctor, appointmentDateTime)){
+                                                                        System.out.println("This doctor is not available at the selected time.");
+                                                                    } else {
+                                                                        // find available room
+                                                                        readRooms();
+                                                                        Room room = getNextAvailableRoom("Consultation", appointmentDateTime);
+
+                                                                        // no available room check
+                                                                        if(room == null){
+                                                                            System.out.println("No rooms available.\nPlease select another date or time.");
+                                                                            break;
+                                                                        }
+
+                                                                        clearScreen();
+                                                                        System.out.println("\nAppointment Details:");
+                                                                        System.out.println("---------------------");
+                                                                        System.out.println("Appointment Date: " + appointmentDateTime.toLocalDate());
+                                                                        System.out.println("Appointment Time: " + appointmentDateTime.toLocalTime());
+                                                                        System.out.println("Doctor: " + doctor.getName());
+                                                                        System.out.println("Patient Name: " + patient.getName());
+                                                                        System.out.println("Patient IC: " + patient.getIc());
+                                                                        System.out.println("---------------------");
+                                                                        System.out.println("\nBook Appointment?");
+
+                                                                        if (getYesOrNoInput()){
+                                                                            // create appointment
+                                                                            try {
+                                                                                Appointment appointment = new Appointment(appointmentDateTime, doctor, patient, room);
+
+                                                                                //link appointment with DOCTOR and PATIENT
+                                                                                doctor.addAppointment(appointment);
+                                                                                patient.addAppointment(appointment);
+                                                                                
+                                                                                APPOINTMENTS.add(appointment);
+                                                                                storeRecord(APPOINTMENT_FILE, appointment.toFileFormat());
+
+                                                                                clearScreen();
+                                                                                System.out.println("\nAppointment Booked Successfully!");
+                                                                                System.out.println("---------------------------------");
+                                                                                System.out.println("Doctor: " + doctor.getName());
+                                                                                System.out.println("Patient Name: " + patient.getName());
+                                                                                System.out.println("Patient IC: " + patient.getIc());
+                                                                                System.out.println("Appointment Room: " + room.getLocation());
+                                                                                System.out.println("---------------------------------");
+                                                                                System.out.println("Press <Enter> to return.");
+                                                                                SCANNER.nextLine();
+                                                                                return;
+                                                                            } catch (Exception e){
+                                                                                System.out.println("Unable to create the appointment.\nPlease try again." + e.getMessage());
+                                                                            }
+                                                                        } else {
+                                                                            System.out.println("Press <Enter> to return.");
+                                                                            SCANNER.nextLine();
+                                                                            return;
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    System.out.println("Invalid minute. Please re-enter.");
+                                                                }
+                                                            }
+                                                            break;
+                                                        } else {
+                                                            clearScreen();
+                                                            System.out.println("Invalid hour. Please re-enter.");
+                                                        }
+                                                    } catch (Exception e) {
+                                                        System.out.println("Invalid input. Please enter a number.");
+                                                        SCANNER.nextLine(); // clear the invalid input
+                                                    }
+                                                }
+                                            }
+                                            }
+                                        catch (Exception e) {
+                                            clearScreen();
+                                            System.out.println("Invalid date format.\nPlease re-enter.");
+                                        }
+                                    }
+                                } else if (choice == availableDoctors.size() + 1){
+                                    break;
+                                } else {
+                                    System.out.println("Invalid selection. Please re-enter.");
+                                }
+                            }
+                        }   
+                    }
+                }
+            }  
+        }
+    }    
+
+
     // read medications
     private static void readMedications(){
         MEDICATIONS.clear();
@@ -2026,6 +2032,7 @@ public class Hospital {
 
                         // go back
                         if (diagnoses.equals("-1")){
+                            clearScreen();
                             break;
                         }
                         else if (diagnoses.equals("-2")){   
@@ -2051,6 +2058,7 @@ public class Hospital {
 
                                 // go back
                                 if (medication.equals("-1")){
+                                    clearScreen();
                                     break;
                                 }
 
