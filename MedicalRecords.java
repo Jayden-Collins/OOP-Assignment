@@ -1,4 +1,8 @@
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -6,39 +10,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class MedicalRecords {
-<<<<<<< HEAD
-    private final String medicalRecordID;
-    private final LocalDate creationDate = LocalDate.now();
-    private final Patient patient;
-=======
     private final String MEDICAL_RECORD_ID;
     private final LocalDate CREATION_DATE;
     private final Patient PATIENT;
->>>>>>> jayden-branch
     private Doctor doctor;
     private List<String> diagnoses = new ArrayList<>();
-    private List<String> prescribedMedications = new ArrayList<>();
+    private List<Medication> prescribedMedications = new ArrayList<>();
     private List<String> treatmentHistory = new ArrayList<>();
     private LocalDateTime nextFollowUp;
     private static int medicalRecordCount = 0;
+    private static String file = "medical_records.txt";
 
     // default constructor for new medical records
     public MedicalRecords(Patient patient, Doctor doctor){
-<<<<<<< HEAD
-        // generate medical record id 
-        this.medicalRecordID = IdGenerator.generateMedicalRecordId();
-        this.patient = patient;
-        this.doctor = doctor;
-    }
-
-    public String getID(){
-        return medicalRecordID;
-=======
         this(IdGenerator.generateMedicalRecordId(), LocalDate.now(), patient, doctor, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), null);
     }
 
     // constructor for file loading
-    public MedicalRecords(String medicalRecordId, LocalDate creationDate, Patient patient, Doctor doctor, List<String> diagnoses, List<String> prescribedMedications, List<String> treatmentHistory, LocalDateTime nextFollowUp){
+    public MedicalRecords(String medicalRecordId, LocalDate creationDate, Patient patient, Doctor doctor, List<String> diagnoses, List<Medication> prescribedMedications, List<String> treatmentHistory, LocalDateTime nextFollowUp){
         this.MEDICAL_RECORD_ID = medicalRecordId;
         this.CREATION_DATE = creationDate;
         this.PATIENT = patient;
@@ -47,14 +36,17 @@ public class MedicalRecords {
         this.prescribedMedications = prescribedMedications;
         this.treatmentHistory = treatmentHistory;
         this.nextFollowUp = nextFollowUp;
->>>>>>> jayden-branch
+    }
+
+    public String getId(){
+        return MEDICAL_RECORD_ID;
     }
 
     public void addDiagnosis(String diagnoses){
         this.diagnoses.add(diagnoses);
     }
 
-    public void prescribeMedications(String medication){
+    public void prescribeMedications(Medication medication){
         this.prescribedMedications.add(medication);
     }
 
@@ -86,7 +78,7 @@ public class MedicalRecords {
         return Collections.unmodifiableList(diagnoses);
     }
 
-    public List<String> getPrescribedMedications() {
+    public List<Medication> getPrescribedMedications() {
         return Collections.unmodifiableList(prescribedMedications);
     }
 
@@ -98,23 +90,78 @@ public class MedicalRecords {
         return nextFollowUp;
     }
 
-<<<<<<< HEAD
+    // don't display null values in toString
     public String toString(){
-        return String.format("Medical Record ID: %s\nRecord Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: %s\n", medicalRecordID, creationDate, patient.getName(), doctor.getName(), String.join(", ", diagnoses), String.join(", ",prescribedMedications), String.join(", ", treatmentHistory), nextFollowUp);
-=======
+        return String.format("Medical Record ID: %s\nCreation Date: %s\nPatient: %s\nDoctor: %s\nDiagnoses: %s\nPrescribed Medications: %s\nTreatment History: %s",
+                MEDICAL_RECORD_ID, CREATION_DATE, PATIENT.getName(), doctor.getName(),
+                String.join(", ", diagnoses),
+                String.join(", ", prescribedMedications.stream()
+                    .map(Medication::toString)
+                    .toArray(String[]::new)),
+                String.join(", ", treatmentHistory)) +
+                 (nextFollowUp != null ? "\nNext Follow Up: " + nextFollowUp.toString() : "");
+    }
+
+    public String toFileFormat(){
+        // join fields using |
+        // for medications lists, join using comma
+        // for medications, only store name without dosage
+        return String.format("%s|%s|%s|%s|%s|%s|%s|%s\n", MEDICAL_RECORD_ID, CREATION_DATE, PATIENT.getId(), doctor.getId(), String.join(",", diagnoses),
+        String.join(",", prescribedMedications.stream().map(Medication::getMedicationName).toArray(String[]::new)), String.join(",", treatmentHistory), nextFollowUp);
+    }
+
     // get method for medical record count
     public static int getMedicalRecordCount() {
+        readMedicalRecordCount(file);
         return medicalRecordCount;
+    }
+
+    // read the number of medical records from the file based on the number of lines in the file
+    public static void readMedicalRecordCount(String file) {
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(file))){
+            while((br.readLine()) != null){
+                count++;
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("Medical Record file not found");
+        } catch (IOException e){
+            System.out.println("Error reading medical records" + e.getMessage());
+        }
+
+        while (hasIdSeq(count)){
+            count++;
+        }
+
+        medicalRecordCount = count;
+    }
+
+    // checks whether an id has been used before
+    private static boolean hasIdSeq(int seq){
+        try (BufferedReader br = new BufferedReader(new FileReader(file))){
+            String line;
+            while((line = br.readLine()) != null){
+                String[] fields = line.split("\\|");
+                if(fields.length > 0 && fields[0].equals("MR-" + seq)){
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e){
+            System.out.println("Medical Record file not found");
+        } catch (IOException e){
+            System.out.println("Error reading medical records" + e.getMessage());
+        }
+        return false;
     }
 
     // increment method for medical record count
     public static void incrementMedicalRecordCount() {
+        readMedicalRecordCount(file);
         medicalRecordCount++;
     }
 
     // set method for medical record count
     public static void setMedicalRecordCount(int medicalRecordCount) {
         MedicalRecords.medicalRecordCount = medicalRecordCount;
->>>>>>> jayden-branch
     }
 }

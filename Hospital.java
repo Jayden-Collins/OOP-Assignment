@@ -1,13 +1,11 @@
 import java.io.*;
 import java.time.DayOfWeek;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import javax.print.attribute.standard.Media;
 
 public class Hospital {
     
@@ -21,6 +19,7 @@ public class Hospital {
     private static final List<Patient> PATIENTS = new ArrayList<>();
     private static final List<Room> CONSULTATION_ROOMS = new ArrayList<>();
     private static final List<Appointment> APPOINTMENTS = new ArrayList<>();
+    private static final List<Medication> MEDICATIONS = new ArrayList<>();
 
     // constants file paths 
     private static final String DEPARTMENT_FILE = "department.txt";
@@ -28,11 +27,9 @@ public class Hospital {
     private static final String NURSE_FILE = "nurse.txt";
     private static final String PATIENT_FILE = "patient.txt";
     private static final String MEDICAL_RECORD_FILE = "medical_records.txt";
-
-    //consultation room 
-    private List<Room> consultationRooms;
     private static final String ROOM_FILE = "room.txt";
     private static final String APPOINTMENT_FILE = "appointment.txt";
+    private static final String MEDICATION_FILE = "medication.txt";
 
     public static void main(String[] args) {
 
@@ -57,6 +54,7 @@ public class Hospital {
                 readNurse();
                 readPatient();
                 readRooms();
+                readMedications();
 
                 // display staff or patient menu based on user role
                 if(Role.isStaff(userRole)){
@@ -114,8 +112,10 @@ public class Hospital {
                                     if(doctor != null){
                                         clearScreen();
                                         System.out.println("Matching Record Found!");
+                                        System.out.println("-----------------------");
                                         System.out.println("\nDoctor Details:");
                                         System.out.println(doctor);
+                                        System.out.println("-----------------------");
                                         System.out.println("Delete doctor record?");
                                         if (getYesOrNoInput()){
                                             DOCTORS.remove(doctor);
@@ -210,12 +210,13 @@ public class Hospital {
                                     clearScreen();
                                     readNurse();
                                     Nurse nurse = searchNurse();
-                                    if (nurse == null){
-                                        System.out.println("Nurse information not found.");
-                                    }
-                                    else {
-                                        System.out.println("Matching record found!");
+                                    if (nurse != null){
+                                        System.out.println("\nMatching record found!");
+                                        System.out.println("-----------------------");
                                         System.out.println(nurse);
+                                        System.out.println("-----------------------");
+                                        System.out.print("Press any key to continue.");
+                                        SCANNER.nextLine();
                                     }
                                 }
 
@@ -227,8 +228,10 @@ public class Hospital {
                                     if(nurse != null){
                                         clearScreen();
                                         System.out.println("Matching Record Found!");
+                                        System.out.println("-----------------------");
                                         System.out.println("\n Nurse Details:");
                                         System.out.println(nurse);
+                                        System.out.println("-----------------------");
                                         System.out.println("Delete nurse record?");
                                         if (getYesOrNoInput()){
                                             NURSES.remove(nurse);
@@ -336,6 +339,10 @@ public class Hospital {
                                 SCANNER.nextLine();
                                 break;
                             }
+                        }
+                        // medical record management page
+                        else if (choice == 4){
+                            medicalRecordManagement();
                         }
                         // department management page
                         else if (choice == 5){
@@ -759,6 +766,12 @@ public class Hospital {
                             }
                         }
                         
+                        // view medical report
+                        else if (choice == 4){
+                            clearScreen();
+                            viewMedicalRecord();
+                        }
+                        
                         // view appointments
                         else if (choice == 5){
                             clearScreen();
@@ -878,7 +891,6 @@ public class Hospital {
         final String PATIENT_PASSWORD = "123456";
         
         clearScreen();
-        System.out.println("---------Hospital Login System-----------");
 
         while(true){
             System.out.println("Hospital Management System");
@@ -921,12 +933,10 @@ public class Hospital {
         System.out.println("1. Doctor Management ");
         System.out.println("2. Nurse Management ");
         System.out.println("3. Patient Management");
-        System.out.println("4. Generate Medical Report");
+        System.out.println("4. Medical Record Management");
         System.out.println("5. Department Management");
         System.out.println("6. Log Out");
         System.out.println("----------");
-        System.out.println("4. Medical Record Management");
-        System.out.println("5. Exit");
         System.out.print("Enter choice: ");
     }
 
@@ -1329,11 +1339,11 @@ public class Hospital {
             return;
         }
 
-        TablePrinter table = new TablePrinter(Arrays.asList("ID", "IC", "Name", "Gender", "Contact Number", "Address", "Year of Experience", "Department"));
+        TablePrinter table = new TablePrinter(Arrays.asList("ID", "IC", "Name", "Gender", "Contact Number", "Address", "Year of Experience", "Department Name"));
 
         // Print each doctor's information
-        for(Doctor doctor : doctors) {
-            table.addRow(Arrays.asList(doctor.getId(), doctor.getIc(), doctor.getName(), doctor.getGender(), doctor.getContactNumber(), doctor.getAddress(), String.valueOf(doctor.getYearOfExp()), doctor.getDepartment()));
+        for(Doctor doctor : DOCTORS) {
+            table.addRow(Arrays.asList(doctor.getId(), doctor.getIc(), doctor.getName(), doctor.getGender(), doctor.getContactNumber(), doctor.getAddress(), String.valueOf(doctor.getYearOfExp()), doctor.getDepartment().getDepartmentName()));
         }
 
         table.print();
@@ -1485,7 +1495,9 @@ public class Hospital {
             System.out.println("Search by");
             System.out.println("----------");
             System.out.println("1. Nurse ID");
-            System.out.println("2. Nurse Name");
+            System.out.println("2. Nurse IC");
+            System.out.println("3. Nurse Name");
+            System.out.println("4. Back");
             System.out.println("----------");
 
             int choice = getChoice();
@@ -1499,6 +1511,8 @@ public class Hospital {
             } else if (choice == 3){
                 search = getPersonName(Role.NURSE);
                 break;
+            } else if (choice == 4){
+                return null; // Go back
             } else {
                 System.out.println("Invalid choice.\nPlease re-enter.\n");
             }
@@ -1512,10 +1526,11 @@ public class Hospital {
             }
         }
 
+        System.out.println("Nurse record not found.\nPlease try again.\n");
         return null;
     }
     
-    //patient managment system
+    //patient management system
     private static void patientManagement(){
         clearScreen();
         System.out.println("Patient Management");
@@ -1586,6 +1601,7 @@ public class Hospital {
 
     // search for patient 
     private static Patient searchPatient(){
+        readPatient();
         while(true){
             clearScreen();
             System.out.println("Search by:");
@@ -1780,113 +1796,6 @@ public class Hospital {
         return patientAppointments;
     }
 
-    // medication list 
-    public List<String> medicationLists(){
-        List<String> medicationLists = new ArrayList<>();
-        medicationLists.add("Statin");
-        medicationLists.add("ACE Inhibitors");
-        medicationLists.add("Beta-Blockers");
-        medicationLists.add("Anticonvulsants");
-        medicationLists.add("Benzodiazepines");
-        medicationLists.add("Gabapentin");
-        medicationLists.add("Glucagon");
-        medicationLists.add("Glyceryl trinitrate");
-        medicationLists.add("Epinephrine (adrenaline) pre-filled syringe");
-        medicationLists.add("cyclophosphamide");
-        medicationLists.add("doxorubicin");
-        medicationLists.add("doxorubicin");
-        medicationLists.add("Cephalexin");
-        medicationLists.add("Amoxicillin");
-        medicationLists.add("Cefdinir");
-
-        return medicationLists;
-    }
-
-    // add list for prescribed medications (cardiology, neurology, emergency, oncology, pediatrics)
-    // search medication first, enter dosage store in list
-    // default dosage and custom dosage
-    public List<String> getPresrcibedMedications(){
-        List<String> medicationLists = medicationLists();
-        // store the medication the l
-        List<String> medications = new ArrayList<>();
-        // search by medication 
-        System.out.print("Enter your medication: ");
-        String medication = scanner.nextLine();
-        
-        // for each loop for the medication lists 
-        for(String medicationList : medicationLists){
-            if(medication == medicationList){
-                // enter default dose or custom dose 
-                System.out.println("Enter your doses(default dose = 1 / custom dose): ");
-                String dose = scanner.nextLine();
-                try {
-                    if(dose == "1"){
-                        //cardiology 3 medicines 
-                        medications.add("Cardiology : Statin, dosage = 1mg");
-                        medications.add("Cardiology : ACE Inhibitors, dosage = 1mg");
-                        medications.add("Cardiology : Beta-Blockers, dosage = 1mg");
-                        
-                        // neurology 3 medicines 
-                        medications.add("Neurology : Anticonvulsants, dosage = 1mg");
-                        medications.add("Neurology : Benzodiazepines, dosage = 1mg");
-                        medications.add("Neurology : Gabapentin, dosage = 1mg");
-                        
-                        // emerngecy have 3 medicines 
-                        medications.add("Emergency : Glucagon, dosage = 1mg");
-                        medications.add("Emergency : Glyceryl trinitrate, dosage = 1mg");
-                        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe, dosage = 1ml");
-                        
-                        // oncology have 3 meidicines 
-                        medications.add("Oncology : cyclophosphamide, dosage = 1ml");
-                        medications.add("Oncology : doxorubicin, dosage = 1ml");
-                        medications.add("Oncology : rituximab, dosage = 1ml");
-
-                        // pediatrics have 3 medicines 
-                        medications.add("Pediatrics : Cephalexin, dosage = 1ml");
-                        medications.add("Pediatrics : Amoxicillin, dosage = 1ml");
-                        medications.add("Pediatrics : Cefdinir, dosage = 1ml");
-
-                    } else if (medication == "Statin"){
-                        medications.add("Cardiology : Statin, dosage = " + dose + "mg");
-                    } else if (medication == "ACE Inhibitors"){
-                        medications.add("Neurology : Benzodiazepines, dosage = " + dose + "mg");
-                    } else if (medication == "Beta-Blockers"){
-                        medications.add("Cardiology : Beta-Blockers, dosage = " + dose + "mg");
-                    } else if (medication == "Anticonvulsants"){
-                        medications.add("Neurology : Anticonvulsants, dosage = " + dose + "mg");
-                    } else if (medication == "Benzodiazepines"){
-                        medications.add("Neurology : Benzodiazepines, dosage = " + dose + "mg");
-                    } else if (medication == "Gabapentin"){
-                        medications.add("Neurology : Gabapentin, dosage = " + dose + "mg");
-                    } else if (medication == "Glucagon"){
-                        medications.add("Emergency : Glucagon, dosage = " + dose + "mg");
-                    } else if (medication == "Glyceryl trinitrate"){
-                        medications.add("Emergency : Glyceryl trinitrate, dosage = " + dose + "mg");
-                    } else if (medication == "Epinephrine (adrenaline) pre-filled syringe"){
-                        medications.add("Emergency : Epinephrine (adrenaline) pre-filled syringe, dosage = " + dose + "mg");
-                    } else if (medication == "cyclophosphamide"){
-                        medications.add("Oncology : cyclophosphamide, dosage = " + dose + "mg");
-                    } else if (medication == "doxorubicin"){
-                        medications.add("Oncology : doxorubicin, dosage = " + dose + "mg");
-                    } else if (medication == "rituximab"){
-                        medications.add("Oncology : rituximab, dosage = " + dose + "mg");
-                    } else if (medication == "Cephalexin"){
-                        medications.add("Pediatrics : Cephalexin, dosage = " + dose + "mg");
-                    } else if (medication == "Amoxicillin"){
-                        medications.add("Pediatrics : Amoxicillin, dosage = " + dose + "mg");
-                    } else if (medication == "Cefdinir"){
-                        medications.add("Pediatrics : Cefdinir, dosage = " + dose + "mg");
-                    }
-
-                } catch (Exception e){
-                    System.out.println("Invalid String format input");
-                }
-            }
-        }
-        
-        return medications;
-    }
-
     // read medications list and store to the file 
     
 
@@ -1911,87 +1820,8 @@ public class Hospital {
     }
 
     // returns all rooms on a specific floor
-    private static List<Room> getRoomFloor(int floor){
+    public List<Room> getRoomsOnFloor(int floor){
         List<Room> roomsOnFloor = new ArrayList<>();
-    //compare all medications and department medications , show specific medications with department
-    public List<String> getMedicationDepartment(String department){
-        List<String> medications = getPresrcibedMedications();
-        List<String> specificMedications = new ArrayList<>();
-
-        for(String medication : medications){
-            if(medication.startsWith(department + " : ")){
-                specificMedications.add(medication);
-            }
-        }
-
-        return specificMedications;
-    }
-
-    // consultation room list 
-    public List<String> roomTypeList(){
-        List<String> roomTypeList = new ArrayList<>();
-
-        // store information into the array list 
-        roomTypeList.add("Consultation Room 1");
-        roomTypeList.add("Consultation Room 2");
-        roomTypeList.add("Consultation Room 3");
-        roomTypeList.add("Consultation Room 4");
-        roomTypeList.add("Consultation Room 5");
-        roomTypeList.add("Consultation Room 6");
-        roomTypeList.add("Consultation Room 7");
-        roomTypeList.add("Consultation Room 8");
-        roomTypeList.add("Consultation Room 9");
-        roomTypeList.add("Consultation Room 10");
-        roomTypeList.add("Consultation Room 11");
-        roomTypeList.add("Consultation Room 12");
-        roomTypeList.add("Consultation Room 13");
-        roomTypeList.add("Consultation Room 14");
-        roomTypeList.add("Consultation Room 15");
-
-        return roomTypeList;
-    }
-
-    //list of floor by room 
-    public List<String> getRoomType(){
-        // room type lists from the previous room type method 
-        List<String> roomLists = roomTypeList();
-        
-        // store custom room type lists 
-        List<String> roomTypeLists = new ArrayList<>();
-
-        //String for room type needed
-        System.out.print("Enter your room: ");
-        String roomType = scanner.nextLine();
-
-        // consultation room have 15 rooms 
-        // room 1 
-        roomTypeLists.add("Floor 1 : Consultation Room 1");
-        roomTypeLists.add("Floor 1 : Consultation Room 2");
-        roomTypeLists.add("Floor 1 : Consultation Room 3");
-
-        // room 2 
-        roomTypeLists.add("Floor 2 : Consultation Room 4");
-        roomTypeLists.add("Floor 2 : Consultation Room 5");
-        roomTypeLists.add("Floor 2 : Consultation Room 6");
-        roomTypeLists.add("Floor 2 : Consultation Room 7");
-        roomTypeLists.add("Floor 2 : Consultation Room 8");
-        roomTypeLists.add("Floor 2 : Consultation Room 9");
-
-        // room 3 
-        roomTypeLists.add("Floor 3 : Consultation Room 10");
-        roomTypeLists.add("Floor 3 : Consultation Room 11");
-        roomTypeLists.add("Floor 3 : Consultation Room 12");
-        roomTypeLists.add("Floor 3 : Consultation Room 13");
-        roomTypeLists.add("Floor 3 : Consultation Room 14");
-        roomTypeLists.add("Floor 3 : Consultation Room 15");
-
-        return roomTypeLists;
-    }
-
-    // specific floor and consultation room 
-    public List<String> getRoomFloor(String id){
-        List<String> roomTypes = getRoomType();
-        List<String> specificRoom = new ArrayList<>();
 
         for(Room room : CONSULTATION_ROOMS){
             if(room.onFloor(floor)){
@@ -2002,237 +1832,362 @@ public class Hospital {
         return roomsOnFloor;
     }
 
-    // medical records management page for staff
-    public static void medicalRecordManagment(){
-        clearScreen();
-        System.out.println("--------Medical Record Management--------");
-        System.out.println("1. Generate Medical Record");
-        System.out.println("2. View Medical Record");
-        System.out.println("3. Delete Medical Record");
-        System.out.println("4. Exit");
-        System.out.print("Enter choice: ");
+    // read medications
+    private static void readMedications(){
+        MEDICATIONS.clear();
 
-        int choice = scanner.nextInt();
-        scanner.nextLine();
+        // read from the file 
+        try(BufferedReader br = new BufferedReader(new FileReader(MEDICATION_FILE))){
+            String line;
+            while((line = br.readLine()) != null){
+                String[] medicationRecord = line.split("\\|");
+                MEDICATIONS.add(new Medication(medicationRecord[0], Integer.parseInt(medicationRecord[1])));
+            }
+        } catch (FileNotFoundException e){
 
-        switch(choice){
-            case 1:
-                clearScreen();
-                generateMedicalRecord();
-                System.out.println("Press <Enter> to continue");
-                scanner.nextLine();
-                break;
-            case 2:
-                clearScreen();
-                viewMedicalRecord();
-                System.out.println("Press <Enter> to continue");
-                scanner.nextLine();
-                break;
-            case 3:
-                clearScreen();
-                deleteMedicalRecord();
-                System.out.println("Press <Enter> to continue");
-                scanner.nextLine();
-                break;
-            case 4:
-                System.out.println("Closed Program");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Invalid choice. Re-enter");
-
+        } catch (IOException e){
+            System.out.println("Error reading medication data: " + e.getMessage());
         }
-    
+    }
+
+    // medical records management page for staff
+    public static void medicalRecordManagement(){
+        while(true){
+            clearScreen();
+            System.out.println("Medical Record Management");
+            System.out.println("-------------------------");
+            System.out.println("1. Generate Medical Record");
+            System.out.println("2. View Medical Record");
+            System.out.println("3. Delete Medical Record");
+            System.out.println("4. Back");
+            System.out.println("-------------------------");
+
+            int choice = getChoice();
+
+            switch(choice){
+                case 1:
+                    clearScreen();
+                    generateMedicalRecord();
+                    break;
+                case 2:
+                    clearScreen();
+                    viewMedicalRecord();
+                    break;
+                case 3:
+                    clearScreen();
+                    deleteMedicalRecord();
+                    break;
+                case 4:
+                    return;
+                default:
+                    System.out.println("Invalid choice. Re-enter");
+            }
+        }
     }
 
     //generate medical records 
     public static void generateMedicalRecord(){
         clearScreen();
-        System.out.println("============Generate Medical Records============");
-        
-        //list patients to choose 
-        List<Patient> patients = readPatient(PATIENT_FILE);
-        if(patients.isEmpty()){
-            System.out.println("No patient informations are available");
-            return;
-        }
-
-        // list out patients information, key in patient id 
-        listPatient(patients);
-        System.out.print("Select patient ID: ");
-        String patientID = scanner.nextLine();
-
-        // selected patient object 
-        Patient selectedPatient = null;
-
-        for(Patient patient : patients){
-            if(patient.getId().equals(patientID)){
-                selectedPatient = patient;
-                break;
+        while(true){
+            System.out.println("============Generate Medical Records============");
+            
+            //list patients to choose 
+            if(PATIENTS.isEmpty()){
+                System.out.println("No patient informations are available");
+                return;
             }
-        }
 
-        if(selectedPatient == null){
-            System.out.println("Patient not found");
-            return;
-        }
+            while(true){
+                // selected patient object
+                Patient selectedPatient = searchPatient();
 
-        //List doctors to choose 
-        List<Doctor> doctors = readDoctors(DOCTOR_FILE);
-        if(doctors.isEmpty()){
-            System.out.println("No doctor informations are available");
-            return;
-        }
+                // go back
+                if(selectedPatient == null){
+                    break;
+                }
 
-        listdoctor(doctors);
-        System.out.print("Select doctor ID: ");
-        String doctorID = scanner.nextLine();
+                // show patient details and ask for confirmation
+                clearScreen();
+                System.out.println("Patient Details:");
+                System.out.println("-----------------");
+                System.out.println(selectedPatient);
+                System.out.println("-----------------");
+                System.out.println("Create Medical Record? (Y/N): ");
 
-        //selected doctor object 
-        Doctor selectedDoctor = null;
+                // go back
+                if (!getYesOrNoInput()){
+                    break;
+                }
 
-        for(Doctor doctor : doctors){
-            if(doctor.getId().equals(doctorID)){
-                selectedDoctor = doctor;
-                break;
+                while(true){
+                    // selected doctor object
+                    Doctor selectedDoctor = null;
+
+                    clearScreen();
+                    System.out.println("Select Doctor:\n");
+                    Department department = selectDepartment();
+
+                    // if department is null, user wants to go back
+                    if(department == null){
+                        break;
+                    }
+
+                    // list of available doctors in the selected department
+                    List<Doctor> availableDoctors = getDoctorInDepartment(department);
+
+                    // if no doctors available, prompt user to select another department
+                    if(availableDoctors.isEmpty()){
+                        System.out.println("No doctors available in this department.\nPlease select another department.");
+                        continue;
+                    }
+                    else {
+                        while(true){                                                   
+                            displayDoctorInDepartment(availableDoctors, department);
+
+                            int choice = getChoice();
+                            if (choice >= 1 && choice <= availableDoctors.size()){
+                                selectedDoctor = availableDoctors.get(choice - 1);
+                                break;
+                            } else if (choice == availableDoctors.size() + 1){
+                                break;
+                            } else {
+                                System.out.println("Invalid selection. Please re-enter.");
+                            }
+                        }
+                    }
+
+                    // go back
+                    if(selectedDoctor == null){
+                        break;
+                    }
+
+                    //medical records new object
+                    MedicalRecords medicalRecord = new MedicalRecords(selectedPatient, selectedDoctor);
+
+                    while(true){
+
+                        // diagnoses record
+                        clearScreen();
+                        System.out.print("Enter diagnoses (or -1 to go back): ");
+                        String diagnoses = SCANNER.nextLine();
+
+                        // go back
+                        if (diagnoses.equals("-1")){
+                            break;
+                        }
+
+                        medicalRecord.addDiagnosis(diagnoses);
+                        while(true){
+                            // display all medications and select to prescribed medications
+                            // allow user to go back to select more
+                            readMedications();
+                            clearScreen();
+                            while(true){
+                                System.out.println("Select medications:");
+                                System.out.println("-------------------");
+                                for (int i = 0; i < MEDICATIONS.size(); i++){
+                                    System.out.println((i + 1) + ". " + MEDICATIONS.get(i));
+                                }
+
+                                System.out.println("-------------------");
+                                System.out.print("Enter medications (or -1 to go back -2 to proceed with next step): ");
+                                String medication = SCANNER.nextLine();
+
+                                // go back
+                                if (medication.equals("-1")){
+                                    break;
+                                }
+
+                                // proceed to next step
+                                else if (medication.equals("-2")){
+                                    while(true){
+                                        // select / search for treatment history 
+                                        // treatment history records 
+                                        clearScreen();
+                                        System.out.print("Enter treatment notes / history (or -1 to go back): ");
+                                        String treatment = SCANNER.nextLine();
+
+                                        // go back
+                                        if (treatment.equals("-1")){
+                                            break;
+                                        }
+
+                                        medicalRecord.addTreatmentNote(treatment);
+                                        clearScreen();
+                                        while(true){
+                                            // select / search for follow up date 
+                                            // follow up date records 
+                                            System.out.print("Enter follow up date (yyyy-mm-dd or -1 to go back or - to skip): ");
+                                            String followUp = SCANNER.nextLine();
+
+                                            // go back
+                                            if (followUp.equals("-1")){
+                                                break;
+                                            }
+
+                                            else if (followUp.equals("-")){
+                                                medicalRecord.addFollowUp(null);
+                                            }
+
+                                            else {
+                                                try {
+                                                    LocalDateTime followUpDate = LocalDate.parse(followUp).atStartOfDay();
+                                                    medicalRecord.addFollowUp(followUpDate);
+                                                    
+                                                    // select time
+
+                                                    // date must be tomorrow or later, not on weekends
+                                                    if (!followUpDate.toLocalDate().isAfter(LocalDate.now()) || followUpDate.getDayOfWeek() == DayOfWeek.SATURDAY || followUpDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                                                        System.out.println("Invalid date. Please enter a date that is tomorrow or later and not on weekends.");
+                                                        continue;
+                                                    }
+                                                } catch (Exception e) {
+                                                    clearScreen();
+                                                    System.out.println("Invalid date format. Re-enter");
+                                                    continue;
+                                                }
+                                            }
+
+                                            // confirmation to save medical record
+                                            clearScreen();
+                                            System.out.println("Medical Record Details:");
+                                            System.out.println("------------------------");
+                                            System.out.println(medicalRecord);
+                                            System.out.println("------------------------");
+                                            System.out.println("Confirm to save medical record? (Y/N): ");
+
+                                            // cancel
+                                            if (!getYesOrNoInput()){
+                                                break;
+                                            }
+
+                                            // save medical records 
+                                            storeRecord(MEDICAL_RECORD_FILE, medicalRecord.toFileFormat());
+                                            System.out.println("Medical Record created successfully.");
+                                            System.out.println("Press <Enter> to return.");
+                                            SCANNER.nextLine();
+                                            return;
+                                        }
+                                    }
+                                }
+                                else {
+                                    try {
+                                        int medicationChoice = Integer.parseInt(medication) - 1;
+                                        if (medicationChoice < 0 || medicationChoice >= MEDICATIONS.size()){
+                                            clearScreen();
+                                            System.out.println("Invalid choice. Please re-enter.");
+                                            continue;
+                                        }
+                                        clearScreen();
+                                        medicalRecord.prescribeMedications(MEDICATIONS.get(Integer.parseInt(medication) - 1));
+                                        System.out.println("Prescribed " + MEDICATIONS.get(medicationChoice) + ".\n");
+                                    } catch (NumberFormatException e) {
+                                        clearScreen();
+                                        System.out.println("Invalid input. Please enter a number.");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        if(selectedDoctor == null){
-            System.out.println("Doctor not found");
-            return;
-        }
-
-        //medical records new object
-        MedicalRecords medicalRecord = new MedicalRecords(selectedPatient, selectedDoctor);
-
-        // diagnoses record 
-        System.out.print("Enter diagnoses: ");
-        String diagnoses = scanner.nextLine();
-        medicalRecord.addDiagnosis(diagnoses);
-
-        // medications record 
-        System.out.print("Enter medications: ");
-        String medication = scanner.nextLine();
-        medicalRecord.prescribeMedications(medication);
-
-        // treatment history records 
-        System.out.print("Enter treatment history: ");
-        String treatment = scanner.nextLine();
-        medicalRecord.addTreatmentNote(treatment);
-
-        // follow up date records 
-        System.out.print("Enter follow up date(yyyy-mm-dd)");
-        String followUp = scanner.nextLine();
-        if(!followUp.isEmpty()){
-            try {
-                LocalDateTime followUpDate = LocalDate.parse(followUp).atStartOfDay();
-                medicalRecord.addFollowUp(followUpDate);
-            } catch (Exception e) {
-                System.out.println("Invalid date format. Re-enter");
-            }
-        }
-
-        // save medical records 
-        saveMedicalRecord(medicalRecord);
-        System.out.println("==================================");
-        System.out.println("Medical Record create successfully.");
-    }
-
-    // save medical records 
-    public static void saveMedicalRecord(MedicalRecords medicalRecords){
-        try(FileWriter fw = new FileWriter(MEDICAL_RECORD_FILE, true);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw)){
-            out.println(medicalRecords.getID() + "|" + medicalRecords.getPatient().getId() + "|" + medicalRecords.getDoctor().getId() + "|" + medicalRecords.getCreationDate() + "|" + medicalRecords.getDiagnoses() + "|" + medicalRecords.getPrescribedMedications() + "|" + medicalRecords.getNextFollowUp());
-            System.out.println("\nNew medical record information added successfully.");
-        } catch (IOException e){
-            System.out.println("Error saving medical records." + e.getMessage());
+            break;
         }
     }
 
     // view medical records for patients 
     public static void viewMedicalRecord(){
         clearScreen();
-        System.out.println("--------View Medical Record----------");
+        while(true){
+            System.out.println("--------View Medical Record----------");
 
-        System.out.print("Enter own patient ID: ");
-        String patientID = scanner.nextLine();
+            Patient patient = searchPatient();
 
-        // List for a medical records based on patient id
-        List<MedicalRecords> medicalRecords = readPatientByPatientMedicalRecord(patientID);
+            // go back
+            if(patient == null){
+                break;
+            }
 
-        // check if the medical records for a patient is it exist or not
-        if(medicalRecords.isEmpty()){
-            System.out.println("No medical records found for this patient from it's own id");
-            return;
-        }
+            // List for a medical records based on patient id
+            List<MedicalRecords> medicalRecords = getMedicalRecordFor(patient);
 
-        System.out.println("--------Medical Record--------");
-        for(MedicalRecords medicalRecord : medicalRecords){
-            System.out.println(medicalRecord.toString());
+            // check if the medical records for a patient is it exist or not
+            if(medicalRecords.isEmpty()){
+                clearScreen();
+                System.out.println("No medical records found for this patient.");
+            }
+            else {
+                clearScreen();
+                System.out.println("Patient Details:");
+                System.out.println("-----------------");
+                System.out.println("Name: " + patient.getName());
+                System.out.println("IC: " + patient.getIc());
+                System.out.println("-----------------\n");
+
+                for(int i = 0; i < medicalRecords.size(); i++){
+                    System.out.println("Medical Record #" + (i + 1));   
+                    System.out.println("---------------------------------------------");
+                    System.out.println(medicalRecords.get(i));
+                    System.out.println("---------------------------------------------");
+                }
+
+                System.out.println("Press <Enter> to continue");
+                SCANNER.nextLine();
+            }
         }
     }
 
-    // read patient by patient medical records based on the patient id 
-    public static List<MedicalRecords> readPatientByPatientMedicalRecord(String patientID){
+    // read medical records from file
+    // search for medical records for a patient
+    public static List<MedicalRecords> getMedicalRecordFor(Patient patient){
         List<MedicalRecords> medicalRecords = new ArrayList<>();
-        List<Patient> patients = readPatient(PATIENT_FILE);
-        List<Doctor> doctors = readDoctors(DOCTOR_FILE);
 
         try (BufferedReader br = new BufferedReader(new FileReader(MEDICAL_RECORD_FILE))){
             String line;
             while((line = br.readLine()) != null){
                 String[] medicalrecord = line.split("\\|");
-                if(medicalrecord.length >= 7 && medicalrecord[1].equals(patientID)){
+                if(medicalrecord.length >= 7 && medicalrecord[2].equals(patient.getId())){
                     // find patient and doctor 
-                    Patient patient = null;
                     Doctor doctor = null;
 
                     //check patient ID 
-                    for(Patient pat : patients){
-                        if(pat.getId().equals(medicalrecord[1])){
+                    for(Patient pat : PATIENTS){
+                        if(pat.getId().equals(medicalrecord[2])){
                             patient = pat;
                             break;
                         }
                     }
 
                     //check doctor id 
-                    for(Doctor doct : doctors){
-                        if(doct.getId().equals(medicalrecord[2])){
+                    for(Doctor doct : DOCTORS){
+                        if(doct.getId().equals(medicalrecord[3])){
                             doctor = doct;
                             break;
                         }
                     }
+                    
+                    // check if doctor is null
+                    if(doctor != null){
+                        // create a new medical record object and add to the list
+                        List<String> diagnoses = Arrays.asList(medicalrecord[4].split(","));
 
-                    if(patient != null && doctor != null){
-                        MedicalRecords medicalRecord = new MedicalRecords(patient, doctor);
+                        List<Medication> prescribedMedications = new ArrayList<>();
+                        readMedications();
+                        for (String medication : medicalrecord[5].split(",")){
+                            System.out.println("Medication: " + medication);
+                            prescribedMedications.add(Medication.findMedicationByName(medication, MEDICATIONS));
+                        }
+                        List<String> treatmentHistory = Arrays.asList(medicalrecord[6].split(","));
 
-                        // check for the diagnoses
-                        if(!medicalrecord[3].isEmpty()){
-                            medicalRecord.addDiagnosis(medicalrecord[3]);
+                        LocalDateTime nextFollowUp = null;
+                        // check if localdatetime is null
+                        if (!medicalrecord[7].equals("null")){
+                            // parse the next follow up date
+                            nextFollowUp = LocalDateTime.parse(medicalrecord[7]);
                         }
 
-                        // check for medications
-                        if(!medicalrecord[4].isEmpty()){
-                            medicalRecord.prescribeMedications(medicalrecord[4]);
-                        }
-
-                        // check for treatment history 
-                        if(!medicalrecord[5].isEmpty()){
-                            medicalRecord.addTreatmentNote(medicalrecord[5]);
-                        }
-
-                        // check for follow up date 
-                        if(!medicalrecord[6].isEmpty()){
-                            try {
-                                LocalDateTime followUpDate = LocalDate.parse(medicalrecord[6]).atStartOfDay();
-                                medicalRecord.addFollowUp(followUpDate);
-                            } catch (Exception e) {
-                                System.out.println("Invalid date format. Re-enter");
-                            }
-                        }
-
+                        // create a new medical record object
+                        MedicalRecords medicalRecord = new MedicalRecords(medicalrecord[0], LocalDate.parse(medicalrecord[1]), patient, doctor, diagnoses, prescribedMedications, treatmentHistory, nextFollowUp);
                         medicalRecords.add(medicalRecord);
                     }
                 }
@@ -2248,52 +2203,80 @@ public class Hospital {
 
     public static void deleteMedicalRecord(){
         clearScreen();
-        System.out.println("--------Delete Medical Record--------");
+        while(true){
+            System.out.println("--------Delete Medical Record--------");
 
-        List<Patient> patients = readPatient(PATIENT_FILE);
-        if(patients.isEmpty()){
-            System.out.println("No patients is found in the file");
-            return;
+            if(PATIENTS.isEmpty()){
+                System.out.println("No patients is found in the file.");
+                return;
+            }
+
+            Patient patient = searchPatient();
+
+            // go back
+            if(patient == null){
+                break;
+            }
+
+            List<MedicalRecords> medicalRecords = getMedicalRecordFor(patient);
+
+            // check if the medical records for a patient is it exist or not
+            if(medicalRecords.isEmpty()){
+                clearScreen();
+                System.out.println("No medical records found for this patient.");
+            }
+            else {
+                clearScreen();
+                System.out.println("Patient Details:");
+                System.out.println("-----------------");
+                System.out.println(patient);
+                System.out.println("-----------------\n");
+
+                for(int i = 0; i < medicalRecords.size(); i++){
+                    System.out.println("Medical Record #" + (i + 1));   
+                    System.out.println("-------------------------");
+                    System.out.println(medicalRecords.get(i));
+                    System.out.println("-------------------------");
+                }
+
+                System.out.println("Select medical record to delete (or -1 to return): ");
+                String input = SCANNER.nextLine();
+
+                if (input.equals("-1")){
+                    break;
+                } else {
+                    try{
+                        int medicalRecordChoice = Integer.parseInt(input) -1;
+                        if(medicalRecordChoice < 0 || medicalRecordChoice >= medicalRecords.size()){
+                            System.out.println("Invalid choice.");
+                        }
+                        else {
+                            // confirmation delete record 
+                            System.out.println("Selected Medical Record");
+                            System.out.println("-------------------------");
+                            System.out.println(medicalRecords.get(medicalRecordChoice));
+                            System.out.println("-------------------------");
+                            System.out.println("Delete medical record? (Y/N): ");
+                            if(!getYesOrNoInput()){
+                                break;
+                            }
+
+                            // remove medical record 
+                            String deleteMedicalRecord = medicalRecords.get(medicalRecordChoice).getId();
+                            medicalRecords.remove(medicalRecordChoice);
+
+                            //update file 
+                            updateMedicalRecord(deleteMedicalRecord);
+                            System.out.println("Medical Record deleted");
+                            System.out.println("Press <Enter> to return.");
+                            SCANNER.nextLine();
+                        }
+                    } catch (NumberFormatException e){
+                        System.out.println("Invalid input. Please enter a number.");
+                    }
+                }
+            }
         }
-
-        listPatient(patients);
-        System.out.print("Enter patient ID: ");
-        String patientID = scanner.nextLine();
-
-        List<MedicalRecords> medicalRecords = readPatientByPatientMedicalRecord(patientID);
-        if(medicalRecords.isEmpty()){
-            System.out.println("No medical record information is found ");
-            return;
-        }
-
-        // show medical record 
-        for(int i = 0; i < medicalRecords.size(); i++){
-            System.out.printf("Medical Record ID: %s\nRecord Date: %s\nDiagnoses: %s\nMedication: %s\nTreatment History: %s\nNext Follow Up: ", medicalRecords.get(i).getID(), medicalRecords.get(i).getCreationDate(), medicalRecords.get(i).getDiagnoses(), medicalRecords.get(i).getPrescribedMedications(), medicalRecords.get(i).getTreatmentHistory(), medicalRecords.get(i).getNextFollowUp());
-        }
-
-        System.out.print("Select medical record to delete: ");
-        int medicalRecordChoice = Integer.parseInt(scanner.nextLine()) -1;
-
-        if(medicalRecordChoice < 0 || medicalRecordChoice >= medicalRecords.size()){
-            System.out.println("Invalid selection. Re-enter");
-            return;
-        }
-
-        // confirmation delete record 
-        System.out.print("--------Confirm Delete Medical Record--------");
-        String confirmation = scanner.nextLine();
-        if(!confirmation.equalsIgnoreCase("Y")){
-            System.out.println("Don't want delete");
-            return;
-        }
-
-        // remove medical record 
-        String deleteMedicalRecord = medicalRecords.get(medicalRecordChoice).getID();
-        medicalRecords.remove(medicalRecordChoice);
-
-        //update file 
-        updateMedicalRecord(deleteMedicalRecord);
-        System.out.println("Medical Record deleted");
     }
 
     // update medical record file after delete 
@@ -2321,7 +2304,4 @@ public class Hospital {
             System.out.println("Error saving medical recods" + e.getMessage());
         }
     }
-
-
-
 }

@@ -1,0 +1,14 @@
+Statin|1
+ACE Inhibitors|1
+Beta-Blockers|1
+Anticonvulsants|1
+Benzodiazepines|1
+Gabapentin|1
+Glucagon|1
+Glyceryl trinitrate|1
+Epinephrine (adrenaline) pre-filled syringe|1
+cyclophosphamide|1
+doxorubicin|1
+Cephalexin|1
+Amoxicillin|1
+Cefdinir|1
