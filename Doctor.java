@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Doctor extends Staff{
-    private List<Appointment> APPOINTMENTS = new ArrayList<>(); // list of appointments for the doctor
+    private final List<Appointment> APPOINTMENTS = new ArrayList<>(); // list of appointments for the doctor
     private static int doctorCount = 0; // static variable to keep track of the number of doctors
 
     // default constructor for new doctors

@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Hospital {
@@ -449,7 +451,69 @@ public class Hospital {
                             }
                         }
                         else if (choice == 6){
-                            System.out.println("\nLog Out?\n");
+                            clearScreen();
+                            while(true){
+                                System.out.println("Reports");
+                                System.out.println("-------");
+                                System.out.println("1. Top 3 Most Experienced Doctors by Department");
+                                System.out.println("2. Monthly Appointments");
+                                System.out.println("3. Monthly New Patients");
+                                System.out.println("4. Most Used medications");
+                                System.out.println("5. Back");
+                                System.out.println("-------");
+
+                                choice = getChoice();
+
+                                // view all appointments
+                                if (choice == 1){
+                                    clearScreen();
+                                    generateTop3ExperienceDoctorsReport();
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
+                                    break;
+                                }
+
+                                // view all medications
+                                else if (choice == 2){
+                                    clearScreen();
+                                    generateMonthlyAppointmentReport();
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
+                                    break;
+                                }
+
+                                // view new patients
+                                else if (choice == 3){
+                                    clearScreen();
+                                    readPatient();
+                                    reportNewPatients();
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
+                                    break;
+                                }
+
+                                // view most used medications
+                                else if (choice == 4){
+                                    clearScreen();
+                                    generateTop5MedicationsReport();
+                                    System.out.print("\nPress any key to return.");
+                                    SCANNER.nextLine();
+                                    break;
+                                }
+
+                                // back
+                                else if (choice == 5){
+                                    break;
+                                }
+
+                                // invalid selection
+                                else {
+                                    System.out.println("Invalid selection. Please re-enter");
+                                }
+                            }
+                        } else if (choice == 7){
+                            clearScreen();
+                            System.out.println("Log Out?\n");
                             if (getYesOrNoInput()){
                                 break;
                             }
@@ -661,10 +725,6 @@ public class Hospital {
         }
     }
 
-    // add the rooms 
-    private static void addRooms(){
-    }
-
     // get and return choice for menus
     // modify to become get integer method
     private static int getChoice(){
@@ -759,7 +819,8 @@ public class Hospital {
         System.out.println("3. Patient Management");
         System.out.println("4. Medical Record Management");
         System.out.println("5. Department Management");
-        System.out.println("6. Log Out");
+        System.out.println("6. Reports");
+        System.out.println("7. Log Out");
         System.out.println("----------");
     }
 
@@ -1431,7 +1492,7 @@ public class Hospital {
             String line;
             while((line = br.readLine()) != null){
                 String[] patientRecord = line.split("\\|");
-                PATIENTS.add(new Patient(patientRecord[0], patientRecord[1], patientRecord[2], patientRecord[3], patientRecord[4], patientRecord[5], patientRecord[6]));
+                PATIENTS.add(new Patient(patientRecord[0], patientRecord[1], patientRecord[2], patientRecord[3], patientRecord[4], patientRecord[5], LocalDate.parse(patientRecord[6]), patientRecord[7]));
             }
         } catch (FileNotFoundException e ){
 
@@ -2427,5 +2488,231 @@ public class Hospital {
         }catch(IOException e){
             System.out.println("Error saving medical recods" + e.getMessage());
         }
+    }
+
+    // reporting feature for total number of new patients registered in a selected year and month
+    public static void reportNewPatients(){
+        clearScreen();
+        System.out.println("Report New Patients");
+        System.out.println("--------------------");
+
+        // get year and month from user
+        int year = 0;
+        int month = 0;
+
+        while (true) {
+            try {
+                System.out.print("Enter year (YYYY): ");
+                year = Integer.parseInt(SCANNER.nextLine());
+
+                if (year < 2000 || year > LocalDate.now().getYear()) {
+                    System.out.println("Invalid year. Please enter a valid year.");
+                    continue;
+                }
+
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Enter month (1-12): ");
+                month = Integer.parseInt(SCANNER.nextLine());
+
+                if (month < 1 || month > 12) {
+                    System.out.println("Invalid month. Please enter a valid month.");
+                    continue;
+                }
+
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        // count new patients registered in the selected year and month
+        int newPatientsCount = 0;
+        for (Patient patient : PATIENTS) {
+            LocalDate registrationDate = patient.getRegistrationDate();
+            if (registrationDate.getYear() == year && registrationDate.getMonthValue() == month) {
+                newPatientsCount++;
+            }
+        }
+
+        // display the result
+        clearScreen();
+        System.out.println("Total new patients registered in " + month + "/" + year + ": " + newPatientsCount);
+    }
+
+    private static List<Doctor> getTop3Doctors(Department department){
+        List<Doctor> doctorDepartment = getDoctorInDepartment(department);
+
+        // check based on experienced (big to small)
+        for (int i = 0; i < doctorDepartment.size() - 1; i++) {
+            for (int j = 0; j < doctorDepartment.size() - i - 1; j++) {
+                if (doctorDepartment.get(j).getYearOfExp() < doctorDepartment.get(j + 1).getYearOfExp()) {
+                    Doctor doct = doctorDepartment.get(j);
+                    doctorDepartment.set(j, doctorDepartment.get(j + 1));
+                    doctorDepartment.set(j + 1, doct);
+                }
+            }
+        }
+
+        // get top 3 
+        List<Doctor> top3Doctors = new ArrayList<>();
+        for (int i = 0; i < Math.min(3, doctorDepartment.size()); i++) {
+            top3Doctors.add(doctorDepartment.get(i));
+        }
+
+        return top3Doctors;
+    }
+
+    private static void generateTop3ExperienceDoctorsReport(){
+        Department department = selectDepartment();
+
+        if(department == null){
+            return;
+        } 
+
+        List<Doctor> top3Doctors = getTop3Doctors(department);
+        
+        clearScreen();
+        System.out.println("Top 3 Doctors in " + department.getDepartmentName() + " Department:");
+        if (top3Doctors.isEmpty()) {
+            System.out.println("No doctors found in this department.");
+        } else {
+            for (int i = 0; i < top3Doctors.size(); i++) {
+                Doctor doctor = top3Doctors.get(i);
+                System.out.printf("%d. %s (%d years of experience)\n", i + 1, doctor.getName(), doctor.getYearOfExp());
+            }
+        }
+    }
+
+    // get the top 5 most used medication for the selected year and month using the map feature
+    private static void generateTop5MedicationsReport(){
+        clearScreen();
+        System.out.println("Top 5 Medications Report");
+        System.out.println("-------------------------");
+
+        // get year and month from user
+        int year = 0;
+        int month = 0;
+
+        while (true) {
+            try {
+                System.out.print("Enter year (YYYY): ");
+                year = Integer.parseInt(SCANNER.nextLine());
+
+                if (year < 2000 || year > LocalDate.now().getYear()) {
+                    System.out.println("Invalid year. Please enter a valid year.");
+                    continue;
+                }
+
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        while (true) {
+            try {
+                System.out.print("Enter month (1-12): ");
+                month = Integer.parseInt(SCANNER.nextLine());
+
+                if (month < 1 || month > 12) {
+                    System.out.println("Invalid month. Please enter a valid month.");
+                    continue;
+                }
+
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+
+        // read medical records from file
+        List<MedicalRecords> medicalRecords = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(MEDICAL_RECORD_FILE))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] medicalRecordData = line.split("\\|");
+                if (medicalRecordData.length >= 7) {
+                    LocalDateTime creationDate = LocalDateTime.parse(medicalRecordData[1]);
+
+                    List<Medication> prescribedMedications = new ArrayList<>();
+                    readMedications();
+                    for (String medicationName : medicalRecordData[5].split(",")) {
+                        prescribedMedications.add(Medication.findMedicationByName(medicationName, MEDICATIONS)); // Assuming 0 is the default quantity
+                    }
+                    if (creationDate.getYear() == year && creationDate.getMonthValue() == month) {
+                        MedicalRecords medicalRecord = new MedicalRecords(medicalRecordData[0], creationDate, null, null, null, prescribedMedications, null, null);
+                        medicalRecords.add(medicalRecord);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading medical records: " + e.getMessage());
+        }
+
+        // count the number of times each medication is prescribed in the selected year and month
+        Map<String, Integer> medicationCount = new HashMap<>();
+        for (MedicalRecords medicalRecord : medicalRecords) {
+            LocalDateTime creationDate = medicalRecord.getCreationDate();
+            if (creationDate.getYear() == year && creationDate.getMonthValue() == month) {
+                for (Medication medication : medicalRecord.getPrescribedMedications()) {
+                    String medicationName = medication.getMedicationName();
+                    medicationCount.put(medicationName, medicationCount.getOrDefault(medicationName, 0) + 1);
+                }
+            }
+        }
+        // sort the medications by count in descending order
+        List<Map.Entry<String, Integer>> sortedMedications = new ArrayList<>(medicationCount.entrySet());
+        sortedMedications.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        // get top 5 medications
+        List<String> top5Medications = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, sortedMedications.size()); i++) {
+            Map.Entry<String, Integer> entry = sortedMedications.get(i);
+            top5Medications.add(entry.getKey() + " (" + entry.getValue() + " times)");
+        }
+
+        // display the result
+        clearScreen();
+        System.out.println("Top 5 Medications in " + month + "/" + year + ":");
+        if (top5Medications.isEmpty()) {
+            System.out.println("No medications found for this month.");
+        } else {
+            for (int i = 0; i < top5Medications.size(); i++) {
+                System.out.printf("%d. %s\n", i + 1, top5Medications.get(i));
+            }
+        }
+    }
+
+    private static List<Appointment> getMonthlyAppointments(int year, int month){
+        List<Appointment> monthlyAppointments = new ArrayList<>();
+
+        for(Appointment appointment: APPOINTMENTS){
+            if(appointment.getAppointmentDateTime().getYear() == year && appointment.getAppointmentDateTime().getMonthValue() == month){
+                monthlyAppointments.add(appointment);
+            }
+        }
+
+        return monthlyAppointments;
+    }
+
+    //generate monthly appointment report 
+    private static void generateMonthlyAppointmentReport(){
+        System.out.print("Enter year (e.g 2025): ");
+        int year = SCANNER.nextInt();
+        System.out.print("Enter month (1-12): ");
+        int month = SCANNER.nextInt();
+        SCANNER.nextLine();
+
+        List<Appointment> monthlyAppointments = getMonthlyAppointments(year, month);
+
+        System.out.println("Total appointments in " + month + "/" + year + ": " + monthlyAppointments.size());
+
     }
 }

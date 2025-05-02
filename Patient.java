@@ -1,8 +1,10 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Patient extends Person{
+    private LocalDate registrationDate;
     private String emergencyContact;
     private final List<MedicalRecords> medicalRecords = new ArrayList<>();
     private List<Appointment> appointments = new ArrayList<>();
@@ -14,12 +16,13 @@ public class Patient extends Person{
 
     // default constructor for new patients
     public Patient(String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
-        this(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientAddress, patientPhoneNumber, emergencyContact);
+        this(IdGenerator.generatePatientId(), patientIc, patientName, patientGender, patientAddress, patientPhoneNumber, LocalDate.now(), emergencyContact);
     }
 
     // constructor for file loading
-    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, String emergencyContact){
+    public Patient(String patientId, String patientIc, String patientName,String patientGender, String patientAddress, String patientPhoneNumber, LocalDate registrationDate,  String emergencyContact){
         super(Role.PATIENT, patientId, patientIc, patientName, patientGender, patientPhoneNumber, patientAddress);
+        this.registrationDate = registrationDate;
         this.emergencyContact = emergencyContact;
         this.MEDICAL_RECORD = new MedicalRecords(this, null);
     }
@@ -68,10 +71,15 @@ public class Patient extends Person{
         patientCount = count;
     }
 
+    // get registration date
+    public LocalDate getRegistrationDate(){
+        return registrationDate;
+    }
+
     // to file format for the patient class
     @Override
     public String toFileFormat(){
-        return String.join("|", super.toFileFormat(), emergencyContact);
+        return String.join("|", super.toFileFormat(), registrationDate.toString(), emergencyContact);
     }
 
     @Override
