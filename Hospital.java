@@ -395,21 +395,41 @@ public class Hospital {
                                 // add department
                                 if (choice == 1){
                                     clearScreen();
-                                    Department newDepartment = getNewDepartmentDetails();
-                                    System.out.println(newDepartment);
-                                    if (getYesOrNoInput()){
-                                        DEPARTMENTS.add(newDepartment);
-                                        storeRecord(DEPARTMENT_FILE, newDepartment.toFileFormat());
-                                        System.out.println("\nNew department registered successfully.");
+                                    while(true){
+                                        Department newDepartment = getNewDepartmentDetails();
+                                        // go back
+                                        if (newDepartment == null){
+                                            break;
+                                        }
+                                        System.out.println("\nNew Department Details:");
+                                        System.out.println("-------------------");
+                                        System.out.println(newDepartment);
+                                        System.out.println("-------------------");
+                                        System.out.println("\nSave new department information?");
+                                        if (getYesOrNoInput()){
+                                            DEPARTMENTS.add(newDepartment);
+                                            storeRecord(DEPARTMENT_FILE, newDepartment.toFileFormat());
+                                            System.out.println("\nNew department registered successfully.");
+                                            System.out.println("\nPress any key to return.");
+                                            SCANNER.nextLine();
+                                            break;
+                                        } else {
+                                            break;
+                                        }
                                     }
                                 }
 
                                 // list all departments
                                 else if (choice == 2) {
                                     clearScreen();
-                                    // clear department array
-                                    readDepartments();
-                                    listDepartments(DEPARTMENTS);
+                                    while(true){
+                                        // clear department array
+                                        readDepartments();
+                                        listDepartments();
+                                        System.out.println("\nPress any key to return.");
+                                        SCANNER.nextLine();
+                                        break;
+                                    }
                                 }
 
                                 // back
@@ -949,15 +969,20 @@ public class Hospital {
     }
 
     // list all departments
-    private static void listDepartments(List<Department> departments){
-        if(departments.isEmpty()){
+    private static void listDepartments(){
+        if(DEPARTMENTS.isEmpty()){
             System.out.println("No departments added yet.");
             return;
         }
 
-        for (Department department : departments){
-            System.out.println(department);
+        TablePrinter table = new TablePrinter(Arrays.asList("ID", "Department Name"));
+
+        // Print each doctor's information
+        for(Department department : DEPARTMENTS) {
+            table.addRow(Arrays.asList(department.getDepartmentId(), department.getDepartmentName()));
         }
+
+        table.print();
     }
 
     // find a department using department id
@@ -1056,11 +1081,13 @@ public class Hospital {
         String name;
 
         while(true){
-            System.out.print("Enter New Department Name (e.g. Orthopedics): ");
+            System.out.print("Enter New Department Name (e.g. Orthopedics or -1 to return): ");
             name = SCANNER.nextLine().trim();
             if(ValidationCheck.validateName(name)){
                 return new Department(name);
-            } else{
+            } else if (name.equals("-1")){
+                return null; // Go back
+            } else {
                 System.out.println("\nInvalid Name format. Please re-enter: ");
             }
         }

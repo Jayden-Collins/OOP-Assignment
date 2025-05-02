@@ -18,38 +18,22 @@ public abstract class Person {
     }
 
     // validate and set name
-    public boolean setName(String name){
-        if(name != null && name.matches("^[a-zA-Z ]+$")){
-            this.name = name;
-            return true;
-        }
-        return false;
+    public void setName(String name){
+        this.name = name;
     }
 
     // set and boolean method for staff gender
-    public boolean setGender(String gender){
-        if(ValidationCheck.validateGender(gender)){
-            this.gender = gender;
-            return true;
-        }
-        return false;
+    public void setGender(String gender){
+        this.gender = gender;
     }
 
-    public boolean setContactNumber(String contactNumber){
-        if(ValidationCheck.validateNumber(contactNumber)){
-            this.contactNumber = contactNumber;
-            return true;
-        }
-        return false;
+    public void setContactNumber(String contactNumber){
+        this.contactNumber = contactNumber;
     }
 
     // set and boolean method for staff address 
-    public boolean setAddress(String address){
-        if(ValidationCheck.validateAddress(address)){
-            this.address = address;
-            return true;
-        }
-        return false;
+    public void setAddress(String address){
+        this.address = address;
     }
 
     // get method 

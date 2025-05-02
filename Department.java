@@ -16,10 +16,7 @@ public class Department {
 
     // validation for department name 
     public boolean setDepartmentName(String departmentName){
-        if(ValidationCheck.validateName(departmentName)){
-            this.departmentName = departmentName;
-            return true;
-        }
+        this.departmentName = departmentName;
         return false;
     }
 
