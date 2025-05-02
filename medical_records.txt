@@ -1,4 +1,1 @@
 MR-25-05-001|2025-05-02T18:41:45.863821600|PT-25-05-0001|DC-25-005|cancer|ACE Inhibitors|treatment|null
-MR-25-05-002|2025-05-02T15:55:56.266896700|PT-25-05-0013|DC-25-013|want die ler,want die|Cephalexin,doxorubicin|dying,die|null
-MR-25-05-003|2025-05-02T16:20:30.875031200|PT-25-05-0026|DC-25-010|dying|Glyceryl trinitrate|cannot treat|2025-07-03T00:00
-

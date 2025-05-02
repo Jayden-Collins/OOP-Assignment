@@ -1,10 +1,11 @@
 NR-25-001|900305-14-5678|Ahmad bin Ismail|male|012-3456789|12, Jalan Tun Razak, 50400, Kuala Kumpur|DT-001|5
-NR-25-002|870412-08-1234|Siti binti Mohd|Female|011-2345678|45, Jalan Bukit Bintang, 55100 Kuala Lumpur|Cardiology|8
-NR-25-003|950618-08-1234|Aina binti Razak|Female|012-3456123|No. 14, Jalan Tun Razak, 50400 Kuala Lumpur|Neurology|4
-NR-25-004|880325-10-5678|Daniel Lim|Male|011-2233445|22, Jalan Bukit Bintang, 55100 Kuala Lumpur|Neurology|9
-NR-25-005|930303-03-1234|Nur Amirah bt Zulkifli|Female|014-6677882|13, Jalan Imbi, 55100 Kuala Lumpur|Pediatrics|6
-NR-25-006|910910-11-5678|Wong Chee Meng|Male|015-9876544|6, Jalan Bangsar, 59200 Kuala Lumpur|Pediatrics|7
-NR-25-007|930404-03-1234|Jason Lee Kok Wai|Male|014-6677883|15, Jalan Imbi, 55100 Kuala Lumpur|Emergency|6
-NR-25-008|911212-11-5678|Aisha bt Abdullah|Female|015-9876545|7, Jalan Bangsar, 59200 Kuala Lumpur|Emergency|8
-NR-25-009|860202-14-3456|Dr. Lim Wei Chong|Male|017-3344559|55, Jalan Ampang, 50450 Kuala Lumpur|Oncology|13
-NR-25-010|921212-05-6789|Dr. Priya a/p Nadarajah|Female|016-7788993|42, Jalan Sultan Ismail, 50250 Kuala Lumpur|Oncology|8
+NR-25-002|870412-08-1234|Siti binti Mohd|Female|011-2345678|45, Jalan Bukit Bintang, 55100 Kuala Lumpur|DT-001|8
+NR-25-003|950618-08-1234|Aina binti Razak|Female|012-3456123|No. 14, Jalan Tun Razak, 50400 Kuala Lumpur|DT-002|4
+NR-25-004|880325-10-5678|Daniel Lim|Male|011-2233445|22, Jalan Bukit Bintang, 55100 Kuala Lumpur|DT-002|9
+NR-25-005|930303-03-1234|Nur Amirah bt Zulkifli|Female|014-6677882|13, Jalan Imbi, 55100 Kuala Lumpur|DT-003|6
+NR-25-006|910910-11-5678|Wong Chee Meng|Male|015-9876544|6, Jalan Bangsar, 59200 Kuala Lumpur|DT-003|7
+NR-25-007|930404-03-1234|Jason Lee Kok Wai|Male|014-6677883|15, Jalan Imbi, 55100 Kuala Lumpur|DT-004|6
+NR-25-008|911212-11-5678|Aisha bt Abdullah|Female|015-9876545|7, Jalan Bangsar, 59200 Kuala Lumpur|DT-004|8
+NR-25-009|860202-14-3456|Dr. Lim Wei Chong|Male|017-3344559|55, Jalan Ampang, 50450 Kuala Lumpur|DT-005|13
+NR-25-010|921212-05-6789|Dr. Priya a/p Nadarajah|Female|016-7788993|42, Jalan Sultan Ismail, 50250 Kuala Lumpur|DT-005|8
+NR-25-011|121212-01-0123|nurse|Male|012-1212129|place|DT-004|0

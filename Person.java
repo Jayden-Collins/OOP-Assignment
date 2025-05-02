@@ -95,4 +95,17 @@ public abstract class Person {
                 "Contact Number: " + contactNumber + "\n" +
                 "Address: " + address + "\n";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Person person = (Person) obj;
+        return ID.equals(person.ID) && IC.equals(person.IC);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * ID.hashCode() + IC.hashCode();
+    }
 }
